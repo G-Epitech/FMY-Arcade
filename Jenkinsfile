@@ -1,12 +1,20 @@
 pipeline {
-    agent {
-      docker {
-        image 'epitechcontent/epitest-docker'
-      }
-    }
+    agent any
 
     stages {
+        stage('Project setup') {
+            steps {
+                sh 'make update'
+            }
+        }
+
         stage('Project compilation') {
+            agent {
+                docker {
+                    image 'epitechcontent/epitest-docker'
+                }
+            }
+
             steps {
                 sh 'make clean'
                 sh 'make'
@@ -15,6 +23,12 @@ pipeline {
         }
 
         stage('Project tests') {
+            agent {
+                docker {
+                    image 'epitechcontent/epitest-docker'
+                }
+            }
+
             steps {
                 sh 'make tests_run'
             }
