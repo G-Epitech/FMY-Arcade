@@ -32,5 +32,9 @@ Clean the project
 ```
 make fclean
 ```
+
+## Groups collaboration
+The project has been realized in collaboration with this [other group](#groups-collaboration). Their group master is [Suceveanu Dragos](https://github.com/sdragos1).
+
 #
 Made by [Flavien Chenu](https://github.com/flavien-chenu), [TekMath](https://github.com/tekmath) & [Yann-Masson](https://github.com/Yann-Masson)
