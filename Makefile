@@ -14,11 +14,10 @@ all:
 					@cp $(BUILD_PATH)/src/$(NAME) .
 
 clean:
-					@make -C $(BUILD_PATH) clean
+					@rm -rf $(BUILD_PATH)
 
 fclean:
 					@rm -f $(NAME)
-					@rm -rf $(BUILD_PATH)
 
 re: 			fclean all
 
