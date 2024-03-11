@@ -1,6 +1,3 @@
-[submodule "libs/shared"]
-	path = libs/shared
-	url = git@github.com:G-Epitech/MAYBDF-ArcadeShared.git
 [submodule "common"]
 	path = common
 	url = git@github.com:G-Epitech/MAYBDF-ArcadeShared.git
