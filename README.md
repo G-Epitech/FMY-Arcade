@@ -1,8 +1,8 @@
-# FMY-Arcade
-🖲️ Retro Platform
+# 🖲️ FMY-Arcade
+A Retro Platform
 
 ## Installation
-### Cmake
+### CMake
 ```
 sudo apt install cmake
 ```
@@ -32,3 +32,5 @@ Clean the project
 ```
 make fclean
 ```
+#
+Made by [Flavien Chenu](https://github.com/flavien-chenu), [TekMath](https://github.com/tekmath) & [Yann-Masson](https://github.com/Yann-Masson)
