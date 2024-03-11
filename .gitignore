@@ -1,0 +1,15 @@
+## CMake
+build
+
+## MacOS
+.DS_Store
+
+## IDEs
+.vscode
+.idea
+
+## Binary
+arcade
+*.gcno
+*.gcda
+*.o
