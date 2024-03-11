@@ -16,7 +16,7 @@ all:
 clean:
 					@rm -rf $(BUILD_PATH)
 
-fclean:
+fclean:		clean
 					@rm -f $(NAME)
 
 re: 			fclean all
