@@ -1,0 +1,23 @@
+name: "CD: Deployement"
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  repository_mirroring:
+    name: "🚀 Repository mirroring"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "📥 Checkout repository"
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: "🚀 Epitech mirroring"
+        uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url: ${{ secrets.DEPLOYMENT_URL }}
+          ssh_private_key: ${{ secrets.DEPLOYEMENT_SSH_KEY }}
