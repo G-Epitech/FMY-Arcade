@@ -6,7 +6,7 @@
 ##
 
 NAME = 				arcade
-BUILD_PATH = 	build
+BUILD_PATH = 		build
 
 all:
 					@cmake -S . -B build
