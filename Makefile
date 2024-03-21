@@ -8,7 +8,7 @@
 NAME = 				arcade
 BUILD_PATH = 		build
 
-all:
+all:			update
 					@cmake -S . -B build
 					cmake --build $(BUILD_PATH)
 					@cp $(BUILD_PATH)/src/$(NAME) .
@@ -24,5 +24,9 @@ re: 			fclean all
 tests_run:
 					echo "pass"
 
-.PHONY: all clean fclean re tests_run
+update:
+					@git submodule init
+					@git submodule update
+
+.PHONY: all clean fclean re tests_run update
 DEFAULT_GOAL := all
