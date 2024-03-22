@@ -6,7 +6,7 @@
 */
 
 #include "IGame.hpp"
-#include "../types/LibraryType.hpp"
+#include "../types/Libraries.hpp"
 
 extern "C" {
     shared::types::LibraryType SHARED_LIBRARY_TYPE_GETTER_NAME(void)
@@ -14,7 +14,7 @@ extern "C" {
         return shared::types::LibraryType::GAME;
     }
 
-    std::shared_ptr<shared::games::IGame> SHARED_GRAPHICS_FACTORY_LOADER_NAME(void)
+    std::shared_ptr<shared::games::IGameProvider> SHARED_GAME_PROVIDER_LOADER_NAME(void)
     {
         return std::make_shared<GameClass>(...)
     }

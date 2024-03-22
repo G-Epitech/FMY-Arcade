@@ -13,7 +13,8 @@
 #define SHARED_GAME_PROVIDER_LOADER_NAME arcadeLibGetGameProvider
 #define SHARED_GRAPHICS_PROVIDER_LOADER_NAME arcadeLibGetGraphicsProvider
 #define SHARED_LIBRARY_TYPE_GETTER_NAME arcadeLibGetType
-#define SHARED_STRINGIFY(x) #x
+#define STRINGIFY(x) #x
+#define SHARED_STRINGIFY(x) STRINGIFY(x)
 
 namespace shared::types
 {
