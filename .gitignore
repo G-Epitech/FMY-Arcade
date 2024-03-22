@@ -9,6 +9,10 @@ cmake-build-debug
 .vscode
 .idea
 
+## Github
+# common/.gihub
+# common/.gitignore
+
 ## Binary
 arcade
 lib
