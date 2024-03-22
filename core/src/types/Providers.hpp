@@ -9,5 +9,5 @@
 
 #include "common/types/Libraries.hpp"
 
-typedef std::vector<std::shared_ptr<shared::games::IGameProvider>> LoaderGamesProvider;
-typedef std::vector<std::shared_ptr<shared::graphics::IGraphicsProvider>> LoaderGraphicsProvider;
+typedef std::vector<std::shared_ptr<shared::games::IGameProvider>> GameProviders;
+typedef std::vector<std::shared_ptr<shared::graphics::IGraphicsProvider>> GraphicsProviders;
