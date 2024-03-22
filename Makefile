@@ -11,7 +11,6 @@ BUILD_PATH = 		build
 all:			update
 					@cmake -S . -B build
 					cmake --build $(BUILD_PATH)
-					@cp $(BUILD_PATH)/core/$(NAME) .
 
 clean:
 					@rm -rf $(BUILD_PATH)
