@@ -2,12 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Project setup') {
-            steps {
-                sh 'make update'
-            }
-        }
-
         stage('Project compilation') {
             agent {
                 docker {
