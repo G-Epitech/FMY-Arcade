@@ -8,9 +8,10 @@
 #pragma once
 
 #include "IComponent.hpp"
+#include "../../types/Vector.hpp"
 
 namespace shared::games::components {
-    class IPositionComponent;
+  class IPositionComponent;
 }
 
 class shared::games::components::IPositionComponent: public virtual IComponent
@@ -22,5 +23,5 @@ class shared::games::components::IPositionComponent: public virtual IComponent
      * @brief Get position of the entity (tiles)
      *
      */
-    virtual Vector2i &getPosition(void) noexcept = 0;
+    virtual types::Vector2i &getPosition(void) noexcept = 0;
 };

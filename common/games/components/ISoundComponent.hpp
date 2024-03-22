@@ -63,5 +63,5 @@ public:
    * @param ctx Context of the game
    * @param state New state of the sound
    */
-  virtual void onStateChange(game::UniqueGame &ctx, SoundState state) = 0;
+  virtual void onStateChange(std::shared_ptr<IGame> &ctx, SoundState state) = 0;
 };

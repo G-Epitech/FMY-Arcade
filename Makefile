@@ -26,7 +26,7 @@ tests_run:
 			echo "pass"
 
 update:
-			@common/pull.sh common
+			@cd common && ./pull.sh .
 
 .PHONY: all clean fclean re tests_run update
 DEFAULT_GOAL := all

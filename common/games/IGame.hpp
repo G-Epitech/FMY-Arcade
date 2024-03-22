@@ -8,21 +8,20 @@
 #pragma once
 
 #include <memory>
-#include "../IEntity.hpp"
-#include "../../types/types.hpp"
-#include "../types/GameManifest.hpp"
+#include "IEntity.hpp"
+#include "../types/types.hpp"
+#include "types/GameManifest.hpp"
 
 using namespace shared::types;
 
-namespace shared::games::game
+namespace shared::games
 {
   class IGame;
 
-  typedef std::unique_ptr<IGame> UniqueGame;
   typedef unsigned long DeltaTime;
 }
 
-class shared::games::game::IGame
+class shared::games::IGame
 {
 public:
   virtual ~IGame() = default;
@@ -38,7 +37,7 @@ public:
    * @brief Manifest with informations of the game
    *
    */
-  virtual const GameManifest getManifest(void) const noexcept = 0;
+  virtual const GameManifest &getManifest(void) const noexcept = 0;
 
   /**
    * @brief The minimum window size required for the game (pixels)
