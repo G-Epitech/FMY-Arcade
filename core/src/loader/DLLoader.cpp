@@ -53,7 +53,7 @@ void DLLoader::loadLibraries(std::string path) {
     std::cout << path << std::endl;
     dir = opendir(path.c_str());
     if (!dir)
-        return;
+        throw ArcadeError("Cannot open directory: " + path);
     ent = readdir(dir);
     while (ent) {
         if (ent->d_name[0] == '.') {

@@ -14,6 +14,7 @@ int main(void)
   try {
     loader.loadLibraries("./lib");
     std::cout << "Games libraries:" << loader.getGamesLibraries().size() << std::endl;
+    std::cout << "Graphics libraries:" << loader.getGraphicsLibraries().size() << std::endl;
   } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl;
   }
