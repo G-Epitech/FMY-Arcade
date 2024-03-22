@@ -1,5 +1,6 @@
 ## CMake
 build
+cmake-build-debug
 
 ## MacOS
 .DS_Store
@@ -8,8 +9,13 @@ build
 .vscode
 .idea
 
+## Github
+common/.github
+common/.gitignore
+
 ## Binary
 arcade
+lib
 *.gcno
 *.gcda
 *.o

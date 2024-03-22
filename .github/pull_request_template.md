@@ -1,16 +1,3 @@
-## Related Tickets & Documents
-
-- Related Issue #
-- Closes (optional) #
-
-## What type of PR is this? (check all applicable)
-
-- [ ] Refactor
-- [ ] Feature
-- [ ] Bug Fix
-- [ ] Optimization
-- [ ] Documentation Update
-
 ## Changes made
 
 _Please replace this line with a description of the changes in this PR. Include

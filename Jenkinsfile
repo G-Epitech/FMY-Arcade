@@ -2,13 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage('Project setup') {
-            steps {
-                sh 'git rm --cached common'
-                sh 'make update'
-            }
-        }
-
         stage('Project compilation') {
             agent {
                 docker {

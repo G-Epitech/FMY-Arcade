@@ -5,28 +5,28 @@
 ## Makefile
 ##
 
-NAME = 				arcade
-BUILD_PATH = 		build
+NAME 		= arcade
+BUILD_PATH 	= build
+LIB_PATH 	= lib
 
-all:			update
-					@cmake -S . -B build
-					cmake --build $(BUILD_PATH)
-					@cp $(BUILD_PATH)/src/$(NAME) .
+all:
+			@cmake -S . -B build
+			cmake --build $(BUILD_PATH)
 
 clean:
-					@rm -rf $(BUILD_PATH)
+			@rm -rf $(BUILD_PATH)
 
 fclean:		clean
-					@rm -f $(NAME)
+			@rm -f $(NAME)
+			@rm -rf $(LIB_PATH)
 
-re: 			fclean all
+re: 		fclean all
 
 tests_run:
-					echo "pass"
+			echo "pass"
 
 update:
-					@git submodule init
-					@git submodule update
+			@cd common && ./pull.sh .
 
 .PHONY: all clean fclean re tests_run update
 DEFAULT_GOAL := all
