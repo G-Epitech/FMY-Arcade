@@ -13,5 +13,6 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "arcade_")
 
 add_subdirectory(core)
 add_subdirectory(games)
+add_subdirectory(graphics)
 
 target_include_directories (arcade PUBLIC ${CMAKE_CURRENT_LIST_DIR}/common/)
