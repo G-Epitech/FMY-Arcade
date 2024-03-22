@@ -28,7 +28,7 @@ class shared::graphics::IGraphicsProvider {
      *
      * @return Manifest of the graphics library
      */
-    virtual const GameManifest &getManifest(void) const noexcept = 0;
+    virtual const GraphicsManifest &getManifest(void) const noexcept = 0;
 
     /**
      * @brief Create a renderer object

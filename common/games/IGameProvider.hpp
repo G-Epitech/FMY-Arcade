@@ -32,5 +32,5 @@ public:
    *
    * @return Created game instance
    */
-  virtual std::shared_ptr<game::IGame> createInstance(void) = 0;
+  virtual std::shared_ptr<shared::games::IGame> createInstance(void) = 0;
 };
