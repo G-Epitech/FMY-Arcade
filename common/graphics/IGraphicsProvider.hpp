@@ -12,14 +12,23 @@
 #include "ISound.hpp"
 #include "ITexture.hpp"
 #include "window/IWindow.hpp"
+#include "types/GraphicsManifest.hpp"
 
 namespace shared::graphics {
-  class IGraphicsFactory;
+  class IGraphicsProvider;
 }
 
-class shared::graphics::IGraphicsFactory {
+class shared::graphics::IGraphicsProvider {
   public:
-    virtual ~IGraphicsFactory() = default;
+    virtual ~IGraphicsProvider() = default;
+
+
+    /**
+     * @brief Get the manifest of the graphics library
+     *
+     * @return Manifest of the graphics library
+     */
+    virtual const GameManifest &getManifest(void) const noexcept = 0;
 
     /**
      * @brief Create a renderer object
