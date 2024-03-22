@@ -7,6 +7,7 @@
 
 NAME 		= arcade
 BUILD_PATH 	= build
+LIB_PATH 	= lib
 
 all:
 			@cmake -S . -B build
@@ -17,6 +18,7 @@ clean:
 
 fclean:		clean
 			@rm -f $(NAME)
+			@rm -rf $(LIB_PATH)
 
 re: 		fclean all
 

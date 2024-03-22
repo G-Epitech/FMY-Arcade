@@ -1,1 +1,1 @@
-add_library()
+add_subdirectory(snake)

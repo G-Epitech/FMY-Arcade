@@ -11,6 +11,7 @@ cmake-build-debug
 
 ## Binary
 arcade
+lib
 *.gcno
 *.gcda
 *.o
