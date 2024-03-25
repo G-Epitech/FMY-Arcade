@@ -10,8 +10,8 @@ cmake-build-debug
 .idea
 
 ## Github
-common/.github
-common/.gitignore
+shared/.github
+shared/.gitignore
 
 ## Binary
 arcade
