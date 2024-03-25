@@ -5,8 +5,8 @@
 ** export
 */
 
-#include "common/games/IGameProvider.hpp"
-#include "common/types/Libraries.hpp"
+#include "shared/games/IGameProvider.hpp"
+#include "shared/types/Libraries.hpp"
 
 extern "C" {
     shared::types::LibraryType SHARED_LIBRARY_TYPE_GETTER_NAME(void)

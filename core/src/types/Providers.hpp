@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "common/types/Libraries.hpp"
+#include "shared/types/Libraries.hpp"
 
 typedef std::vector<std::shared_ptr<shared::games::IGameProvider>> GameProviders;
 typedef std::vector<std::shared_ptr<shared::graphics::IGraphicsProvider>> GraphicsProviders;
