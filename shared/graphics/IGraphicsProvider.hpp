@@ -53,12 +53,4 @@ class shared::graphics::IGraphicsProvider {
      * @return Created texture object
      */
     virtual std::shared_ptr<ITexture> createTexture(const std::string &path) = 0;
-
-    /**
-     * @brief Create a window icon object
-     *
-     * @param path Path of the window icon file
-     * @return Created window icon object
-     */
-    virtual std::unique_ptr<IWindowIcon> createWindowIcon(const std::string &path) = 0;
 };
