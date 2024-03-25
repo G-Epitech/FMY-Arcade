@@ -23,7 +23,7 @@ namespace shared::types
     GRAPHIC,
   } LibraryType;
 
-  typedef std::shared_ptr<shared::games::IGameProvider> (*GameProvider)(void);
-  typedef std::shared_ptr<shared::graphics::IGraphicsProvider> (*GraphicsProvider)(void);
+  typedef std::shared_ptr<games::IGameProvider> (*GameProvider)(void);
+  typedef std::shared_ptr<graphics::IGraphicsProvider> (*GraphicsProvider)(void);
   typedef LibraryType (*LibraryTypeGetter)(void);
 }
