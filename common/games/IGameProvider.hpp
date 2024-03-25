@@ -12,7 +12,7 @@
 #include "types/GameManifest.hpp"
 
 namespace shared::games {
-    class IGameProvider;
+  class IGameProvider;
 }
 
 class shared::games::IGameProvider
