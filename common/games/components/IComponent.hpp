@@ -45,5 +45,5 @@ public:
    *
    * @return Entity of the component
    */
-  virtual std::shared_ptr<entity::IEntity> getEntity() noexcept = 0;
+  virtual const entity::IEntity &getEntity() noexcept = 0;
 };
