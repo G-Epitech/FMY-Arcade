@@ -40,12 +40,6 @@ public:
   virtual const GameManifest &getManifest(void) const noexcept = 0;
 
   /**
-   * @brief The minimum window size required for the game (pixels)
-   *
-   */
-  virtual const Vector2u getWindowMinSize(void) const noexcept = 0;
-
-  /**
    * @brief Number of tiles that represent the game
    * Tile size is managed by the renderer
    *
