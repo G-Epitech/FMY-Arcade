@@ -31,9 +31,6 @@ const shared::types::Vector2u common::AGame::getSize() const noexcept {
     return this->_size;
 }
 
-shared::types::UUId common::AGame::_registerEntity(EntityPtr entity) {
-    const shared::types::UUId id;
-
-    this->_entities[id] = std::move(entity);
-    return id;
+void common::AGame::_registerEntity(EntityPtr entity) {
+    this->_entities[entity->getId()] = std::move(entity);
 }

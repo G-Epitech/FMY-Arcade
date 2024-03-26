@@ -67,5 +67,5 @@ protected:
      * @return Id of the entity
      * @warning This method is moving ownership of the entity
      */
-    shared::types::UUId _registerEntity(EntityPtr entity);
+    void _registerEntity(EntityPtr entity);
 };

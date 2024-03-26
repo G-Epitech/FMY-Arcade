@@ -24,7 +24,6 @@ const shared::games::GameManifest snake::SnakeGame::manifest = {
 };
 
 snake::SnakeGame::SnakeGame(): common::AGame(Vector2u(12, 12)) {
-    std::cout << "SnakeGame created" << std::endl;
 }
 
 snake::SnakeGame::~SnakeGame() = default;
