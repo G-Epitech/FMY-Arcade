@@ -9,35 +9,34 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
-#include "../events/IEvent.hpp"
-#include "../../types/types.hpp"
-#include "../types/EntityProps.hpp"
+#include "events/IEvent.hpp"
+#include "types/EntityProps.hpp"
 
 using namespace shared::types;
 
-namespace shared::graphics
-{
+namespace shared::graphics {
   class IWindow;
-
-  typedef enum
-  {
-    WINDOWED,
-    FULLSCREEN
-  } WindowMode;
-
-  typedef struct {
-    Vector2u size;            //Initial size of the window
-    WindowMode mode;          //Initial mode of the window
-    unsigned int fps;         //Initial framerate of the window
-    const std::string title;  //Initial title of the window
-    const std::string icon;   //Initial icon of the window
-  } WindowInitProps;
 }
 
 class shared::graphics::IWindow {
   public:
     virtual ~IWindow() = default;
+
+    typedef enum
+    {
+        WINDOWED,
+        FULLSCREEN
+    } WindowMode;
+
+    typedef struct {
+        Vector2u size;            //Initial size of the window
+        WindowMode mode;          //Initial mode of the window
+        unsigned int fps;         //Initial framerate of the window
+        const std::string title;  //Initial title of the window
+        const std::string icon;   //Initial icon of the window
+    } WindowInitProps;
 
     /**
      * @brief Set the title of current window
@@ -150,5 +149,5 @@ class shared::graphics::IWindow {
      * but make another call `B` (directly after call `A`) `eventsB`
      * will result to an empty vector
      */
-    virtual std::vector<events::IEvent> getEvents(void) = 0;
+    virtual std::vector<events::EventPtr> getEvents(void) = 0;
 };

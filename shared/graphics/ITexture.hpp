@@ -11,7 +11,7 @@ namespace shared::graphics {
     class ITexture;
 }
 
-class ITexture {
+class shared::graphics::ITexture {
   public:
     virtual ~ITexture() = default;
 };

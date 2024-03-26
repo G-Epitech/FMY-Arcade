@@ -10,7 +10,7 @@
 #include <memory>
 
 #include "../ITexture.hpp"
-#include "../../types/types.hpp"
+#include "../../types/Vector.hpp"
 
 using namespace shared::types;
 
