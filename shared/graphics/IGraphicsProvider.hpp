@@ -49,8 +49,9 @@ class shared::graphics::IGraphicsProvider {
     /**
      * @brief Create a texture object
      *
-     * @param path Path of the texture file
+     * @param bin Path of the binary texture file
+     * @param ascii Path of the ascii texture file
      * @return Created texture object
      */
-    virtual std::shared_ptr<ITexture> createTexture(const std::string &path) = 0;
+    virtual std::shared_ptr<ITexture> createTexture(const std::string &bin, const std::string &ascii) = 0;
 };
