@@ -5,6 +5,7 @@
 ** export
 */
 
+#include "src/SnakeGameProvider.hpp"
 #include "shared/games/IGameProvider.hpp"
 #include "shared/types/Libraries.hpp"
 
@@ -14,8 +15,8 @@ extern "C" {
         return shared::types::LibraryType::GAME;
     }
 
-/*    std::shared_ptr<shared::games::IGameProvider> SHARED_GAME_PROVIDER_LOADER_NAME(void)
+    std::shared_ptr<shared::games::IGameProvider> SHARED_GAME_PROVIDER_LOADER_NAME(void)
     {
-        return std::make_shared<GameClass>(...)
-    }*/
+        return std::make_shared<arcade::games::snake::SnakeGameProvider>();
+    }
 }
