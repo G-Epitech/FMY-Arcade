@@ -70,5 +70,5 @@ class DLLoader {
      * @brief Throw an error when loading a library
      * @param handle handle pointer to the library
      */
-    void _loadError(void *handle);
+    void _throwLoadError(void *handle);
 };

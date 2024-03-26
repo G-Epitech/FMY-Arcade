@@ -11,7 +11,7 @@
 #include "DLLoader.hpp"
 #include "exception/ArcadeError.hpp"
 
-void DLLoader::_loadError(void *handle) {
+void DLLoader::_throwLoadError(void *handle) {
     std::string error = dlerror();
 
     if (this->_dir)
@@ -26,7 +26,7 @@ shared::types::LibraryType DLLoader::_getLibraryGetter(const std::string &filepa
 
     getter = reinterpret_cast<shared::types::LibraryTypeGetter>(dlsym(handle, SHARED_STRINGIFY(SHARED_LIBRARY_TYPE_GETTER_NAME)));
     if (!getter)
-        this->_loadError(handle);
+        this->_throwLoadError(handle);
     return getter();
 }
 
@@ -35,7 +35,7 @@ void DLLoader::_loadGameLibrary(const std::string &filepath, void *handle) {
 
     game = reinterpret_cast<shared::types::GameProvider>(dlsym(handle, SHARED_STRINGIFY(SHARED_GAME_PROVIDER_LOADER_NAME)));
     if (!game)
-        this->_loadError(handle);
+        this->_throwLoadError(handle);
     this->_gamesLibraries.push_back(game());
 }
 
@@ -44,7 +44,7 @@ void DLLoader::_loadGraphicsLibrary(const std::string &filepath, void *handle) {
 
     graphics = reinterpret_cast<shared::types::GraphicsProvider>(dlsym(handle, SHARED_STRINGIFY(SHARED_GRAPHICS_PROVIDER_LOADER_NAME)));
     if (!graphics)
-        this->_loadError(handle);
+        this->_throwLoadError(handle);
     this->_graphicsLibraries.push_back(graphics());
 }
 
@@ -53,7 +53,7 @@ void DLLoader::registerLibrary(const std::string &filepath) {
     shared::types::LibraryType type;
 
     if (!handle)
-        this->_loadError(handle);
+        this->_throwLoadError(handle);
     dlerror();
     type = this->_getLibraryGetter(filepath, handle);
     if (type == shared::types::LibraryType::GAME)
