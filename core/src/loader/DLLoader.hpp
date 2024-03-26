@@ -8,6 +8,7 @@
 #pragma once
 
 #include <iostream>
+#include <dirent.h>
 #include "types/Providers.hpp"
 
 class DLLoader {
@@ -38,6 +39,7 @@ class DLLoader {
     const GraphicsProviders &getGraphicsLibraries() const;
 
   private:
+    DIR *_dir;
     const std::string _path;
     GameProviders _gamesLibraries;
     GraphicsProviders _graphicsLibraries;
@@ -63,4 +65,10 @@ class DLLoader {
      * @param handle handle pointer to the library
      */
     void _loadGraphicsLibrary(const std::string &filepath, void *handle);
+
+    /**
+     * @brief Throw an error when loading a library
+     * @param handle handle pointer to the library
+     */
+    void _throwLoadError(void *handle);
 };
