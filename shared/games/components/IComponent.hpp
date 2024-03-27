@@ -8,7 +8,6 @@
 #pragma once
 
 #include "../IEntity.hpp"
-#include "../../types/UUId.hpp"
 
 namespace shared::games::components {
   typedef enum {
@@ -32,13 +31,6 @@ public:
    * @return Type of the component
    */
   virtual const ComponentType getType() const noexcept = 0;
-
-  /**
-   * @brief Get the uuid of component
-   *
-   * @return Component id
-   */
-  virtual const types::UUId &getId() const noexcept = 0;
 
   /**
    * @brief Get the parent entity of the component

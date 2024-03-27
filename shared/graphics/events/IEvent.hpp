@@ -21,6 +21,8 @@ namespace shared::graphics::events
     WINDOW_CLOSE,       // Window closed
     WINDOW_RESIZE,      // Window resized
   } EventType;
+
+  typedef std::unique_ptr<IEvent> EventPtr;
 }
 
 class shared::graphics::events::IEvent
@@ -31,5 +33,5 @@ class shared::graphics::events::IEvent
     /**
      * @brief Event type
      */
-    virtual const EventType getType() const noexcept = 0;
+    virtual EventType getType() const noexcept = 0;
 };

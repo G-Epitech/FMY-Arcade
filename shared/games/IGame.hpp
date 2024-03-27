@@ -9,7 +9,7 @@
 
 #include <memory>
 #include "IEntity.hpp"
-#include "../types/types.hpp"
+#include "../types/Vector.hpp"
 #include "types/GameManifest.hpp"
 
 using namespace shared::types;
@@ -36,6 +36,7 @@ public:
   /**
    * @brief Manifest with informations of the game
    *
+   * @return Manifest of the game
    */
   virtual const GameManifest &getManifest() const noexcept = 0;
 
@@ -43,6 +44,7 @@ public:
    * @brief Number of tiles that represent the game
    * Tile size is managed by the renderer
    *
+   * @return The number of tiles of the game
    */
   virtual const Vector2u getSize() const noexcept = 0;
 
@@ -56,14 +58,7 @@ public:
   /**
    * @brief Get map of entities
    *
+   * @return Entities map of the game
    */
   virtual const entity::EntitiesMap &getEntities(void) const = 0;
-
-  /**
-   * @brief Get entity by id
-   *
-   * @param id Id of the entity
-   * @return The specific entity
-   */
-  virtual std::shared_ptr<entity::IEntity> getEntityById(const UUId &id) const = 0;
 };

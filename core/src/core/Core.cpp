@@ -19,18 +19,22 @@ Core::Core(GameProviders gameProviders, GraphicsProviders graphicsProviders)
 
 Core::~Core() {}
 
+void Core::_initGame()
+{
+    this->_game = this->_gameProvider.get()->createInstance();
+}
+
 void Core::_initWindow()
 {
-    shared::graphics::WindowInitProps windowInitProps {
-        {0, 0},
-        shared::graphics::WINDOWED,
-        60,
-        "Arcade",
-        "icon"
+    auto gameManifest = this->_game.get()->getManifest();
+    shared::graphics::IWindow::WindowInitProps windowInitProps {
+        this->_game.get()->getSize(),
+        shared::graphics::IWindow::WINDOWED,
+        this->_game.get()->getFps(),
+        gameManifest.name,
+        gameManifest.iconPath
     };
 
-    this->_game = this->_gameProvider.get()->createInstance();
-    windowInitProps.size = this->_game.get()->getSize();
     this->_window = this->_graphicsProvider.get()->createWindow(windowInitProps);
 }
 
@@ -41,38 +45,49 @@ std::shared_ptr<shared::graphics::ITexture> Core::_getTexture(std::string bin, s
     return this->_textures[bin + ascii];
 }
 
-void Core::_renderDisplayableEntity(std::shared_ptr<shared::games::components::IDisplayableComponent> displayable)
+shared::graphics::EntityProps Core::_getDisplayableEntity(std::shared_ptr<shared::games::components::IDisplayableComponent> displayable)
 {
     auto textureProps = displayable.get()->getTextureProps();
-    shared::graphics::EntityTextureProps entityTextureProps{
+    shared::graphics::EntityTextureProps entityTextureProps {
         this->_getTexture(textureProps.sources.bin, textureProps.sources.ascii),
         textureProps.sources.binTileSize,
-        textureProps.origin};
-    shared::graphics::EntityProps entityProps{
+        textureProps.origin
+    };
+    shared::graphics::EntityProps entityProps {
         entityTextureProps,
         displayable.get()->getSize(),
-        displayable.get()->getPosition()};
-    this->_window.get()->render(entityProps);
+        displayable.get()->getPosition()
+    };
+
+    return entityProps;
 }
 
 void Core::_renderEntities()
 {
     shared::games::entity::EntitiesMap entities = this->_game.get()->getEntities();
+    std::map<unsigned int, shared::graphics::EntityProps> entitiesProps;
 
     for (auto &entity : entities) {
-        auto components = entity.second.get()->getComponents();
+        auto components = entity.get()->getComponents();
         for (auto &component : components) {
-            if (component.second.get()->getType() == shared::games::components::DISPLAYABLE)
-                this->_renderDisplayableEntity(std::dynamic_pointer_cast<shared::games::components::IDisplayableComponent>(component.second));
+            if (component.get()->getType() == shared::games::components::DISPLAYABLE) {
+                auto displayable = std::dynamic_pointer_cast<shared::games::components::IDisplayableComponent>(component);
+                unsigned int index = displayable.get()->getZIndex();
+                entitiesProps.insert(std::make_pair(index, this->_getDisplayableEntity(displayable)));
+            }
         }
     }
+    this->_window.get()->clear();
+    for (auto &entity : entitiesProps)
+        this->_window.get()->render(entity.second);
+    this->_window.get()->display();
 }
 
 void Core::run()
 {
+    this->_initGame();
     this->_initWindow();
     while (this->_window.get()->isOpen()) {
-        this->_window.get()->display();
-        this->_window.get()->clear();
+        this->_renderEntities();
     }
 }

@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <map>
 #include "types/Providers.hpp"
 #include "shared/games/components/IDisplayableComponent.hpp"
 
@@ -32,10 +33,16 @@ class Core {
         GraphicsProviders _graphicsProviders;
 
         /**
-         * @brief Initialize the core
+         * @brief Initialize the window
          * 
          */
         void _initWindow();
+
+        /**
+         * @brief Initialize the game
+         * 
+         */
+        void _initGame();
 
         /**
          * @brief Render all entities
@@ -52,5 +59,11 @@ class Core {
          */
         std::shared_ptr<shared::graphics::ITexture> _getTexture(std::string bin, std::string ascii);
 
-        void _renderDisplayableEntity(std::shared_ptr<shared::games::components::IDisplayableComponent> displayable);
+        /**
+         * @brief Get a displayable entity
+         * 
+         * @param displayable The displayable component
+         * @return The displayable entity
+         */
+        shared::graphics::EntityProps _getDisplayableEntity(std::shared_ptr<shared::games::components::IDisplayableComponent> displayable);
 };

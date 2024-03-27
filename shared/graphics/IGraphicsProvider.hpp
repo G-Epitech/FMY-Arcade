@@ -11,7 +11,7 @@
 
 #include "ISound.hpp"
 #include "ITexture.hpp"
-#include "window/IWindow.hpp"
+#include "IWindow.hpp"
 #include "types/GraphicsManifest.hpp"
 
 namespace shared::graphics {
@@ -22,7 +22,6 @@ class shared::graphics::IGraphicsProvider {
   public:
     virtual ~IGraphicsProvider() = default;
 
-
     /**
      * @brief Get the manifest of the graphics library
      *
@@ -31,12 +30,12 @@ class shared::graphics::IGraphicsProvider {
     virtual const GraphicsManifest &getManifest(void) const noexcept = 0;
 
     /**
-     * @brief Create a renderer object
+     * @brief Create a new window object
      *
      * @param windowProps Properties to use to init the window
-     * @return Created renderer object
+     * @return Created window object
      */
-    virtual std::unique_ptr<IWindow> createWindow(const WindowInitProps &windowProps) = 0;
+    virtual std::unique_ptr<IWindow> createWindow(const IWindow::WindowInitProps &windowProps) = 0;
 
     /**
      * @brief Create a sound object
