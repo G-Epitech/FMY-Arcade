@@ -27,13 +27,12 @@ public:
     ~AKeyEvent() override = default;
 
     EventType getType() const noexcept override {
-        return _type;
+        return T;
     }
 
 protected:
     AKeyEvent(const KeyType keyType, const KeyCode code) : _keyType(keyType), _code(code) {};
 
-    const EventType _type = T;
     const KeyType   _keyType;
     const KeyCode   _code;
 };

@@ -23,7 +23,7 @@ public:
     ~AMouseEvent() override = default;
 
     EventType getType() const noexcept override {
-        return _type;
+        return T;
     }
 
     const Vector2i getPosition() const noexcept override {
@@ -38,6 +38,5 @@ protected:
      */
     explicit AMouseEvent(Vector2i pos): _pos(pos){};
 
-    const EventType _type = T;
     Vector2i        _pos;
 };
