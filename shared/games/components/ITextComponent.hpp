@@ -28,7 +28,7 @@ namespace shared::games::components {
 
     typedef struct {
         std::string path;       // Path of the font
-        types::Vector2u size;   // Font size
+        unsigned int size;      // Font size
     } TextFontProps;
 
     typedef struct {

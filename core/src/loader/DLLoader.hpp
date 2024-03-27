@@ -11,7 +11,9 @@
 #include "types/Providers.hpp"
 
 class DLLoader {
-  public:
+public:
+    DLLoader();
+    ~DLLoader();
 
     /**
      * @brief Register a library
@@ -37,7 +39,7 @@ class DLLoader {
      */
     const GraphicsProviders &getGraphicsLibraries() const;
 
-  private:
+private:
     const std::string _path;
     GameProviders _gamesLibraries;
     GraphicsProviders _graphicsLibraries;
