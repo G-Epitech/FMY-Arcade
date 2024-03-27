@@ -8,14 +8,17 @@
 #include "IGame.hpp"
 #include "../types/Libraries.hpp"
 
+using namespace shared::games;
+using namespace shared::types;
+
 extern "C" {
-    shared::types::LibraryType SHARED_LIBRARY_TYPE_GETTER_NAME(void)
+    LibraryType SHARED_LIBRARY_TYPE_GETTER_NAME(void)
     {
-        return shared::types::LibraryType::GAME;
+        return LibraryType::GAME;
     }
 
-    std::shared_ptr<shared::games::IGameProvider> SHARED_GAME_PROVIDER_LOADER_NAME(void)
+    IGameProvider* SHARED_GAME_PROVIDER_LOADER_NAME(void)
     {
-        return std::make_shared<GameClass>(...)
+        return new YOUR_CLASS();
     }
 }

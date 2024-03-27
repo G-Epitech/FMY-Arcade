@@ -10,32 +10,33 @@
 #include "../IEntity.hpp"
 
 namespace shared::games::components {
-  typedef enum {
-    DISPLAYABLE,
-    SOUND,
-    COLLIDABLE,
-    POSITION,
-    KEYBOARD
-  } ComponentType;
+    typedef enum {
+      TEXTURE,
+      TEXT,
+      SOUND,
+      COLLIDABLE,
+      POSITION,
+      KEYBOARD
+    } ComponentType;
 
-  class IComponent;
+    class IComponent;
 }
 
 class shared::games::components::IComponent {
 public:
-  virtual ~IComponent() = default;
+    virtual ~IComponent() = default;
 
-  /**
-   * @brief Get the type of the component
-   *
-   * @return Type of the component
-   */
-  virtual const ComponentType getType() const noexcept = 0;
+    /**
+     * @brief Get the type of the component
+     *
+     * @return Type of the component
+     */
+    virtual const ComponentType getType() const noexcept = 0;
 
-  /**
-   * @brief Get the parent entity of the component
-   *
-   * @return Entity of the component
-   */
-  virtual const entity::IEntity &getEntity() noexcept = 0;
+    /**
+     * @brief Get the parent entity of the component
+     *
+     * @return Entity of the component
+     */
+    virtual const entity::IEntity &getEntity() noexcept = 0;
 };

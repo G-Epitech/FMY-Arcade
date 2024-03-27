@@ -46,41 +46,50 @@ std::shared_ptr<shared::graphics::ITexture> Core::_getTexture(std::string bin, s
     return this->_textures[bin + ascii];
 }
 
-shared::graphics::EntityProps Core::_getDisplayableEntity(std::shared_ptr<shared::games::components::IDisplayableComponent> displayable)
+shared::graphics::TextureProps Core::_getTextureEntity(std::shared_ptr<shared::games::components::ITextureComponent> texture)
 {
-    auto textureProps = displayable.get()->getTextureProps();
-    shared::graphics::EntityTextureProps entityTextureProps {
+    auto textureProps = texture.get()->getTextureProps();
+    shared::graphics::TextureProps entityTextureProps {
         this->_getTexture(textureProps.sources.bin, textureProps.sources.ascii),
         textureProps.sources.binTileSize,
-        textureProps.origin
-    };
-    shared::graphics::EntityProps entityProps {
-        entityTextureProps,
-        displayable.get()->getSize(),
-        displayable.get()->getPosition()
+        textureProps.origin,
+        texture.get()->getSize(),
+        texture.get()->getPosition()
     };
 
-    return entityProps;
+    return entityTextureProps;
 }
 
 void Core::_renderEntities()
 {
-    shared::games::entity::EntitiesMap entities = this->_game.get()->getEntities();
-    std::map<unsigned int, shared::graphics::EntityProps> entitiesProps;
+    std::map<unsigned int, std::vector<shared::graphics::TextureProps>> entitiesTextureProps;
+    std::map<unsigned int, std::vector<shared::graphics::TextProps>> entitiesTextProps;
 
-    for (auto &entity : entities) {
+    for (auto &entity : this->_gameEntities) {
         auto components = entity.get()->getComponents();
         for (auto &component : components) {
-            if (component.get()->getType() == shared::games::components::DISPLAYABLE) {
-                auto displayable = std::dynamic_pointer_cast<shared::games::components::IDisplayableComponent>(component);
-                unsigned int index = displayable.get()->getZIndex();
-                entitiesProps.insert(std::make_pair(index, this->_getDisplayableEntity(displayable)));
+            if (component.get()->getType() == shared::games::components::TEXTURE) {
+                auto texture = std::dynamic_pointer_cast<shared::games::components::ITextureComponent>(component);
+                unsigned int index = texture.get()->getZIndex();
+                entitiesTextureProps[index].push_back(this->_getTextureEntity(texture));
             }
         }
     }
     this->_window.get()->clear();
-    for (auto &entity : entitiesProps)
-        this->_window.get()->render(entity.second);
+    auto textPropsIt = entitiesTextProps.begin();
+    auto texturePropsIt = entitiesTextureProps.begin();
+    while (texturePropsIt != entitiesTextureProps.end() || textPropsIt != entitiesTextProps.end()) {
+        if (texturePropsIt != entitiesTextureProps.end()) {
+            for (auto &textureProps : texturePropsIt->second)
+                this->_window.get()->render(textureProps);
+            texturePropsIt++;
+        }
+        if (textPropsIt != entitiesTextProps.end()) {
+            for (auto &textProps : textPropsIt->second)
+                this->_window.get()->render(textProps);
+            textPropsIt++;
+        }
+    }
     this->_window.get()->display();
 }
 
@@ -96,6 +105,7 @@ void Core::run()
         previousTime = currentTime;
 
         this->_game.get()->compute(deltaTime);
+        this->_gameEntities = this->_game.get()->getEntities();
         this->_renderEntities();
     }
 }

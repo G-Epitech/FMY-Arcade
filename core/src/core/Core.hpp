@@ -9,6 +9,8 @@
 
 #include <map>
 #include "types/Providers.hpp"
+#include "shared/games/components/ITextComponent.hpp"
+#include "shared/games/components/ITextureComponent.hpp"
 #include "shared/games/components/IDisplayableComponent.hpp"
 
 class Core {
@@ -31,6 +33,7 @@ class Core {
         std::map<std::string, std::shared_ptr<shared::graphics::ITexture>> _textures;
         GameProviders _gameProviders;
         GraphicsProviders _graphicsProviders;
+        shared::games::entity::EntitiesMap _gameEntities;
 
         /**
          * @brief Initialize the window
@@ -60,12 +63,10 @@ class Core {
         std::shared_ptr<shared::graphics::ITexture> _getTexture(std::string bin, std::string ascii);
 
         /**
-         * @brief Get a displayable entity
+         * @brief Get the texture entity
          * 
-         * @param displayable The displayable component
-         * @return The displayable entity
+         * @param texture The texture component
+         * @return The texture entity
          */
-        shared::graphics::EntityProps _getDisplayableEntity(std::shared_ptr<shared::games::components::IDisplayableComponent> displayable);
-
-        
+        shared::graphics::TextureProps _getTextureEntity(std::shared_ptr<shared::games::components::ITextureComponent> texture);
 };

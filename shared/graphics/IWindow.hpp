@@ -12,7 +12,8 @@
 #include <memory>
 
 #include "events/IEvent.hpp"
-#include "types/EntityProps.hpp"
+#include "types/TextureProps.hpp"
+#include "types/TextProps.hpp"
 
 using namespace shared::types;
 
@@ -44,13 +45,6 @@ class shared::graphics::IWindow {
      * @param title Title of the window
      */
     virtual void setTitle(const std::string &title) = 0;
-
-    /**
-     * @brief Get the title of current window
-     *
-     * @return Title of the window
-     */
-    virtual std::string getTitle() const = 0;
 
     /**
      * @brief Set the size of the window
@@ -102,18 +96,18 @@ class shared::graphics::IWindow {
     virtual void setIcon(const std::string &icon) = 0;
 
     /**
-     * @brief Get the icon of the window
+     * @brief Render the texture of entity with given properties
      *
-     * @return Icon object of the window
+     * @param props Properties of the entity & texture to render
      */
-    virtual const std::string &getIcon(void) const = 0;
+    virtual void render(const TextureProps &props) = 0;
 
     /**
-     * @brief Render the entity with given properties
+     * @brief Render the text of entity with given properties
      *
-     * @param props Properties of the entity to render
+     * @param props Properties of the entity & text to render
      */
-    virtual void render(const EntityProps &props) = 0;
+    virtual void render(const TextProps &props) = 0;
 
     /**
      * @brief Clear the content of the window

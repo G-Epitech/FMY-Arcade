@@ -53,4 +53,12 @@ class shared::graphics::IGraphicsProvider {
      * @return Created texture object
      */
     virtual std::shared_ptr<ITexture> createTexture(const std::string &bin, const std::string &ascii) = 0;
+
+    /**
+     * @brief Create a font object
+     *
+     * @param path Path of the font file
+     * @return Created font object
+     */
+    virtual std::shared_ptr<IFont> createFont(const std::string &path) = 0;
 };
