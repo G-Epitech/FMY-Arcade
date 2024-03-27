@@ -2,16 +2,19 @@
 ** EPITECH PROJECT, 2024
 ** arcade
 ** File description:
-** DLLoader
+** Loader
 */
 
 #pragma once
 
+#include <dlfcn.h>
+
 #include <iostream>
 #include <dirent.h>
+#include <memory>
 #include "types/Providers.hpp"
 
-class DLLoader {
+class Loader {
   public:
 
     /**
