@@ -46,6 +46,13 @@ std::shared_ptr<shared::graphics::ITexture> Core::_getTexture(std::string bin, s
     return this->_textures[bin + ascii];
 }
 
+std::shared_ptr<shared::graphics::IFont> Core::_getFont(std::string path)
+{
+    if (this->_fonts.find(path) == this->_fonts.end())
+        this->_fonts[path] = this->_graphicsProvider.get()->createFont(path);
+    return this->_fonts[path];
+}
+
 shared::graphics::TextureProps Core::_getTextureEntity(std::shared_ptr<shared::games::components::ITextureComponent> texture)
 {
     auto textureProps = texture.get()->getTextureProps();
