@@ -7,17 +7,20 @@
 
 #pragma once
 
+#include "shared/graphics/ITexture.hpp"
 #include "shared/graphics/IGraphicsProvider.hpp"
 
-namespace sfml
+using namespace shared::graphics;
+
+namespace arcade::graphics::sfml
 {
     class GraphicsProvider;
 }
 
-class sfml::GraphicsProvider : public shared::graphics::IGraphicsProvider
+class arcade::graphics::sfml::GraphicsProvider : public shared::graphics::IGraphicsProvider
 {
 public:
-    GraphicsProvider() = default;
+    GraphicsProvider();
     ~GraphicsProvider() override = default;
 
     /**
@@ -25,7 +28,7 @@ public:
      *
      * @return Manifest of the graphics library
      */
-    const shared::graphics::GraphicsManifest &getManifest();
+    const shared::graphics::GraphicsManifest &getManifest() const noexcept override;
 
     /**
      * @brief Create a renderer object
@@ -33,7 +36,7 @@ public:
      * @param windowProps Properties to use to init the window
      * @return Created renderer object
      */
-    std::unique_ptr<shared::graphics::IWindow> createWindow(const shared::graphics::WindowInitProps &windowProps) override;
+    std::unique_ptr<IWindow> createWindow(const IWindow::WindowInitProps &windowProps) override;
 
     /**
      * @brief Create a sound object
@@ -41,7 +44,7 @@ public:
      * @param path Path of the sound file
      * @return Created sound object
      */
-    std::shared_ptr<shared::graphics::ISound> createSound(const std::string &path) override;
+    std::shared_ptr<ISound> createSound(const std::string &path) override;
 
     /**
      * @brief Create a texture object
@@ -50,7 +53,15 @@ public:
      * @param ascii Path of the ascii texture file
      * @return Created texture object
      */
-    std::shared_ptr<shared::graphics::ITexture> createTexture(const std::string &bin, const std::string &ascii) override;
+    std::shared_ptr<ITexture> createTexture(const std::string &bin, const std::string &ascii) override;
+
+    /**
+     * @brief Create a font object
+     *
+     * @param path Path of the font file
+     * @return Created font object
+     */
+    std::shared_ptr<IFont> createFont(const std::string &path) override;
 
 protected:
     static const shared::graphics::GraphicsManifest _manifest;

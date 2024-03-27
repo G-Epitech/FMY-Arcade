@@ -12,6 +12,8 @@
 
 class DLLoader {
   public:
+    DLLoader();
+    ~DLLoader();
 
     /**
      * @brief Register a library

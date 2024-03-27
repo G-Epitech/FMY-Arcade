@@ -5,19 +5,22 @@
 ** export
 */
 
-#include <memory>
 #include "shared/games/IGameProvider.hpp"
 #include "shared/types/Libraries.hpp"
 #include "src/GraphicsProvider.hpp"
 
-extern "C++" {
-    shared::types::LibraryType SHARED_LIBRARY_TYPE_GETTER_NAME(void)
+using namespace arcade::graphics;
+using namespace shared::graphics;
+using namespace shared::types;
+
+extern "C" {
+    LibraryType SHARED_LIBRARY_TYPE_GETTER_NAME(void)
     {
-        return shared::types::LibraryType::GRAPHIC;
+        return LibraryType::GRAPHIC;
     }
 
-/*    std::shared_ptr<shared::graphics::IGraphicsProvider> SHARED_GRAPHICS_PROVIDER_LOADER_NAME(void)
+    IGraphicsProvider *SHARED_GRAPHICS_PROVIDER_GETTER_NAME(void)
     {
-        return std::make_shared<sfml::GraphicsProvider>();
-    }*/
+        return new sfml::GraphicsProvider();
+    }
 }

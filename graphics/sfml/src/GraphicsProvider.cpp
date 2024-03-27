@@ -5,28 +5,49 @@
 ** GraphicsProvider class
 */
 
+#include <iostream>
 #include "GraphicsProvider.hpp"
 #include "window/Window.hpp"
 
-const shared::graphics::GraphicsManifest sfml::GraphicsProvider::_manifest = {
-        .name = "sfml",
-        .description = "SFML Library",
-        .version = "1.0",
-        .authors = {{
-                            .name = "tekmath",
-                            .email = "matheo.coquet@epitech.eu",
-                            .website = "thismath.com"
-                    }}
+using namespace shared::graphics;
+using namespace arcade::graphics::sfml;
+
+const shared::graphics::GraphicsManifest GraphicsProvider::_manifest = {
+    .name = "sfml",
+    .description = "SFML Library",
+    .version = "1.0",
+    .authors = {
+        {
+            .name = "tekmath",
+            .email = "matheo.coquet@epitech.eu",
+            .website = "thismath.com"
+        },
+        {
+            .name = "Flavien Chenu",
+            .email = "flavien.chenu@epitech.eu",
+            .website = "https://github.com/flavien-chenu"
+        }
+    }
 };
 
-const shared::graphics::GraphicsManifest &sfml::GraphicsProvider::getManifest() {
-    return sfml::GraphicsProvider::_manifest;
+GraphicsProvider::GraphicsProvider() = default;
+
+const GraphicsManifest &GraphicsProvider::getManifest() const noexcept {
+    return GraphicsProvider::_manifest;
 }
 
-std::unique_ptr<shared::graphics::IWindow>
-sfml::GraphicsProvider::createWindow(const shared::graphics::WindowInitProps &windowProps) {
-    std::unique_ptr<shared::graphics::IWindow> WindowObject = std::make_unique<Window>(windowProps.title,
-                                                                                       windowProps.size);
+std::unique_ptr<IWindow> GraphicsProvider::createWindow(const IWindow::WindowInitProps &props) {
+    return std::make_unique<Window>(props);
+}
 
-    return WindowObject;
+std::shared_ptr<ISound> GraphicsProvider::createSound(const std::string &path) {
+    return nullptr;
+}
+
+std::shared_ptr<ITexture> GraphicsProvider::createTexture(const std::string &bin, const std::string &ascii) {
+    return nullptr;
+}
+
+std::shared_ptr<IFont> GraphicsProvider::createFont(const std::string &path) {
+    return nullptr;
 }

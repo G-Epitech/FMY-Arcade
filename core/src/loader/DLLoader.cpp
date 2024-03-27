@@ -12,6 +12,15 @@
 #include "DLLoader.hpp"
 #include "exception/ArcadeError.hpp"
 
+DLLoader::DLLoader() = default;
+
+DLLoader::~DLLoader() {
+    for (auto &game : this->_gamesLibraries)
+        delete game;
+    for (auto &graphics : this->_graphicsLibraries)
+        delete graphics;
+}
+
 shared::types::LibraryType DLLoader::_getLibraryGetter(const std::string &filepath, void *handle) {
     shared::types::LibraryTypeGetter getter = nullptr;
 
@@ -22,18 +31,15 @@ shared::types::LibraryType DLLoader::_getLibraryGetter(const std::string &filepa
 }
 
 void DLLoader::_loadGameLibrary(const std::string &filepath, void *handle) {
-    shared::types::GameProvider game = nullptr;
+    auto game = reinterpret_cast<shared::types::GameProviderGetter>(dlsym(handle, SHARED_STRINGIFY(SHARED_GAME_PROVIDER_GETTER_NAME)));
 
-    game = reinterpret_cast<shared::types::GameProvider>(dlsym(handle, SHARED_STRINGIFY(SHARED_GAME_PROVIDER_LOADER_NAME)));
     if (!game)
         throw ArcadeError("Cannot find game provider in library: " + filepath);
     this->_gamesLibraries.push_back(game());
 }
 
 void DLLoader::_loadGraphicsLibrary(const std::string &filepath, void *handle) {
-    shared::types::GraphicsProvider graphics = nullptr;
-
-    graphics = reinterpret_cast<shared::types::GraphicsProvider>(dlsym(handle, SHARED_STRINGIFY(SHARED_GRAPHICS_PROVIDER_LOADER_NAME)));
+    auto graphics = reinterpret_cast<shared::types::GraphicsProviderGetter >(dlsym(handle, SHARED_STRINGIFY(SHARED_GRAPHICS_PROVIDER_GETTER_NAME)));
     if (!graphics)
         throw ArcadeError("Cannot find graphics provider in library: " + filepath);
     this->_graphicsLibraries.push_back(graphics());
@@ -44,7 +50,7 @@ void DLLoader::registerLibrary(const std::string &filepath) {
     shared::types::LibraryType type;
 
     if (!handle)
-        throw ArcadeError("Cannot load library: " + filepath);
+        throw ArcadeError("Cannot load library: " + filepath + ": " + dlerror());
     type = this->_getLibraryGetter(filepath, handle);
     if (type == shared::types::LibraryType::GAME)
         this->_loadGameLibrary(filepath, handle);
