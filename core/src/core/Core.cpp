@@ -5,6 +5,7 @@
 ** Core
 */
 
+#include <chrono>
 #include <memory.h>
 #include "Core.hpp"
 #include "shared/games/components/IComponent.hpp"
@@ -85,9 +86,16 @@ void Core::_renderEntities()
 
 void Core::run()
 {
+    auto previousTime = std::chrono::high_resolution_clock::now();
+
     this->_initGame();
     this->_initWindow();
     while (this->_window.get()->isOpen()) {
+        auto currentTime = std::chrono::high_resolution_clock::now();
+        auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(previousTime - currentTime).count();
+        previousTime = currentTime;
+
+        this->_game.get()->compute(deltaTime);
         this->_renderEntities();
     }
 }
