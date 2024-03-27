@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "Window.hpp"
+#include "common/events/mouse/mouse.hpp"
 
 using namespace arcade::graphics::sfml;
 
@@ -105,7 +106,12 @@ std::vector<events::EventPtr> Window::getEvents() {
             this->_window->close();
             return events;
         }
-        std::cout << "Event received" << std::endl;
+        if (event.type == sf::Event::MouseMoved) {
+            auto mouseEvent = std::make_shared<common::events::MouseMoveEvent>(
+                Vector2i(event.mouseMove.x, event.mouseMove.y)
+            );
+            events.push_back(mouseEvent);
+        }
     }
     return events;
 }

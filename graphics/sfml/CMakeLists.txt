@@ -1,10 +1,15 @@
-add_library(sfml SHARED
+project(sfml)
+add_library(${PROJECT_NAME} SHARED
         export.cpp
         src/GraphicsProvider.cpp
         src/GraphicsProvider.hpp
         src/window/Window.cpp
         src/window/Window.hpp
 )
-target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
-target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../..)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
+
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../..)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
+
 target_link_libraries(sfml sfml-graphics sfml-window sfml-system)
