@@ -11,7 +11,6 @@
 #include <vector>
 #include <memory>
 
-#include "shared/types/UUId.hpp"
 #include "common/game/AGame.hpp"
 
 namespace arcade::games::snake {

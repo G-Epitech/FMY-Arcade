@@ -13,6 +13,7 @@
 
 namespace arcade::games::common {
     class AGame;
+
     typedef std::shared_ptr<shared::games::entity::IEntity> EntityPtr;
 }
 
@@ -35,12 +36,11 @@ public:
     const shared::types::Vector2u getSize() const noexcept override;
 
     /**
-     * @brief Get entity by id
+     * @brief Get fps of the game
      *
-     * @param id Id of the entity
-     * @return The specific entity
+     * @return The number of frame per seconds of the game
      */
-    EntityPtr getEntityById(const shared::types::UUId &id) const override;
+    const unsigned int getFps() const noexcept override;
 
 protected:
     /**
@@ -59,6 +59,11 @@ protected:
      * @brief Game size
      */
     shared::types::Vector2u _size;
+
+    /**
+     * @brief Game frame per seconds
+     */
+    unsigned int _fps;
 
     /**
      * @brief Add an entity to the game

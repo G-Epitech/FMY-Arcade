@@ -8,6 +8,7 @@
 #pragma once
 
 #include "common/game/AGame.hpp"
+#include "Snake.hpp"
 
 namespace arcade::games::snake {
     class SnakeGame;
@@ -38,4 +39,7 @@ public:
      * @param dt Delta time from last frame
      */
     void compute(shared::games::DeltaTime dt) override;
+
+protected:
+    std::unique_ptr<Snake> _snake;
 };

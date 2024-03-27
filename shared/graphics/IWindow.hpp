@@ -9,35 +9,35 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
-#include "../events/IEvent.hpp"
-#include "../../types/types.hpp"
-#include "../types/EntityProps.hpp"
+#include "events/IEvent.hpp"
+#include "types/TextureProps.hpp"
+#include "types/TextProps.hpp"
 
 using namespace shared::types;
 
-namespace shared::graphics
-{
+namespace shared::graphics {
   class IWindow;
-
-  typedef enum
-  {
-    WINDOWED,
-    FULLSCREEN
-  } WindowMode;
-
-  typedef struct {
-    Vector2u size;            //Initial size of the window
-    WindowMode mode;          //Initial mode of the window
-    unsigned int fps;         //Initial framerate of the window
-    const std::string title;  //Initial title of the window
-    const std::string icon;   //Initial icon of the window
-  } WindowInitProps;
 }
 
 class shared::graphics::IWindow {
   public:
     virtual ~IWindow() = default;
+
+    typedef enum
+    {
+        WINDOWED,
+        FULLSCREEN
+    } WindowMode;
+
+    typedef struct {
+        Vector2u size;            //Initial size of the window
+        WindowMode mode;          //Initial mode of the window
+        unsigned int fps;         //Initial framerate of the window
+        const std::string title;  //Initial title of the window
+        const std::string icon;   //Initial icon of the window
+    } WindowInitProps;
 
     /**
      * @brief Set the title of current window
@@ -45,13 +45,6 @@ class shared::graphics::IWindow {
      * @param title Title of the window
      */
     virtual void setTitle(const std::string &title) = 0;
-
-    /**
-     * @brief Get the title of current window
-     *
-     * @return Title of the window
-     */
-    virtual std::string getTitle() const = 0;
 
     /**
      * @brief Set the size of the window
@@ -103,18 +96,18 @@ class shared::graphics::IWindow {
     virtual void setIcon(const std::string &icon) = 0;
 
     /**
-     * @brief Get the icon of the window
+     * @brief Render the texture of entity with given properties
      *
-     * @return Icon object of the window
+     * @param props Properties of the entity & texture to render
      */
-    virtual const std::string &getIcon(void) const = 0;
+    virtual void render(const TextureProps &props) = 0;
 
     /**
-     * @brief Render the entity with given properties
+     * @brief Render the text of entity with given properties
      *
-     * @param props Properties of the entity to render
+     * @param props Properties of the entity & text to render
      */
-    virtual void render(const EntityProps &props) = 0;
+    virtual void render(const TextProps &props) = 0;
 
     /**
      * @brief Clear the content of the window
@@ -150,5 +143,5 @@ class shared::graphics::IWindow {
      * but make another call `B` (directly after call `A`) `eventsB`
      * will result to an empty vector
      */
-    virtual std::vector<events::IEvent> getEvents(void) = 0;
+    virtual std::vector<events::EventPtr> getEvents(void) = 0;
 };

@@ -7,10 +7,8 @@
 
 #pragma once
 
-#include <map>
+#include <vector>
 #include <memory>
-
-#include "../types/UUId.hpp"
 
 namespace shared::games
 {
@@ -20,14 +18,15 @@ namespace shared::games
   {
     class IEntity;
 
-    typedef std::map<types::UUId, std::shared_ptr<IEntity>> EntitiesMap;
+    typedef std::shared_ptr<IEntity> EntityPtr;
+    typedef std::vector<EntityPtr> EntitiesMap;
   }
 
   namespace components
   {
     class IComponent;
 
-    typedef std::map<types::UUId, std::shared_ptr<IComponent>> ComponentsMap;
+    typedef std::vector<std::shared_ptr<IComponent>> ComponentsMap;
   }
 }
 
@@ -35,13 +34,6 @@ class shared::games::entity::IEntity
 {
 public:
   virtual ~IEntity() = default;
-
-  /**
-   * @brief Get the id of the entity
-   *
-   * @return Entity unique id
-   */
-  virtual const types::UUId &getId(void) const noexcept = 0;
 
   /**
    * @brief Get the components of the entity
