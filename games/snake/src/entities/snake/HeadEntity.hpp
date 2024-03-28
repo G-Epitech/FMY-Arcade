@@ -1,8 +1,8 @@
 /*
 ** EPITECH PROJECT, 2024
-** TailEntity.hpp
+** HeadEntity.hpp
 ** File description:
-** TailEntity class
+** HeadEntity class
 */
 
 #pragma once
@@ -12,14 +12,14 @@
 #include "common/components/TextureComponent.hpp"
 
 namespace arcade::games::snake {
-    class TailEntity;
+    class HeadEntity;
 }
 
-class arcade::games::snake::TailEntity : public common::AEntity {
+class arcade::games::snake::HeadEntity : public common::AEntity {
 public:
-    ~TailEntity() override = default;
+    ~HeadEntity() override = default;
 
-    explicit TailEntity();
+    explicit HeadEntity();
 
 protected:
     /**

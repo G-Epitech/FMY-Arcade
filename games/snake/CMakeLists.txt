@@ -7,6 +7,8 @@ add_library(${PROJECT_NAME} SHARED
         src/entities/snake/Snake.hpp
         src/entities/snake/TailEntity.cpp
         src/entities/snake/TailEntity.hpp
+        src/entities/snake/HeadEntity.cpp
+        src/entities/snake/HeadEntity.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)

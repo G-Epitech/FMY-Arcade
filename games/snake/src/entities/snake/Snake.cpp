@@ -7,11 +7,14 @@
 
 #include "Snake.hpp"
 #include "TailEntity.hpp"
+#include "HeadEntity.hpp"
 
 using namespace shared::games::entity;
 using namespace arcade::games::snake;
 
 Snake::Snake(unsigned int tails) {
+    this->head = std::make_shared<HeadEntity>();
+
     for (size_t i = 0; i < tails; i++) {
         this->addTail();
     }

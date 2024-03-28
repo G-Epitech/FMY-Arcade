@@ -27,5 +27,8 @@ int main(void) {
     auto game = lib->createInstance();
     std::cout << "\n[ Compute 1 ]\n" << std::endl;
     game->compute(1);
+
+    std::cout << "\n[ Compute 2 ]\n" << std::endl;
+    game->compute(2);
     return 0;
 }
