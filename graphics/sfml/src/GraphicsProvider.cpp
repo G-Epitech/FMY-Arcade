@@ -9,6 +9,7 @@
 #include "GraphicsProvider.hpp"
 #include "utils/compiler.hpp"
 #include "window/Window.hpp"
+#include "font/Font.hpp"
 #include "sound/Sound.hpp"
 #include "texture/Texture.hpp"
 
@@ -52,5 +53,5 @@ std::shared_ptr<ITexture> GraphicsProvider::createTexture(const std::string &bin
 }
 
 std::shared_ptr<IFont> GraphicsProvider::createFont(const std::string &path) {
-    return nullptr;
+    return std::make_shared<font::Font>(path);
 }

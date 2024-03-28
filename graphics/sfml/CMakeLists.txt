@@ -11,6 +11,8 @@ add_library(sfml SHARED
         src/sound/Sound.hpp
         src/texture/Texture.cpp
         src/texture/Texture.hpp
+        src/font/Font.cpp
+        src/font/Font.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 
