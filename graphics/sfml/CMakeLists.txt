@@ -9,6 +9,8 @@ add_library(sfml SHARED
         src/window/EventsHandler.hpp
         src/sound/Sound.cpp
         src/sound/Sound.hpp
+        src/texture/Texture.cpp
+        src/texture/Texture.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 

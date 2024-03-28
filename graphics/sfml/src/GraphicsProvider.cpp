@@ -7,8 +7,10 @@
 
 #include <iostream>
 #include "GraphicsProvider.hpp"
+#include "utils/compiler.hpp"
 #include "window/Window.hpp"
 #include "sound/Sound.hpp"
+#include "texture/Texture.hpp"
 
 using namespace shared::graphics;
 using namespace arcade::graphics::sfml;
@@ -45,8 +47,8 @@ std::shared_ptr<ISound> GraphicsProvider::createSound(const std::string &path) {
     return std::make_shared<sound::Sound>(path);
 }
 
-std::shared_ptr<ITexture> GraphicsProvider::createTexture(const std::string &bin, const std::string &ascii) {
-    return nullptr;
+std::shared_ptr<ITexture> GraphicsProvider::createTexture(const std::string &bin, unused const std::string &ascii) {
+    return std::make_shared<texture::Texture>(bin);
 }
 
 std::shared_ptr<IFont> GraphicsProvider::createFont(const std::string &path) {
