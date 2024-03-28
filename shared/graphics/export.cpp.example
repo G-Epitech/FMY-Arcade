@@ -17,7 +17,7 @@ extern "C" {
         return LibraryType::GRAPHIC;
     }
 
-    IGraphicsProvider *SHARED_GRAPHICS_PROVIDER_LOADER_NAME(void)
+    IGraphicsProvider *SHARED_GRAPHICS_PROVIDER_GETTER_NAME(void)
     {
         return new YOUR_CLASS();
     }

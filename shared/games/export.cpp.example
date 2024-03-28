@@ -17,7 +17,7 @@ extern "C" {
         return LibraryType::GAME;
     }
 
-    IGameProvider* SHARED_GAME_PROVIDER_LOADER_NAME(void)
+    IGameProvider* SHARED_GAME_PROVIDER_GETTER_NAME(void)
     {
         return new YOUR_CLASS();
     }
