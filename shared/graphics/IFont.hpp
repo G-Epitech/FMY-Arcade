@@ -2,16 +2,16 @@
 ** EPITECH PROJECT, 2024
 ** arcade-shared
 ** File description:
-** ITexture
+** IFont
 */
 
 #pragma once
 
 namespace shared::graphics {
-    class ITexture;
+    class IFont;
 }
 
-class shared::graphics::ITexture {
+class shared::graphics::IFont {
   public:
-    virtual ~ITexture() = default;
+    virtual ~IFont() = default;
 };
