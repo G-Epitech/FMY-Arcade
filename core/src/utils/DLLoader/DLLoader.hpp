@@ -50,10 +50,10 @@ class DLLoader {
         T loadSymbol(std::string name) {
             if (!this->_handle)
                 throw DLLoaderExeption("Library not loaded");
-            T function = reinterpret_cast<T>(dlsym(this->_handle, name.c_str()));
-            if (!function)
+            T symbol = reinterpret_cast<T>(dlsym(this->_handle, name.c_str()));
+            if (!symbol)
                 this->_throwError();
-            return function;
+            return symbol;
         }
 
         class DLLoaderExeption : public std::exception {
