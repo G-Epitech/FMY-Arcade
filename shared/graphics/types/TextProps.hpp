@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <string>
 #include <memory>
 
 #include "../IFont.hpp"
@@ -29,12 +30,8 @@ namespace shared::graphics {
     } TextVerticalAlign;
 
     typedef struct {
-        std::string path;       // Path of the font
-        types::Vector2u size;   // Font size
-    } TextFontProps;
-
-    typedef struct {
-        std::shared_ptr<IFont> font;   // Font of the text
+        std::shared_ptr<IFont> font;        // Font of the text
+        unsigned int fontSize;              // Font size
         std::string content;                // Content of the text
         TextAlign align;                    // Alignment of the text
         TextVerticalAlign verticalAlign;    // Vertical alignment of the text
