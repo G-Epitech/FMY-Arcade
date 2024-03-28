@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace shared::graphics::exceptions {
     class IGraphicsException;
 }
