@@ -28,8 +28,13 @@ const shared::games::GameManifest snake::SnakeGame::manifest = {
         }
 };
 
-snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(19, 19)) {
-    this->_snake = std::make_unique<Snake>();
+snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(19, 19), 60) {
+    this->_snake = std::make_unique<Snake>(2);
+    this->_registerEntity(this->_snake->head);
+
+    for (auto &tail: this->_snake->getTails()) {
+        this->_registerEntity(tail);
+    }
 }
 
 snake::SnakeGame::~SnakeGame() = default;
@@ -41,4 +46,5 @@ const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcep
 void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
     std::cout << "SnakeGame::compute" << std::endl;
     std::cout << "DeltaTime: " << dt << std::endl;
+    std::cout << "Number of entity: " << this->_entities.size() << std::endl;
 }

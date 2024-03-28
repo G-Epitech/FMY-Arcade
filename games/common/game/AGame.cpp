@@ -11,7 +11,7 @@
 
 using namespace arcade::games;
 
-common::AGame::AGame(shared::types::Vector2u size) : _size(size) {
+common::AGame::AGame(shared::types::Vector2u size, unsigned int fps) : _size(size), _fps(fps) {
     this->_entities = {};
 }
 
@@ -27,6 +27,6 @@ const unsigned int common::AGame::getFps() const noexcept {
     return this->_fps;
 }
 
-void common::AGame::_registerEntity(EntityPtr entity) {
+void common::AGame::_registerEntity(shared::games::entity::EntityPtr entity) {
     this->_entities.push_back(std::move(entity));
 }

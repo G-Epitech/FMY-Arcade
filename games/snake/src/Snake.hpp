@@ -19,18 +19,32 @@ namespace arcade::games::snake {
 
 class arcade::games::snake::Snake {
 public:
-    Snake();
+    explicit Snake(unsigned int tails);
     ~Snake();
-
-    /**
-     * @brief Entities that compose the snake
-     *
-     */
-    std::vector<common::EntityPtr> body;
 
     /**
      * @brief Head of the snake
      *
      */
-    common::EntityPtr head;
+    shared::games::entity::EntityPtr head;
+
+    /**
+     * @brief Add a tail to the snake body
+     *
+     * @return The entity to the new tail
+     */
+    shared::games::entity::EntityPtr addTail();
+
+    /**
+     * Get tails of the snake
+     *
+     * @return Vector of tails
+     */
+    std::vector<shared::games::entity::EntityPtr> &getTails();
+protected:
+    /**
+     * @brief Entities that compose the snake
+     *
+     */
+    std::vector<shared::games::entity::EntityPtr> _tails;
 };

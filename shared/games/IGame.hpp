@@ -56,7 +56,7 @@ public:
   virtual const unsigned int getFps() const noexcept = 0;
 
   /**
-   * @brief Get map of entities
+   * @brief Get map of entity
    *
    * @return Entities map of the game
    */

@@ -13,8 +13,6 @@
 
 namespace arcade::games::common {
     class AGame;
-
-    typedef std::shared_ptr<shared::games::entity::IEntity> EntityPtr;
 }
 
 class arcade::games::common::AGame : public shared::games::IGame {
@@ -22,9 +20,9 @@ public:
     ~AGame() override = default;
 
     /**
-     * @brief Get map of entities
+     * @brief Get map of entity
      *
-     * @return Map of entities
+     * @return Map of entity
      */
     const shared::games::entity::EntitiesMap &getEntities() const override;
 
@@ -47,11 +45,12 @@ protected:
      * @brief Construct a new AGame object
      *
      * @param size Size of the game
+     * @param fps Fps of the game
      */
-    explicit AGame(shared::types::Vector2u size);
+    explicit AGame(shared::types::Vector2u size, unsigned int fps);
 
     /**
-     * @brief List of game entities
+     * @brief List of game entity
      */
     shared::games::entity::EntitiesMap _entities;
 
@@ -72,5 +71,5 @@ protected:
      * @return Id of the entity
      * @warning This method is moving ownership of the entity
      */
-    void _registerEntity(EntityPtr entity);
+    void _registerEntity(shared::games::entity::EntityPtr entity);
 };

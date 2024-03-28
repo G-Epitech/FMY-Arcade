@@ -25,5 +25,7 @@ int main(void) {
     std::cout << "Game authors: " << manifest.authors[0].name << std::endl;
 
     auto game = lib->createInstance();
+    std::cout << "\n[ Compute 1 ]\n" << std::endl;
+    game->compute(1);
     return 0;
 }
