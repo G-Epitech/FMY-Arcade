@@ -117,7 +117,7 @@ public:
     /**
      * @brief Get the events object
      *
-     * @return Last events occured
+     * @return Last events occurred
      * @warning Call successively this method will result in losing events
      * @note Call `A` return `eventsA` containing 2 events,
      * but make another call `B` (directly after call `A`) `eventsB`
@@ -126,8 +126,9 @@ public:
     std::vector<shared::graphics::events::EventPtr> getEvents() override;
 
 private:
-    std::unique_ptr<sf::RenderWindow> _window;
-    std::string _title;
-    unsigned int _fps;
-    WindowMode _mode;
+    sf::RenderWindow    _window;
+    std::string         _title;
+    unsigned int        _fps;
+    WindowMode          _mode;
+    sf::Image           _icon;
 };

@@ -5,31 +5,33 @@
 ** Window class
 */
 
-#include <iostream>
 #include "Window.hpp"
 #include "EventsHandler.hpp"
 #include "common/events/mouse/mouse.hpp"
+#include "common/exceptions/WindowException.hpp"
 
 using namespace arcade::graphics::sfml::events;
 using namespace arcade::graphics::sfml::window;
+using namespace arcade::graphics::common::exceptions;
 
 Window::Window(const IWindow::WindowInitProps &props)
 {
-    this->_mode = props.mode;
-    this->_fps = props.fps;
-    this->_window = std::make_unique<sf::RenderWindow>(
+    _mode = props.mode;
+    _fps = props.fps;
+    _window.create(
         sf::VideoMode(props.size.x, props.size.y),
         props.title
     );
+    Window::setIcon(props.icon);
 }
 
 Window::~Window()
 {
-    this->_window->close();
+    _window.close();
 }
 
 void Window::setTitle(const std::string &title) {
-    this->_window->setTitle(title);
+    _window.setTitle(title);
 }
 
 void Window::setSize(shared::types::Vector2u size) {
@@ -43,24 +45,24 @@ shared::types::Vector2u Window::getSize() const {
 }
 
 void Window::setFramerateLimit(unsigned int fps) {
-    this->_window->setFramerateLimit(fps);
-    this->_fps = fps;
+    _window.setFramerateLimit(fps);
+    _fps = fps;
 }
 
 unsigned int Window::getFramerateLimit() const {
-    return this->_fps;
+    return _fps;
 }
 
 void Window::setMode(IWindow::WindowMode mode) {
     this->_mode = mode;
     if (mode == FULLSCREEN) {
-        this->_window->create(
+        _window.create(
             sf::VideoMode(1920, 1080),
             this->_title,
             sf::Style::Fullscreen
         );
     } else {
-        this->_window->create(
+        _window.create(
             sf::VideoMode(1920, 1080),
             this->_title,
             sf::Style::Default
@@ -69,15 +71,27 @@ void Window::setMode(IWindow::WindowMode mode) {
 }
 
 Window::WindowMode Window::getMode() const {
-    return this->_mode;
+    return _mode;
 }
 
 bool Window::isOpen() const {
-    return this->_window->isOpen();
+    return _window.isOpen();
 }
 
-void Window::setIcon(const std::string &icon) {
-    (void) icon;
+void Window::setIcon(const std::string &path) {
+    if (path.empty())
+        return;
+    if (!_icon.loadFromFile(path)) {
+        throw WindowException(
+            "Failed to load icon at: " + path,
+            "Window.setIcon in SFML library"
+        );
+    }
+    _window.setIcon(
+        _icon.getSize().x,
+        _icon.getSize().y,
+        _icon.getPixelsPtr()
+    );
 }
 void Window::render(const shared::graphics::TextureProps &props) {
     (void) props;
@@ -88,17 +102,17 @@ void Window::render(const shared::graphics::TextProps &props) {
 }
 
 void Window::clear() {
-    this->_window->clear();
+    _window.clear();
 }
 
 void Window::display() {
-    this->_window->display();
+    _window.display();
 }
 
 void Window::close() {
-    this->_window->close();
+    _window.close();
 }
 
 std::vector<EventPtr> Window::getEvents() {
-    return EventsHandler::handleEvents(*this->_window);
+    return EventsHandler::handleEvents(_window);
 }
