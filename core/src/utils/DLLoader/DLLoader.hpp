@@ -8,39 +8,68 @@
 #pragma once
 
 #include <dlfcn.h>
-#include "exception/ArcadeError.hpp"
+#include <iostream>
 
 class DLLoader {
     public:
-        DLLoader();
-        ~DLLoader();
 
         /**
-         * @brief Open a library
+         * @brief Construct a new DLLoader object
          * 
-         * @param filepath 
+         * @param filepath File path of the library
          */
-        void openLibrary(const std::string &filepath);
+        DLLoader(const std::string &filepath);
+
+        ~DLLoader();
+
+        typedef enum {
+            LAZY = RTLD_LAZY,
+            NOW = RTLD_NOW,
+            LOCAL = RTLD_LOCAL,
+            GLOBAL = RTLD_GLOBAL,
+            NODELETE = RTLD_NODELETE,
+            DEEPBIND = RTLD_DEEPBIND,
+            NOLOAD = RTLD_NOLOAD
+        } LoadingMode;
+
+        /**
+         * @brief Open the library
+         * 
+         * @param mode Loading mode
+         */
+        void open(LoadingMode mode = LAZY);
 
         /**
          * @brief Get a function from the library
          * 
          * @tparam T Function prototype
-         * @param functionName Function name
+         * @param name Symbol name
          * @return T Function founded
          */
         template <typename T>
-        T getFunction(std::string functionName) {
-            T function = reinterpret_cast<T>(dlsym(this->_handle, functionName.c_str()));
-
+        T loadSymbol(std::string name) {
+            if (!this->_handle)
+                throw DLLoaderExeption("Library not loaded");
+            T function = reinterpret_cast<T>(dlsym(this->_handle, name.c_str()));
             if (!function)
                 this->_throwError();
             return function;
         }
 
+        class DLLoaderExeption : public std::exception {
+            public:
+                DLLoaderExeption(const std::string &message);
+
+                const char *what() const noexcept override;
+
+            private:
+                const std::string _message;
+        };
+
     protected:
     private:
         void *_handle;
+        const std::string _filepath;
 
         /**
          * @brief Throw an error

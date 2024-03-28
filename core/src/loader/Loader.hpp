@@ -49,8 +49,6 @@ class Loader {
     const GraphicsProviders &getGraphicsLibraries() const;
 
   private:
-    DIR *_dir;
-    DLLoader _dlLoader;
     const std::string _path;
     GameProviders _gamesLibraries;
     GraphicsProviders _graphicsLibraries;
@@ -60,20 +58,20 @@ class Loader {
      * @param filepath file path of the library
      * @return getter function
      */
-    shared::types::LibraryType _getLibraryGetter(const std::string &filepath);
+    shared::types::LibraryType _getLibraryGetter(const std::string &filepath, DLLoader &dlLoader);
 
     /**
      * @brief Load a game library
      * @param filepath file path of the library
      * @param handle handle pointer to the library
      */
-    void _loadGameLibrary(const std::string &filepath);
+    void _loadGameLibrary(const std::string &filepath, DLLoader &dlLoader);
 
     /**
      * @brief Load a graphics library
      * @param filepath file path of the library
      */
-    void _loadGraphicsLibrary(const std::string &filepath);
+    void _loadGraphicsLibrary(const std::string &filepath, DLLoader &dlLoader);
 
     /**
      * @brief Throw an error when loading a library

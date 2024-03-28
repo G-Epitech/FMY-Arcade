@@ -5,67 +5,53 @@
 ** Loader
 */
 
+#include <filesystem>
 #include "Loader.hpp"
+#include "exception/ArcadeError.hpp"
 
-Loader::Loader() {
-    this->_dir = nullptr;
-}
+Loader::Loader() {}
 
-Loader::~Loader() {
-    if (this->_dir)
-        closedir(this->_dir);
-}
+Loader::~Loader() {}
 
-shared::types::LibraryType Loader::_getLibraryGetter(const std::string &filepath) {
+shared::types::LibraryType Loader::_getLibraryGetter(const std::string &filepath, DLLoader &dlLoader) {
     shared::types::LibraryTypeGetter getter = nullptr;
 
-    getter = this->_dlLoader.getFunction<shared::types::LibraryTypeGetter>(SHARED_STRINGIFY(SHARED_LIBRARY_TYPE_GETTER_NAME));
+    getter = dlLoader.loadSymbol<shared::types::LibraryTypeGetter>(SHARED_STRINGIFY(SHARED_LIBRARY_TYPE_GETTER_NAME));
     return getter();
 }
 
-void Loader::_loadGameLibrary(const std::string &filepath) {
+void Loader::_loadGameLibrary(const std::string &filepath, DLLoader &dlLoader) {
     shared::types::GameProviderGetter game = nullptr;
 
-    game = this->_dlLoader.getFunction<shared::types::GameProviderGetter>(SHARED_STRINGIFY(SHARED_GAME_PROVIDER_GETTER_NAME));
+    game = dlLoader.loadSymbol<shared::types::GameProviderGetter>(SHARED_STRINGIFY(SHARED_GAME_PROVIDER_GETTER_NAME));
     this->_gamesLibraries.push_back(std::unique_ptr<shared::games::IGameProvider>(game()));
 }
 
-void Loader::_loadGraphicsLibrary(const std::string &filepath) {
+void Loader::_loadGraphicsLibrary(const std::string &filepath, DLLoader &dlLoader) {
     shared::types::GraphicsProviderGetter graphics = nullptr;
 
-    graphics = this->_dlLoader.getFunction<shared::types::GraphicsProviderGetter>(SHARED_STRINGIFY(SHARED_GRAPHICS_PROVIDER_GETTER_NAME));
+    graphics = dlLoader.loadSymbol<shared::types::GraphicsProviderGetter>(SHARED_STRINGIFY(SHARED_GRAPHICS_PROVIDER_GETTER_NAME));
     this->_graphicsLibraries.push_back(std::unique_ptr<shared::graphics::IGraphicsProvider>(graphics()));
 }
 
 void Loader::registerLibrary(const std::string &filepath) {
     shared::types::LibraryType type;
+    DLLoader dlLoader(filepath);
 
-    this->_dlLoader.openLibrary(filepath);
-    type = this->_getLibraryGetter(filepath);
+    dlLoader.open();
+    type = this->_getLibraryGetter(filepath, dlLoader);
     if (type == shared::types::LibraryType::GAME)
-        this->_loadGameLibrary(filepath);
+        this->_loadGameLibrary(filepath, dlLoader);
     else if (type == shared::types::LibraryType::GRAPHIC)
-        this->_loadGraphicsLibrary(filepath);
+        this->_loadGraphicsLibrary(filepath, dlLoader);
     else
         throw ArcadeError(filepath + ": Unknown library type!");
 }
 
 void Loader::loadLibraries(std::string path) {
-    struct dirent *ent;
-
-    if (this->_dir)
-        closedir(this->_dir);
-    this->_dir = opendir(path.c_str());
-    if (!this->_dir)
-        throw ArcadeError("Cannot open directory: " + path);
-    ent = readdir(this->_dir);
-    while (ent) {
-        if (ent->d_name[0] == '.') {
-            ent = readdir(this->_dir);
-            continue;
-        }
-        this->registerLibrary(path + "/" + ent->d_name);
-        ent = readdir(this->_dir);
+    for (const auto &entry : std::filesystem::directory_iterator(path)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".so")
+            this->registerLibrary(entry.path());
     }
 }
 
