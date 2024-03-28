@@ -11,7 +11,7 @@
 using namespace arcade::games;
 
 const shared::games::GameManifest snake::SnakeGame::manifest = {
-        .name = "Snake",
+        .name = "snake",
         .description = "The snake original game",
         .version = "1.0.0",
         .authors = {

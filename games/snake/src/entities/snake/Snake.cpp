@@ -2,11 +2,11 @@
 ** EPITECH PROJECT, 2024
 ** arcade
 ** File description:
-** Snake.cpp
+** snake.cpp
 */
 
 #include "Snake.hpp"
-#include "common/entity/AEntity.hpp"
+#include "TailEntity.hpp"
 
 using namespace shared::games::entity;
 using namespace arcade::games::snake;
@@ -24,4 +24,8 @@ std::vector<EntityPtr> &Snake::getTails() {
 }
 
 EntityPtr Snake::addTail() {
+    EntityPtr newTail = std::make_shared<TailEntity>();
+
+    this->_tails.push_back(newTail);
+    return newTail;
 }

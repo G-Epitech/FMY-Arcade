@@ -8,7 +8,7 @@
 #pragma once
 
 #include "common/game/AGame.hpp"
-#include "Snake.hpp"
+#include "games/snake/src/entities/snake/Snake.hpp"
 
 namespace arcade::games::snake {
     class SnakeGame;
