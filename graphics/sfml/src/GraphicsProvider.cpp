@@ -8,6 +8,7 @@
 #include <iostream>
 #include "GraphicsProvider.hpp"
 #include "window/Window.hpp"
+#include "sound/Sound.hpp"
 
 using namespace shared::graphics;
 using namespace arcade::graphics::sfml;
@@ -37,11 +38,11 @@ const GraphicsManifest &GraphicsProvider::getManifest() const noexcept {
 }
 
 std::unique_ptr<IWindow> GraphicsProvider::createWindow(const IWindow::WindowInitProps &props) {
-    return std::make_unique<Window>(props);
+    return std::make_unique<window::Window>(props);
 }
 
 std::shared_ptr<ISound> GraphicsProvider::createSound(const std::string &path) {
-    return nullptr;
+    return std::make_shared<sound::Sound>(path);
 }
 
 std::shared_ptr<ITexture> GraphicsProvider::createTexture(const std::string &bin, const std::string &ascii) {

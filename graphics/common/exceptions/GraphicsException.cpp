@@ -15,10 +15,10 @@ GraphicsException::GraphicsException(const std::string &message, const std::stri
     this->_where = where;
 }
 
-const std::string &GraphicsException::what() const noexcept {
-    return this->_message;
+const char *GraphicsException::what() const noexcept {
+    return this->_message.c_str();
 }
 
-const std::string &GraphicsException::where() const noexcept {
-    return this->_where;
+const char *GraphicsException::where() const noexcept {
+    return this->_where.c_str();
 }

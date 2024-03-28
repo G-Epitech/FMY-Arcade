@@ -12,11 +12,11 @@
 
 using namespace shared::graphics;
 
-namespace arcade::graphics::sfml{
+namespace arcade::graphics::sfml::window {
     class Window;
 }
 
-class arcade::graphics::sfml::Window : public IWindow {
+class arcade::graphics::sfml::window::Window : public IWindow {
 public:
     explicit Window(const IWindow::WindowInitProps &props);
     ~Window() override;

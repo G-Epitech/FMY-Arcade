@@ -1,5 +1,5 @@
 project(sfml)
-add_library(${PROJECT_NAME} SHARED
+add_library(sfml SHARED
         export.cpp
         src/GraphicsProvider.cpp
         src/GraphicsProvider.hpp
@@ -7,11 +7,13 @@ add_library(${PROJECT_NAME} SHARED
         src/window/Window.hpp
         src/window/EventsHandler.cpp
         src/window/EventsHandler.hpp
+        src/sound/Sound.cpp
+        src/sound/Sound.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../..)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
+target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
+target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../..)
+target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
 
-target_link_libraries(sfml sfml-graphics sfml-window sfml-system)
+target_link_libraries(sfml sfml-graphics sfml-window sfml-system sfml-audio)

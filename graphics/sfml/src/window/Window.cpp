@@ -10,8 +10,8 @@
 #include "EventsHandler.hpp"
 #include "common/events/mouse/mouse.hpp"
 
-using namespace arcade::graphics::sfml;
 using namespace shared::graphics::events;
+using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::sfml::events;
 
 Window::Window(const IWindow::WindowInitProps &props)
