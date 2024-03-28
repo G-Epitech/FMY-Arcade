@@ -10,15 +10,13 @@
 #include <SFML/Graphics.hpp>
 #include "shared/graphics/IWindow.hpp"
 
-using namespace shared::graphics;
-
 namespace arcade::graphics::sfml::window {
     class Window;
 }
 
-class arcade::graphics::sfml::window::Window : public IWindow {
+class arcade::graphics::sfml::window::Window: public shared::graphics::IWindow {
 public:
-    explicit Window(const IWindow::WindowInitProps &props);
+    explicit Window(const WindowInitProps &props);
     ~Window() override;
 
     /**
@@ -82,14 +80,14 @@ public:
      *
      * @param props Properties of the entity to render
      */
-    void render(const TextProps &props) override;
+    void render(const shared::graphics::TextProps &props) override;
 
     /**
      * @brief Render the entity with given properties
      *
      * @param props Properties of the entity to render
      */
-    void render(const TextureProps &props) override;
+    void render(const shared::graphics::TextureProps &props) override;
 
     /**
      * @brief Clear the content of the window
@@ -125,7 +123,7 @@ public:
      * but make another call `B` (directly after call `A`) `eventsB`
      * will result to an empty vector
      */
-    std::vector<events::EventPtr> getEvents() override;
+    std::vector<shared::graphics::events::EventPtr> getEvents() override;
 
 private:
     std::unique_ptr<sf::RenderWindow> _window;

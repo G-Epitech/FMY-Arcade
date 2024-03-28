@@ -12,13 +12,11 @@
 #include "shared/graphics/IFont.hpp"
 #include "utils/compiler.hpp"
 
-using namespace shared::graphics;
-
 namespace arcade::graphics::sfml::font {
     class Font;
 }
 
-class arcade::graphics::sfml::font::Font : public IFont {
+class arcade::graphics::sfml::font::Font : public shared::graphics::IFont {
 public:
     explicit Font(const std::string &path);
     ~Font() override = default;

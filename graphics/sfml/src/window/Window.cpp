@@ -10,9 +10,8 @@
 #include "EventsHandler.hpp"
 #include "common/events/mouse/mouse.hpp"
 
-using namespace shared::graphics::events;
-using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::sfml::events;
+using namespace arcade::graphics::sfml::window;
 
 Window::Window(const IWindow::WindowInitProps &props)
 {
@@ -69,7 +68,7 @@ void Window::setMode(IWindow::WindowMode mode) {
     }
 }
 
-IWindow::WindowMode Window::getMode() const {
+Window::WindowMode Window::getMode() const {
     return this->_mode;
 }
 
@@ -80,11 +79,11 @@ bool Window::isOpen() const {
 void Window::setIcon(const std::string &icon) {
     (void) icon;
 }
-void Window::render(const TextProps &props) {
+void Window::render(const shared::graphics::TextureProps &props) {
     (void) props;
 }
 
-void Window::render(const TextureProps &props) {
+void Window::render(const shared::graphics::TextProps &props) {
     (void) props;
 }
 

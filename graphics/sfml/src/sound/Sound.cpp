@@ -22,7 +22,7 @@ Sound::Sound(const std::string &path, SoundState state) {
     _sound.stop();
 }
 
-ISound::SoundVolume Sound::getVolume() const {
+Sound::SoundVolume Sound::getVolume() const {
     return static_cast<SoundVolume>(_sound.getVolume());
 }
 
@@ -41,7 +41,7 @@ void Sound::setState(SoundState state) {
     }
 }
 
-ISound::SoundState Sound::getState() const {
+Sound::SoundState Sound::getState() const {
     auto state = _sound.getStatus();
 
     switch (state) {

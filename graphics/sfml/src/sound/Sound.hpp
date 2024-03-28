@@ -12,13 +12,11 @@
 
 #include "shared/graphics/ISound.hpp"
 
-using namespace shared::graphics;
-
 namespace arcade::graphics::sfml::sound {
     class Sound;
 }
 
-class arcade::graphics::sfml::sound::Sound : public ISound {
+class arcade::graphics::sfml::sound::Sound : public shared::graphics::ISound {
 public:
     explicit Sound(const std::string &path, SoundState state = STOP);
     ~Sound() override = default;

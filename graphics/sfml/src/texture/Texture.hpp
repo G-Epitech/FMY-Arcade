@@ -11,13 +11,11 @@
 #include <SFML/Graphics.hpp>
 #include "shared/graphics/ITexture.hpp"
 
-using namespace shared::graphics;
-
 namespace arcade::graphics::sfml::texture {
     class Texture;
 }
 
-class arcade::graphics::sfml::texture::Texture: public ITexture {
+class arcade::graphics::sfml::texture::Texture: public shared::graphics::ITexture {
 public:
     explicit Texture(const std::string &path);
     ~Texture() override = default;
