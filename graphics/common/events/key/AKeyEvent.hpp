@@ -30,6 +30,14 @@ public:
         return T;
     }
 
+    const KeyCode getKeyCode() const noexcept override {
+        return _code;
+    }
+
+    const KeyType getKeyType() const noexcept override {
+        return _keyType;
+    }
+
 protected:
     AKeyEvent(const KeyType keyType, const KeyCode code) : _keyType(keyType), _code(code) {};
 

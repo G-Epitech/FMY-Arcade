@@ -15,5 +15,6 @@ namespace arcade::graphics::common::events {
 
 class arcade::graphics::common::events::KeyReleaseEvent: public AKeyEvent<EventType::KEY_RELEASE> {
 public:
-    using AKeyEvent::AKeyEvent;
+    KeyReleaseEvent(const KeyType type, const KeyCode code) : AKeyEvent(type, code) {};
+    ~KeyReleaseEvent() override = default;
 };

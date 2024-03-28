@@ -15,5 +15,7 @@ namespace arcade::graphics::common::events {
 
 class arcade::graphics::common::events::KeyPressEvent: public AKeyEvent<EventType::KEY_PRESS> {
 public:
-    using AKeyEvent::AKeyEvent;
+    explicit KeyPressEvent(const KeyType type, const KeyCode code = { .character = 0 })
+        : AKeyEvent(type, code) {};
+    ~KeyPressEvent() override = default;
 };

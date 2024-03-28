@@ -5,6 +5,8 @@ add_library(${PROJECT_NAME} SHARED
         src/GraphicsProvider.hpp
         src/window/Window.cpp
         src/window/Window.hpp
+        src/window/EventsHandler.cpp
+        src/window/EventsHandler.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 

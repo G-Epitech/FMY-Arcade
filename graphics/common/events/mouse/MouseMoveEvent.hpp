@@ -18,8 +18,7 @@ namespace arcade::graphics::common::events {
 
 class arcade::graphics::common::events::MouseMoveEvent: public AMouseEvent<EventType::MOUSE_MOVE> {
 public:
-    
-    explicit MouseMoveEvent(Vector2i pos): AMouseEvent<EventType::MOUSE_MOVE>(pos) {}
+    explicit MouseMoveEvent(const Vector2i pos): AMouseEvent<EventType::MOUSE_MOVE>(pos) {}
 
     ~MouseMoveEvent() override = default;
 };

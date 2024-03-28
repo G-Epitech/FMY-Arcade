@@ -18,7 +18,7 @@ namespace arcade::graphics::common::events {
 }
 
 template <EventType T>
-class arcade::graphics::common::events::AMouseEvent: public IMouseEvent {
+class arcade::graphics::common::events::AMouseEvent: public virtual IMouseEvent {
 public:
     ~AMouseEvent() override = default;
 

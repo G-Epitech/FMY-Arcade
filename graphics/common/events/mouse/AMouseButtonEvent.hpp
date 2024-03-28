@@ -23,7 +23,7 @@ namespace arcade::graphics::common::events {
 }
 
 template<EventType T> requires MouseButtonEventType<T>
-class arcade::graphics::common::events::AMouseButtonEvent: public AMouseEvent<T>, public IMouseButtonEvent {
+class arcade::graphics::common::events::AMouseButtonEvent: public AMouseEvent<T>, public virtual IMouseButtonEvent {
 public:
     /**
      * @brief Construct a new AMouseButtonEvent object
