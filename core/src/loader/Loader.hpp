@@ -2,19 +2,26 @@
 ** EPITECH PROJECT, 2024
 ** arcade
 ** File description:
-** DLLoader
+** Loader
 */
 
 #pragma once
 
-#include <iostream>
 #include <dirent.h>
 #include "types/Providers.hpp"
+#include "utils/DLLoader/DLLoader.hpp"
 
-class DLLoader {
+class Loader {
   public:
-    DLLoader();
-    ~DLLoader();
+    /**
+     * @brief Construct a new Loader object
+     */
+    Loader();
+
+    /**
+     * @brief Destroy the Loader object
+     */
+    ~Loader();
 
     /**
      * @brief Register a library
@@ -41,7 +48,6 @@ class DLLoader {
     const GraphicsProviders &getGraphicsLibraries() const;
 
   private:
-    DIR *_dir;
     const std::string _path;
     GameProviders _gamesLibraries;
     GraphicsProviders _graphicsLibraries;
@@ -49,28 +55,26 @@ class DLLoader {
     /**
      * @brief Get the Library Getter object
      * @param filepath file path of the library
-     * @param handle handle pointer to the library
      * @return getter function
      */
-    shared::types::LibraryType _getLibraryGetter(const std::string &filepath, void *handle);
+    shared::types::LibraryType _getLibraryGetter(const std::string &filepath, DLLoader &dlLoader);
 
     /**
      * @brief Load a game library
      * @param filepath file path of the library
      * @param handle handle pointer to the library
      */
-    void _loadGameLibrary(const std::string &filepath, void *handle);
+    void _loadGameLibrary(const std::string &filepath, DLLoader &dlLoader);
 
     /**
      * @brief Load a graphics library
      * @param filepath file path of the library
-     * @param handle handle pointer to the library
      */
-    void _loadGraphicsLibrary(const std::string &filepath, void *handle);
+    void _loadGraphicsLibrary(const std::string &filepath, DLLoader &dlLoader);
 
     /**
      * @brief Throw an error when loading a library
-     * @param handle handle pointer to the library
+     * @param e exception
      */
-    void _throwLoadError(void *handle);
+    void _throwError(std::exception const &e);
 };

@@ -5,11 +5,11 @@
 ** main
 */
 
-#include "loader/DLLoader.hpp"
+#include "loader/Loader.hpp"
 
 int main(void)
 {
-  DLLoader loader;
+  Loader loader;
 
   try {
     loader.loadLibraries("./lib");
