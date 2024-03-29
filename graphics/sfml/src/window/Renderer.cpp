@@ -5,6 +5,7 @@
 ** Renderer.cpp
 */
 
+#include "Window.hpp"
 #include "Renderer.hpp"
 #include "font/Font.hpp"
 #include "common/exceptions/WindowException.hpp"
@@ -12,10 +13,7 @@
 using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::common::exceptions;
 
-Renderer::Renderer(sf::RenderWindow &window, const Vector2u &size):
-    _window(window),
-    _tileSize(10, 10),
-    tileSize(_tileSize)
+Renderer::Renderer(Window &window): _window(window), _layer(_window.getInnerWindow())
 {
     _text.setFont(sf::Font());
     _sprite.setTexture(sf::Texture());
@@ -34,7 +32,7 @@ void Renderer::render(const shared::graphics::TextProps &props) {
         props.color.b,
         props.color.a)
     );
-    _window.draw(_text);
+    _layer.draw(_text);
 }
 
 void Renderer::render(unused const shared::graphics::TextureProps &props) {

@@ -13,9 +13,11 @@
 using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::common::exceptions;
 
+const Vector2u Window::tileSize = { 10, 10 };
+
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
-    _renderer(_window, props.size),
+    _renderer(*this),
     _eventsHandler(*this)
 {
     auto size = _getPixelSizeFromTiles(props.size);
@@ -129,12 +131,12 @@ std::vector<EventPtr> Window::getEvents() {
     return _eventsHandler.handleEvents();
 }
 
-Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) const {
+Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) {
     Vector2u real(1920, 1080);
 
-    if (size.x * static_cast<unsigned int>(_renderer.tileSize.x) < 1920)
-        real.x = size.x * static_cast<unsigned int>(_renderer.tileSize.x);
-    if (size.y * static_cast<unsigned int>(_renderer.tileSize.y) < 1080)
-        real.y = size.y * static_cast<unsigned int>(_renderer.tileSize.y);
+    if (size.x * static_cast<unsigned int>(tileSize.x) < 1920)
+        real.x = size.x * static_cast<unsigned int>(tileSize.x);
+    if (size.y * static_cast<unsigned int>(tileSize.y) < 1080)
+        real.y = size.y * static_cast<unsigned int>(tileSize.y);
     return real;
 }

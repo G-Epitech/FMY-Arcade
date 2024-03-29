@@ -134,12 +134,13 @@ public:
     sf::RenderWindow &getInnerWindow() noexcept;
 
     /**
-     * @brief On resize event
+     * @brief Get the size of a tile
+     * @return Size of a tile
      */
-    void onResize();
+    static const Vector2u  tileSize;
 
 private:
-    Vector2u _getPixelSizeFromTiles(const Vector2u &size) const;
+    static Vector2u _getPixelSizeFromTiles(const Vector2u &size);
 
     EventsHandler       _eventsHandler;
     Renderer            _renderer;

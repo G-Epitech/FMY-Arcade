@@ -19,7 +19,7 @@ namespace arcade::graphics::sfml::window {
 
 class arcade::graphics::sfml::window::Renderer {
 public:
-    Renderer(sf::RenderWindow &window, const Vector2u &size);
+    explicit Renderer(Window &window);
     ~Renderer() = default;
 
     /**
@@ -34,15 +34,9 @@ public:
      */
     void render(const shared::graphics::TextProps &props);
 
-    /**
-     * @brief Get the size of a tile
-     * @return Size of a tile
-     */
-    const Vector2f &tileSize;
-
 private:
-    Vector2f            _tileSize;
-    sf::RenderWindow    &_window;
+    Window              &_window;
+    sf::RenderWindow    &_layer;
     sf::Text            _text;
     sf::Sprite          _sprite;
 
