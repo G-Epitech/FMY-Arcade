@@ -7,15 +7,12 @@
 
 #pragma once
 
+#include <memory>
 #include <dlfcn.h>
 #include <iostream>
 
 class DLLoader {
     public:
-
-        DLLoader();
-
-        ~DLLoader();
 
         typedef enum {
             LAZY = RTLD_LAZY,
@@ -23,16 +20,25 @@ class DLLoader {
             LOCAL = RTLD_LOCAL,
             GLOBAL = RTLD_GLOBAL,
             NODELETE = RTLD_NODELETE,
-            DEEPBIND = RTLD_DEEPBIND,
             NOLOAD = RTLD_NOLOAD
         } LoadingMode;
 
         /**
+         * @brief Construct a new DLLoader object
+         * 
+         * @param filepath Path to the library
+         */
+        DLLoader(const std::string &filepath, LoadingMode mode = LAZY);
+
+        ~DLLoader();
+
+        /**
          * @brief Open the library
          * 
+         * @param filepath Path to the library
          * @param mode Loading mode
          */
-        void open(const std::string &filepath, LoadingMode mode = LAZY);
+        static std::shared_ptr<DLLoader> open(const std::string &filepath, LoadingMode mode = LAZY);
 
         /**
          * @brief Get a function from the library
