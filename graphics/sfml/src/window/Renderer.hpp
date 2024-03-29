@@ -36,22 +36,9 @@ public:
 
     /**
      * @brief Get the size of a tile
-     * @param props Texture properties
-     * @return Size of a tile
-     */
-    void updateTileSize();
-
-    /**
-     * @brief Get the size of a tile
      * @return Size of a tile
      */
     const Vector2f &tileSize;
-
-    /**
-     * @brief Get the size of the rendering area
-     * @return Size of the rendering area
-     */
-    const Vector2u size;
 
 private:
     Vector2f            _tileSize;

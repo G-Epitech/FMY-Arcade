@@ -5,7 +5,6 @@
 ** Renderer.cpp
 */
 
-#include <iostream>
 #include "Renderer.hpp"
 #include "font/Font.hpp"
 #include "common/exceptions/WindowException.hpp"
@@ -15,8 +14,7 @@ using namespace arcade::graphics::common::exceptions;
 
 Renderer::Renderer(sf::RenderWindow &window, const Vector2u &size):
     _window(window),
-    _tileSize(20, 20),
-    size(size.x, size.y),
+    _tileSize(10, 10),
     tileSize(_tileSize)
 {
     _text.setFont(sf::Font());
@@ -24,7 +22,6 @@ Renderer::Renderer(sf::RenderWindow &window, const Vector2u &size):
 }
 
 void Renderer::render(const shared::graphics::TextProps &props) {
-    std::cout << "Rendering text inner" << std::endl;
     auto font = _castOrThrow<shared::graphics::IFont, font::Font>(props.font);
 
     _reset(_text);
@@ -72,11 +69,4 @@ std::shared_ptr<To> Renderer::_castOrThrow(std::shared_ptr<From> from) {
         );
     }
     return to;
-}
-
-void Renderer::updateTileSize() {
-    if (size.x != 0)
-        _tileSize.x = static_cast<float>(_window.getSize().x) / static_cast<float>(size.x);
-    if (size.y != 0)
-        _tileSize.y = static_cast<float>(_window.getSize().y) / static_cast<float>(size.y);
 }

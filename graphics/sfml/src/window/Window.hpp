@@ -133,13 +133,20 @@ public:
      */
     sf::RenderWindow &getInnerWindow() noexcept;
 
-private:
-    Vector2u _getInitSize(const Vector2u &requestedSize) const;
+    /**
+     * @brief On resize event
+     */
+    void onResize();
 
+private:
+    Vector2u _getPixelSizeFromTiles(const Vector2u &size) const;
+
+    EventsHandler       _eventsHandler;
     Renderer            _renderer;
     sf::RenderWindow    _window;
     std::string         _title;
     unsigned int        _fps;
     WindowMode          _mode;
     sf::Image           _icon;
+    Vector2u            _size;
 };

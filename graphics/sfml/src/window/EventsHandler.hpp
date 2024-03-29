@@ -13,16 +13,16 @@
 #include "common/events/window/window.hpp"
 #include "common/events/mouse/mouse.hpp"
 #include "common/events/key/key.hpp"
-#include "Window.hpp"
 
 namespace arcade::graphics::sfml::window {
     class EventsHandler;
+    class Window;
 }
 
 class arcade::graphics::sfml::window::EventsHandler {
 public:
-    EventsHandler() = delete;
-    ~EventsHandler() = delete;
+    explicit EventsHandler(Window &window);
+    ~EventsHandler() = default;
 
     typedef EventPtr (*EventHandler)(sf::Event &event, Window &window);
 
@@ -31,7 +31,7 @@ public:
      * @param window Window object
      * @return Vector of events
      */
-    static std::vector<EventPtr> handleEvents(Window &window);
+    std::vector<EventPtr> handleEvents();
 
 private:
 
@@ -124,4 +124,14 @@ private:
      * @return Pointer to created event or null if not handled
      */
     static EventPtr _handleWindowResizeEvent(sf::Event &event, Window &window);
+
+    /**
+     * @brief Resolve position of the event to convert it in tiles unit
+     * @param position Position to resolve
+     * @param window Window object of which relate the position
+     * @return Resolved position
+     */
+    static Vector2i _resolvePosition(Vector2i position, Window &window);
+
+    window::Window &_window;
 };

@@ -5,7 +5,6 @@
 ** Window class
 */
 
-#include <iostream>
 #include "Window.hpp"
 #include "EventsHandler.hpp"
 #include "common/events/mouse/mouse.hpp"
@@ -14,10 +13,13 @@
 using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::common::exceptions;
 
-Window::Window(const IWindow::WindowInitProps &props): _renderer(_window, props.size)
+Window::Window(const IWindow::WindowInitProps &props):
+    _size(props.size),
+    _renderer(_window, props.size),
+    _eventsHandler(*this)
 {
-    auto size = _getInitSize(props.size);
-    std::cout << "Size: " << size.x << " " << size.y << std::endl;
+    auto size = _getPixelSizeFromTiles(props.size);
+
     _mode = props.mode;
     _fps = props.fps;
     _window.create(
@@ -41,13 +43,14 @@ void Window::setTitle(const std::string &title) {
 }
 
 void Window::setSize(shared::types::Vector2u size) {
-    (void) size;
-    //this->_window->setSize(sf::Vector2u(size.x, size.y));
+    auto real = _getPixelSizeFromTiles(size);
+
+    _size = size;
+    _window.setSize(sf::Vector2u(real.x, real.y));
 }
 
 shared::types::Vector2u Window::getSize() const {
-    return {12, 12};
-    //return shared::types::Vector2u(this->_window->getSize().x, this->_window->getSize().y);
+    return _size;
 }
 
 void Window::setFramerateLimit(unsigned int fps) {
@@ -60,16 +63,18 @@ unsigned int Window::getFramerateLimit() const {
 }
 
 void Window::setMode(IWindow::WindowMode mode) {
+    auto size = _window.getSize();
+
     this->_mode = mode;
     if (mode == FULLSCREEN) {
         _window.create(
-            sf::VideoMode(1920, 1080),
+            sf::VideoMode(size.x, size.y),
             this->_title,
             sf::Style::Fullscreen
         );
     } else {
         _window.create(
-            sf::VideoMode(1920, 1080),
+            sf::VideoMode(size.x, size.y),
             this->_title,
             sf::Style::Default
         );
@@ -105,7 +110,6 @@ void Window::render(const shared::graphics::TextureProps &props) {
 }
 
 void Window::render(const shared::graphics::TextProps &props) {
-    std::cout << "Rendering text" << std::endl;
     _renderer.render(props);
 }
 
@@ -114,16 +118,6 @@ void Window::clear() {
 }
 
 void Window::display() {
-    sf::RectangleShape rect(sf::Vector2f(_renderer.tileSize.x, _renderer.tileSize.y));
-    rect.setOutlineColor(sf::Color::Red);
-    rect.setFillColor(sf::Color::Transparent);
-    rect.setOutlineThickness(1);
-    for (unsigned int i = 0; i < 1920 / _renderer.tileSize.x; i++) {
-        for (unsigned int j = 0; j < 1080 / _renderer.tileSize.y; j++) {
-            rect.setPosition(i * _renderer.tileSize.x, j * _renderer.tileSize.y);
-            _window.draw(rect);
-        }
-    }
     _window.display();
 }
 
@@ -132,15 +126,15 @@ void Window::close() {
 }
 
 std::vector<EventPtr> Window::getEvents() {
-    return EventsHandler::handleEvents(*this);
+    return _eventsHandler.handleEvents();
 }
 
-Vector2u Window::_getInitSize(const Vector2u &requestedSize) const {
-    Vector2u size(1920, 1080);
+Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) const {
+    Vector2u real(1920, 1080);
 
-    if (requestedSize.x * static_cast<unsigned int>(_renderer.tileSize.x) < 1920)
-        size.x = requestedSize.x * static_cast<unsigned int>(_renderer.tileSize.x);
-    if (requestedSize.y * static_cast<unsigned int>(_renderer.tileSize.y) < 1080)
-        size.y = requestedSize.y * static_cast<unsigned int>(_renderer.tileSize.y);
-    return size;
+    if (size.x * static_cast<unsigned int>(_renderer.tileSize.x) < 1920)
+        real.x = size.x * static_cast<unsigned int>(_renderer.tileSize.x);
+    if (size.y * static_cast<unsigned int>(_renderer.tileSize.y) < 1080)
+        real.y = size.y * static_cast<unsigned int>(_renderer.tileSize.y);
+    return real;
 }

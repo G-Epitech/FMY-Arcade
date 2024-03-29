@@ -7,6 +7,7 @@
 
 #include <memory>
 
+#include "Window.hpp"
 #include "EventsHandler.hpp"
 #include "utils/compiler.hpp"
 
@@ -27,8 +28,9 @@ EventsHandler::EventHandler EventsHandler::_getHandler(sf::Event::EventType type
     return handler != handlers.end() ? handler->second : nullptr;
 }
 
+EventsHandler::EventsHandler(Window &window): _window(window) {}
 
-std::vector<EventPtr> EventsHandler::handleEvents(Window &_window) {
+std::vector<EventPtr> EventsHandler::handleEvents() {
     std::vector<EventPtr> events;
     sf::Event SFMLEvent{};
 
@@ -191,9 +193,9 @@ EventPtr EventsHandler::_handleMouseMoveEvent(
     sf::Event &event,
     unused Window &window
 ) {
-    return std::make_shared<MouseMoveEvent>(Vector2i(
-        event.mouseMove.x,
-        event.mouseMove.y
+    return std::make_shared<MouseMoveEvent>(_resolvePosition(
+        Vector2i(event.mouseMove.x, event.mouseMove.y),
+        window
     ));
 }
 
@@ -201,7 +203,10 @@ EventPtr EventsHandler::_handleMouseButtonPressEvent(
     sf::Event &event,
     unused Window &window
 ) {
-    Vector2i pos(event.mouseButton.x, event.mouseButton.y);
+    Vector2i pos = _resolvePosition(
+        Vector2i(event.mouseButton.x, event.mouseButton.y),
+        window
+    );
 
     if (event.mouseButton.button == sf::Mouse::Button::Left)
         return std::make_shared<MouseButtonPressEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
@@ -215,7 +220,10 @@ EventPtr EventsHandler::_handleMouseBtnReleaseEvent(
     sf::Event &event,
     unused Window &window
 ) {
-    Vector2i pos(event.mouseButton.x, event.mouseButton.y);
+    Vector2i pos = _resolvePosition(
+        Vector2i(event.mouseButton.x, event.mouseButton.y),
+        window
+    );
 
     if (event.mouseButton.button == sf::Mouse::Button::Left)
         return std::make_shared<MouseButtonReleaseEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
@@ -223,4 +231,17 @@ EventPtr EventsHandler::_handleMouseBtnReleaseEvent(
         return std::make_shared<MouseButtonReleaseEvent>(pos, IMouseButtonEvent::MouseButton::RIGHT);
     else
         return nullptr;
+}
+
+Vector2i EventsHandler::_resolvePosition(
+    Vector2i position,
+    Window &window
+){
+    auto size = window.getSize();
+    auto realSize = window.getInnerWindow().getSize();
+
+    return {
+        static_cast<int>(position.x * size.x / realSize.x),
+        static_cast<int>(position.y * size.y / realSize.y)
+    };
 }
