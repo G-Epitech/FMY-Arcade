@@ -5,7 +5,7 @@
 ** main
 */
 
-#include "core/Core.hpp"
+#include "Core.hpp"
 #include "loader/Loader.hpp"
 
 int main(void)
