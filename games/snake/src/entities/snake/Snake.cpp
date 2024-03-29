@@ -13,6 +13,7 @@ using namespace shared::games::entity;
 using namespace arcade::games::snake;
 
 Snake::Snake(unsigned int tails) {
+    this->lastMove = std::chrono::milliseconds(0);
     this->head = std::make_shared<HeadEntity>();
 
     for (size_t i = 0; i < tails; i++) {
@@ -22,12 +23,12 @@ Snake::Snake(unsigned int tails) {
 
 Snake::~Snake() = default;
 
-std::vector<EntityPtr> &Snake::getTails() {
+std::vector<std::shared_ptr<TailEntity>> &Snake::getTails() {
     return this->_tails;
 }
 
-EntityPtr Snake::addTail() {
-    EntityPtr newTail = std::make_shared<TailEntity>();
+std::shared_ptr<TailEntity> Snake::addTail() {
+    std::shared_ptr<TailEntity> newTail = std::make_shared<TailEntity>();
 
     this->_tails.push_back(newTail);
     return newTail;

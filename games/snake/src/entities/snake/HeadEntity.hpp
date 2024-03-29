@@ -19,7 +19,15 @@ class arcade::games::snake::HeadEntity : public common::AEntity {
 public:
     ~HeadEntity() override = default;
 
+    /**
+     * @brief Create the head of a snake
+     */
     explicit HeadEntity();
+
+    /**
+     * @brief Update the position of the head of the snake
+     */
+    void forward();
 
 protected:
     /**
@@ -29,4 +37,6 @@ protected:
     static shared::games::components::TextureProps _defaultTextureProps();
 
     shared::games::components::TextureProps _textureProps;
+
+    Vector2i _direction;
 };

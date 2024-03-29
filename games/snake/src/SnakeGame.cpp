@@ -36,6 +36,7 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(19, 19), 60) {
     for (auto &tail: this->_snake->getTails()) {
         this->_registerEntity(tail);
     }
+    this->_clock = std::chrono::milliseconds(0);
 }
 
 snake::SnakeGame::~SnakeGame() = default;
@@ -45,11 +46,15 @@ const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcep
 }
 
 void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
-    std::cout << "SnakeGame::compute" << std::endl;
-    std::cout << "DeltaTime: " << dt << std::endl;
-    std::cout << "Number of entity: " << this->_entities.size() << std::endl;
+    this->_clock += dt;
 
-    auto txcmp = std::dynamic_pointer_cast<shared::games::components::ITextureComponent>(this->_entities[1]->getComponents().at(1));
-    std::cout << "Origin texture first tail: " << txcmp->getTextureProps().origin.x << std::endl;
-    txcmp->getTextureProps().origin.x += 2;
+    if (this->_clock > std::chrono::milliseconds(300) + this->_snake->lastMove) {
+        this->_snake->lastMove = this->_clock;
+        this->_snake->head->forward();
+
+        // DEBUG //
+        auto position = std::dynamic_pointer_cast<shared::games::components::IPositionComponent>(this->_snake->head->getComponents().at(1));
+        std::cout << "Snake Position [" << position->getPosition().x << ", " << position->getPosition().y << "]" << std::endl;
+        // END DEBUG //
+    }
 }

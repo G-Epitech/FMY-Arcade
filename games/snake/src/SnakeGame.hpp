@@ -42,4 +42,5 @@ public:
 
 protected:
     std::unique_ptr<Snake> _snake;
+    shared::games::DeltaTime _clock;
 };

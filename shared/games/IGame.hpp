@@ -8,6 +8,7 @@
 #pragma once
 
 #include <memory>
+#include <chrono>
 #include "IEntity.hpp"
 #include "../types/Vector.hpp"
 #include "types/GameManifest.hpp"
@@ -18,7 +19,7 @@ namespace shared::games
 {
   class IGame;
 
-  typedef unsigned long DeltaTime;
+  typedef std::chrono::duration<double, std::milli> DeltaTime;
 }
 
 class shared::games::IGame
@@ -56,7 +57,7 @@ public:
   virtual const unsigned int getFps() const noexcept = 0;
 
   /**
-   * @brief Get map of entity
+   * @brief Get map of entities
    *
    * @return Entities map of the game
    */

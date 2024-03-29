@@ -12,6 +12,9 @@
 #include <memory>
 
 #include "common/game/AGame.hpp"
+#include "shared/games/IEntity.hpp"
+#include "HeadEntity.hpp"
+#include "TailEntity.hpp"
 
 namespace arcade::games::snake {
     class Snake;
@@ -26,25 +29,27 @@ public:
      * @brief Head of the snake
      *
      */
-    shared::games::entity::EntityPtr head;
+    std::shared_ptr<HeadEntity> head;
 
     /**
      * @brief Add a tail to the snake body
      *
      * @return The entity to the new tail
      */
-    shared::games::entity::EntityPtr addTail();
+    std::shared_ptr<TailEntity>  addTail();
 
     /**
      * Get tails of the snake
      *
      * @return Vector of tails
      */
-    std::vector<shared::games::entity::EntityPtr> &getTails();
+    std::vector<std::shared_ptr<TailEntity>> &getTails();
+
+    shared::games::DeltaTime lastMove;
 protected:
     /**
      * @brief Entities that compose the snake
      *
      */
-    std::vector<shared::games::entity::EntityPtr> _tails;
+    std::vector<std::shared_ptr<TailEntity>> _tails;
 };

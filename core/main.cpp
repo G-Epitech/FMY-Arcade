@@ -25,10 +25,13 @@ int main(void) {
     std::cout << "Game authors: " << manifest.authors[0].name << std::endl;
 
     auto game = lib->createInstance();
-    std::cout << "\n[ Compute 1 ]\n" << std::endl;
-    game->compute(1);
 
-    std::cout << "\n[ Compute 2 ]\n" << std::endl;
-    game->compute(2);
+    auto last = std::chrono::high_resolution_clock::now();
+    while (true) {
+        auto current_time = std::chrono::high_resolution_clock::now();
+        auto elapsed_time = duration_cast<std::chrono::duration<double, std::milli>>(current_time - last);
+        game->compute(elapsed_time);
+        last = current_time;
+    }
     return 0;
 }
