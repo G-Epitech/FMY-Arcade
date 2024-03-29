@@ -28,7 +28,6 @@ class DLLoader {
             LOCAL = RTLD_LOCAL,
             GLOBAL = RTLD_GLOBAL,
             NODELETE = RTLD_NODELETE,
-            DEEPBIND = RTLD_DEEPBIND,
             NOLOAD = RTLD_NOLOAD
         } LoadingMode;
 
