@@ -8,7 +8,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Renderer.hpp"
 #include "shared/graphics/IWindow.hpp"
+#include "EventsHandler.hpp"
 
 namespace arcade::graphics::sfml::window {
     class Window;
@@ -125,7 +127,16 @@ public:
      */
     std::vector<shared::graphics::events::EventPtr> getEvents() override;
 
+    /**
+     * @brief Get the window object
+     * @return Window object
+     */
+    sf::RenderWindow &getInnerWindow() noexcept;
+
 private:
+    Vector2u _getInitSize(const Vector2u &requestedSize) const;
+
+    Renderer            _renderer;
     sf::RenderWindow    _window;
     std::string         _title;
     unsigned int        _fps;

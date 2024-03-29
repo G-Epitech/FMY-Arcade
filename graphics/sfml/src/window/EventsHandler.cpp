@@ -10,7 +10,7 @@
 #include "EventsHandler.hpp"
 #include "utils/compiler.hpp"
 
-using namespace arcade::graphics::sfml::events;
+using namespace arcade::graphics::sfml::window;
 
 EventsHandler::EventHandler EventsHandler::_getHandler(sf::Event::EventType type) {
     static std::map<sf::Event::EventType, EventHandler> handlers = {
@@ -27,13 +27,14 @@ EventsHandler::EventHandler EventsHandler::_getHandler(sf::Event::EventType type
     return handler != handlers.end() ? handler->second : nullptr;
 }
 
-std::vector<EventPtr> EventsHandler::handleEvents(sf::RenderWindow &window) {
+
+std::vector<EventPtr> EventsHandler::handleEvents(Window &_window) {
     std::vector<EventPtr> events;
     sf::Event SFMLEvent{};
 
-    while (window.pollEvent(SFMLEvent)) {
+    while (_window.getInnerWindow().pollEvent(SFMLEvent)) {
         auto handler = _getHandler(SFMLEvent.type);
-        auto event = handler ? handler(SFMLEvent, window) : nullptr;
+        auto event = handler ? handler(SFMLEvent, _window) : nullptr;
 
         if (event)
             events.push_back(event);
@@ -139,10 +140,7 @@ bool EventsHandler::_handleCharKey(
     return true;
 }
 
-EventPtr EventsHandler::_handleKeyPressEvent(
-    sf::Event &event,
-    unused sf::RenderWindow &window
-) {
+EventPtr EventsHandler::_handleKeyPressEvent(sf::Event &event, unused Window &window) {
     IKeyEvent::KeyType type = IKeyEvent::KeyType::UNKNOWN;
     IKeyEvent::KeyCode code;
 
@@ -159,7 +157,7 @@ EventPtr EventsHandler::_handleKeyPressEvent(
 
 EventPtr EventsHandler::_handleKeyReleaseEvent(
     sf::Event &event,
-    unused sf::RenderWindow &window
+    unused Window &window
 ) {
     IKeyEvent::KeyType type = IKeyEvent::KeyType::UNKNOWN;
     IKeyEvent::KeyCode code;
@@ -177,21 +175,21 @@ EventPtr EventsHandler::_handleKeyReleaseEvent(
 
 EventPtr EventsHandler::_handleWindowCloseEvent(
     unused sf::Event &event,
-    unused sf::RenderWindow &window
+    unused Window &window
 ) {
     return std::make_shared<WindowCloseEvent>();
 }
 
 EventPtr EventsHandler::_handleWindowResizeEvent(
     unused sf::Event &event,
-    unused sf::RenderWindow &window
+    Window &window
 ) {
     return std::make_shared<WindowResizeEvent>();
 }
 
 EventPtr EventsHandler::_handleMouseMoveEvent(
     sf::Event &event,
-    unused sf::RenderWindow &window
+    unused Window &window
 ) {
     return std::make_shared<MouseMoveEvent>(Vector2i(
         event.mouseMove.x,
@@ -201,7 +199,7 @@ EventPtr EventsHandler::_handleMouseMoveEvent(
 
 EventPtr EventsHandler::_handleMouseButtonPressEvent(
     sf::Event &event,
-    unused sf::RenderWindow &window
+    unused Window &window
 ) {
     Vector2i pos(event.mouseButton.x, event.mouseButton.y);
 
@@ -215,7 +213,7 @@ EventPtr EventsHandler::_handleMouseButtonPressEvent(
 
 EventPtr EventsHandler::_handleMouseBtnReleaseEvent(
     sf::Event &event,
-    unused sf::RenderWindow &window
+    unused Window &window
 ) {
     Vector2i pos(event.mouseButton.x, event.mouseButton.y);
 
