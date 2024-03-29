@@ -5,8 +5,7 @@
 ** export
 */
 
-#include "src/SnakeGameProvider.hpp"
-#include "shared/games/IGameProvider.hpp"
+#include "SnakeGameProvider.hpp"
 #include "shared/types/Libraries.hpp"
 
 using namespace shared::games;

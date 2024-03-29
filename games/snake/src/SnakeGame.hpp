@@ -18,7 +18,7 @@ class arcade::games::snake::SnakeGame : public arcade::games::common::AGame {
 public:
     SnakeGame();
 
-    ~SnakeGame() override;
+    ~SnakeGame() override = default;
 
     /**
      * @brief Game manifest

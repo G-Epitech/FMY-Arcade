@@ -39,8 +39,6 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(19, 19), 60) {
     this->_clock = std::chrono::milliseconds(0);
 }
 
-snake::SnakeGame::~SnakeGame() = default;
-
 const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcept {
     return SnakeGame::manifest;
 }
