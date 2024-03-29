@@ -5,9 +5,11 @@
 ** export
 */
 
-#include "IGraphicsProvider.hpp"
-#include "../types/Libraries.hpp"
+#include "shared/games/IGameProvider.hpp"
+#include "shared/types/Libraries.hpp"
+#include "src/GraphicsProvider.hpp"
 
+using namespace arcade::graphics;
 using namespace shared::graphics;
 using namespace shared::types;
 
@@ -19,6 +21,6 @@ extern "C" {
 
     IGraphicsProvider *SHARED_GRAPHICS_PROVIDER_GETTER_NAME(void)
     {
-        return new YOUR_CLASS();
+        return new sfml::GraphicsProvider();
     }
 }
