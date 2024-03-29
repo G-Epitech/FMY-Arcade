@@ -5,10 +5,11 @@
 ** main
 */
 
-#include "loader/DLLoader.hpp"
+#include "loader/Loader.hpp"
 
-int main(void) {
-    DLLoader loader;
+int main(void)
+{
+  Loader loader;
 
     try {
         loader.loadLibraries("./lib");
@@ -17,7 +18,7 @@ int main(void) {
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
-    auto lib = loader.getGamesLibraries().at(0);
+    auto lib = loader.getGamesLibraries().at(0).get();
     auto manifest = lib->getManifest();
     std::cout << "Game name: " << manifest.name << std::endl;
     std::cout << "Game description: " << manifest.description << std::endl;

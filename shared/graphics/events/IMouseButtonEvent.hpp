@@ -13,7 +13,7 @@ namespace shared::graphics::events{
     class IMouseButtonEvent;
 }
 
-class shared::graphics::events::IMouseButtonEvent : public virtual IMouseEvent {
+class shared::graphics::events::IMouseButtonEvent : public IMouseEvent {
 public:
     virtual ~IMouseButtonEvent() = default;
 
