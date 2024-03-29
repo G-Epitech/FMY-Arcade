@@ -1,4 +1,3 @@
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    Loader.cpp
-    Loader.hpp
+    Providers.hpp
 )

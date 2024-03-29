@@ -13,9 +13,11 @@
 #include "shared/games/components/ITextureComponent.hpp"
 #include "shared/games/components/IDisplayableComponent.hpp"
 
+using namespace shared::graphics;
+
 class Core {
     public:
-        Core(GameProviders gameProviders, GraphicsProviders graphicsProviders);
+        Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders);
         ~Core();
 
         /**
@@ -27,13 +29,13 @@ class Core {
     protected:
     private:
         std::shared_ptr<shared::games::IGame> _game;
-        std::shared_ptr<shared::graphics::IWindow> _window;
-        std::shared_ptr<shared::games::IGameProvider> _gameProvider;
-        std::shared_ptr<shared::graphics::IGraphicsProvider> _graphicsProvider;
-        std::map<std::string, std::shared_ptr<shared::graphics::IFont>> _fonts;
-        std::map<std::string, std::shared_ptr<shared::graphics::ITexture>> _textures;
-        GameProviders _gameProviders;
-        GraphicsProviders _graphicsProviders;
+        std::shared_ptr<IWindow> _window;
+        std::unique_ptr<shared::games::IGameProvider> &_gameProvider;
+        std::unique_ptr<IGraphicsProvider> &_graphicsProvider;
+        std::map<std::string, std::shared_ptr<IFont>> _fonts;
+        std::map<std::string, std::shared_ptr<ITexture>> _textures;
+        const GameProviders &_gameProviders;
+        const GraphicsProviders &_graphicsProviders;
         shared::games::entity::EntitiesMap _gameEntities;
 
         /**
@@ -61,7 +63,7 @@ class Core {
          * @param ascii Path to the ascii file
          * @return The correct texture
          */
-        std::shared_ptr<shared::graphics::ITexture> _getTexture(std::string bin, std::string ascii);
+        std::shared_ptr<ITexture> _getTexture(std::string bin, std::string ascii);
 
         /**
          * @brief Get a font
@@ -69,7 +71,7 @@ class Core {
          * @param path Path to the font file
          * @return The correct font
          */
-        std::shared_ptr<shared::graphics::IFont> _getFont(std::string path);
+        std::shared_ptr<IFont> _getFont(std::string path);
 
         /**
          * @brief Get the texture entity
@@ -77,7 +79,7 @@ class Core {
          * @param texture The texture component
          * @return The texture entity
          */
-        shared::graphics::TextureProps _getTextureEntity(std::shared_ptr<shared::games::components::ITextureComponent> texture);
+        TextureProps _getTextureEntity(std::shared_ptr<shared::games::components::ITextureComponent> texture);
 
         /**
          * @brief Get the text entity
@@ -85,5 +87,29 @@ class Core {
          * @param text The text component
          * @return The text entity
          */
-        shared::graphics::TextProps _getTextEntity(std::shared_ptr<shared::games::components::ITextComponent> text);
+        TextProps _getTextEntity(std::shared_ptr<shared::games::components::ITextComponent> text);
+
+        /**
+         * @brief Render the props
+         * 
+         * @param textures The textures
+         * @param texts The texts
+         */
+        void _renderProps(std::map<unsigned int, std::vector<TextureProps>> &textures, std::map<unsigned int, std::vector<TextProps>> &texts);
+
+        /**
+         * @brief Render the texture props
+         * 
+         * @param textures The textures
+         * @param texturePropsIt The iterator
+         */
+        void _renderTextureProps(std::map<unsigned int, std::vector<TextureProps>> &textures, std::map<unsigned int, std::vector<TextureProps>>::iterator &texturePropsIt);
+    
+        /**
+         * @brief Render the text props
+         * 
+         * @param texts The texts
+         * @param textPropsIt The iterator
+         */
+        void _renderTextProps(std::map<unsigned int, std::vector<TextProps>> &texts, std::map<unsigned int, std::vector<TextProps>>::iterator &textPropsIt);
 };
