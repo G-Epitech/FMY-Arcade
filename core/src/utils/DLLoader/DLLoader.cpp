@@ -13,20 +13,20 @@ void DLLoader::_throwError() {
     throw DLLoaderExeption(error.empty() ? "Unknown error while loading library" : error);
 }
 
-DLLoader::DLLoader() {}
+DLLoader::DLLoader(const std::string &filepath, LoadingMode mode) {
+    this->_handle = dlopen(filepath.c_str(), mode);
+    if (!this->_handle)
+        this->_throwError();
+    dlerror();
+}
 
 DLLoader::~DLLoader() {
     if (this->_handle)
         dlclose(this->_handle);
 }
 
-void DLLoader::open(const std::string &filepath, DLLoader::LoadingMode mode) {
-    if (this->_handle)
-        dlclose(this->_handle);
-    this->_handle = dlopen(filepath.c_str(), mode);
-    if (!this->_handle)
-        this->_throwError();
-    dlerror();
+std::shared_ptr<DLLoader> DLLoader::open(const std::string &filepath, DLLoader::LoadingMode mode) {
+    return std::make_shared<DLLoader>(filepath, mode);
 }
 
 DLLoader::DLLoaderExeption::DLLoaderExeption(const std::string &message) : _message(message) {}
