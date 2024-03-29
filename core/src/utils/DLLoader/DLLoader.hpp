@@ -13,12 +13,7 @@
 class DLLoader {
     public:
 
-        /**
-         * @brief Construct a new DLLoader object
-         * 
-         * @param filepath File path of the library
-         */
-        DLLoader(const std::string &filepath);
+        DLLoader();
 
         ~DLLoader();
 
@@ -36,7 +31,7 @@ class DLLoader {
          * 
          * @param mode Loading mode
          */
-        void open(LoadingMode mode = LAZY);
+        void open(const std::string &filepath, LoadingMode mode = LAZY);
 
         /**
          * @brief Get a function from the library
@@ -68,7 +63,7 @@ class DLLoader {
     protected:
     private:
         void *_handle;
-        const std::string _filepath;
+        std::string _filepath;
 
         /**
          * @brief Throw an error
