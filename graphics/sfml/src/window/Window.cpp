@@ -140,3 +140,22 @@ Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) {
         real.y = size.y * static_cast<unsigned int>(tileSize.y);
     return real;
 }
+
+Vector2i Window::pixelsToTiles(const shared::types::Vector2i &position) const {
+    auto realSize = _window.getSize();
+
+    return {
+        static_cast<int>(position.x * _size.x / realSize.x),
+        static_cast<int>(position.y * _size.y / realSize.y)
+    };
+}
+
+Vector2i Window::tilesToPixels(const Vector2i &position) const {
+    auto realSize = _window.getSize();
+
+    return {
+        static_cast<int>(position.x * realSize.x / _size.x),
+        static_cast<int>(position.y * realSize.y / _size.y)
+    };
+}
+

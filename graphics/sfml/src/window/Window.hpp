@@ -134,6 +134,18 @@ public:
     sf::RenderWindow &getInnerWindow() noexcept;
 
     /**
+     * @brief Convert a position in pixels to a position in tiles
+     * @return Converted position
+     */
+    Vector2i pixelsToTiles(const Vector2i &position) const;
+
+    /**
+     * @brief Convert a position in tiles to a position in pixels
+     * @return Converted position
+     */
+    Vector2i tilesToPixels(const Vector2i &position) const;
+
+    /**
      * @brief Get the size of a tile
      * @return Size of a tile
      */

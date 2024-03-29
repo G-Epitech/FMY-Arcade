@@ -191,22 +191,18 @@ EventPtr EventsHandler::_handleWindowResizeEvent(
 
 EventPtr EventsHandler::_handleMouseMoveEvent(
     sf::Event &event,
-    unused Window &window
+    Window &window
 ) {
-    return std::make_shared<MouseMoveEvent>(_resolvePosition(
-        Vector2i(event.mouseMove.x, event.mouseMove.y),
-        window
-    ));
+    return std::make_shared<MouseMoveEvent>(
+        window.pixelsToTiles(Vector2i(event.mouseMove.x, event.mouseMove.y))
+    );
 }
 
 EventPtr EventsHandler::_handleMouseButtonPressEvent(
     sf::Event &event,
-    unused Window &window
+    Window &window
 ) {
-    Vector2i pos = _resolvePosition(
-        Vector2i(event.mouseButton.x, event.mouseButton.y),
-        window
-    );
+    Vector2i pos = window.pixelsToTiles(Vector2i(event.mouseButton.x, event.mouseButton.y));
 
     if (event.mouseButton.button == sf::Mouse::Button::Left)
         return std::make_shared<MouseButtonPressEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
@@ -220,10 +216,7 @@ EventPtr EventsHandler::_handleMouseBtnReleaseEvent(
     sf::Event &event,
     unused Window &window
 ) {
-    Vector2i pos = _resolvePosition(
-        Vector2i(event.mouseButton.x, event.mouseButton.y),
-        window
-    );
+    Vector2i pos = window.pixelsToTiles(Vector2i(event.mouseButton.x, event.mouseButton.y));
 
     if (event.mouseButton.button == sf::Mouse::Button::Left)
         return std::make_shared<MouseButtonReleaseEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
@@ -231,17 +224,4 @@ EventPtr EventsHandler::_handleMouseBtnReleaseEvent(
         return std::make_shared<MouseButtonReleaseEvent>(pos, IMouseButtonEvent::MouseButton::RIGHT);
     else
         return nullptr;
-}
-
-Vector2i EventsHandler::_resolvePosition(
-    Vector2i position,
-    Window &window
-){
-    auto size = window.getSize();
-    auto realSize = window.getInnerWindow().getSize();
-
-    return {
-        static_cast<int>(position.x * size.x / realSize.x),
-        static_cast<int>(position.y * size.y / realSize.y)
-    };
 }
