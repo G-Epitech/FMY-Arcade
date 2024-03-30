@@ -125,12 +125,6 @@ class Core {
          */
         void _handleEvents();
 
-        // void _handleComponentEvent(std::shared_ptr<events::IKeyEvent> &event, std::shared_ptr<components::IKeyboardComponent> &component);
-
-        // void _handleComponentEvent(std::shared_ptr<events::IMouseButtonEvent> &event, std::shared_ptr<components::IDisplayableComponent> &component);
-
-        // void _handleComponentEvent(std::shared_ptr<events::IMouseEvent> &event, std::shared_ptr<components::IDisplayableComponent> &component);
-
         /**
          * @brief Handle the component events
          * 
@@ -155,13 +149,21 @@ class Core {
          */
         void _handleDisplayableEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IDisplayableComponent> &component);
 
-        // ======================================== PENDING ========================================
+        /**
+         * @brief Handle the collidable events
+         * 
+         * @param events Events to handle
+         * @param component The collidable component
+         */
+        void _handleCollidableComponents(std::shared_ptr<components::ICollidableComponent> &component);
 
-        // void _handleCollidableComponents(std::shared_ptr<components::ICollidableComponent> &component);
-
-        // void _handleCollisions(std::shared_ptr<components::ICollidableComponent> &component, std::shared_ptr<components::ICollidableComponent> &target);
-
-        // =========================================================================================
+        /**
+         * @brief Handle the collisions
+         * 
+         * @param component The collidable component
+         * @param target The target collidable component
+         */
+        void _handleCollisions(std::shared_ptr<components::ICollidableComponent> &component, std::shared_ptr<components::ICollidableComponent> &target);
 
         /**
          * @brief Handle the key press event
@@ -244,11 +246,4 @@ class Core {
          * @return The converted key press data
          */
         components::IKeyboardComponent::KeyData _convertKeyPressData(events::IKeyEvent::KeyType type, events::IKeyEvent::KeyCode code);
-
-        // void _handleMouseButtonPress(std::shared_ptr<events::IMouseButtonEvent> &event);
-
-        // void _handleMouseButtonRelease(std::shared_ptr<events::IMouseButtonEvent> &event);
-
-        // void _handleMouseMove(std::shared_ptr<events::IMouseEvent> &event);
-
 };

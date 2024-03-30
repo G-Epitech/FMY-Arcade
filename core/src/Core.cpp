@@ -146,7 +146,6 @@ void Core::_renderEntities()
     this->_window->display();
 }
 
-
 components::IKeyboardComponent::KeyData Core::_convertKeyPressData(events::IKeyEvent::KeyType type, events::IKeyEvent::KeyCode code)
 {
     components::IKeyboardComponent::KeyData keyCodeData;
@@ -273,32 +272,32 @@ void Core::_handleDisplayableEvents(std::vector<events::EventPtr> &events, std::
     }
 }
 
-// void Core::_handleCollisions(std::shared_ptr<components::ICollidableComponent> &component, std::shared_ptr<components::ICollidableComponent> &target)
-// {
-//     auto componentPosition = component->getPosition();
-//     auto componentSize = component->getSize();
-//     auto targetPosition = target->getPosition();
-//     auto targetSize = target->getSize();
+void Core::_handleCollisions(std::shared_ptr<components::ICollidableComponent> &component, std::shared_ptr<components::ICollidableComponent> &target)
+{
+    auto componentPosition = component->getPosition();
+    auto componentSize = component->getSize();
+    auto targetPosition = target->getPosition();
+    auto targetSize = target->getSize();
 
-//     if (componentPosition.x < targetPosition.x + targetSize.x &&
-//         componentPosition.x + componentSize.x > targetPosition.x &&
-//         componentPosition.y < targetPosition.y + targetSize.y &&
-//         componentPosition.y + componentSize.y > targetPosition.y)
-//         this->_handleCollidableComponents(component);
-// }
+    if (componentPosition.x < targetPosition.x + targetSize.x &&
+        componentPosition.x + componentSize.x > targetPosition.x &&
+        componentPosition.y < targetPosition.y + targetSize.y &&
+        componentPosition.y + componentSize.y > targetPosition.y)
+        component->onCollide(this->_game, target);
+}
 
-// void Core::_handleCollidableComponents(std::shared_ptr<components::ICollidableComponent> &component)
-// {
-//     for (auto &entity : this->_gameEntities) {
-//         auto components = entity->getComponents();
-//         for (auto &entityComponent : components) {
-//             if (entityComponent->getType() == components::COLLIDABLE) {
-//                 auto collidable = std::dynamic_pointer_cast<components::ICollidableComponent>(entityComponent);
-//                 this->_handleCollisions(component, collidable);
-//             }
-//         }
-//     }
-// }
+void Core::_handleCollidableComponents(std::shared_ptr<components::ICollidableComponent> &component)
+{
+    for (auto &entity : this->_gameEntities) {
+        auto components = entity->getComponents();
+        for (auto &entityComponent : components) {
+            if (entityComponent->getType() == components::COLLIDABLE) {
+                auto collidable = std::dynamic_pointer_cast<components::ICollidableComponent>(entityComponent);
+                this->_handleCollisions(component, collidable);
+            }
+        }
+    }
+}
 
 void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IComponent> &component)
 {
@@ -308,9 +307,13 @@ void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::sh
         auto keyboard = std::dynamic_pointer_cast<components::IKeyboardComponent>(component);
         this->_handleKeyBoardEvents(events, keyboard);
     }
-    if (type == components::TEXTURE || type == components::TEXT) {
+    if (type == components::DISPLAYABLE) {
         auto displayable = std::dynamic_pointer_cast<components::IDisplayableComponent>(component);
         this->_handleDisplayableEvents(events, displayable);
+    }
+    if (type == components::COLLIDABLE) {
+        auto collidable = std::dynamic_pointer_cast<components::ICollidableComponent>(component);
+        this->_handleCollidableComponents(collidable);
     }
 }
 
@@ -326,123 +329,6 @@ void Core::_handleEvents()
         }
     }
 }
-
-// void Core::_handleKeyPress(std::shared_ptr<events::IKeyEvent> &keyEvent)
-// {
-//     auto keyCode = keyEvent->getKeyCode();
-//     auto keyType = keyEvent->getKeyType();
-
-//     for (auto &entity : this->_gameEntities) {
-//         auto components = entity->getComponents();
-//         for (auto &component : components) {
-//             if (component->getType() == components::KEYBOARD) {
-//                 auto keyboard = std::dynamic_pointer_cast<components::IKeyboardComponent>(component);
-//                 auto keyCodeData = this->_convertKeyPressData(keyType, keyCode);
-//                 keyboard->onKeyPress(this->_game, keyCodeData);
-//             }
-//         }
-//     }
-// }
-
-// void Core::_handleKeyRelease(std::shared_ptr<events::IKeyEvent> &keyEvent)
-// {
-//     auto keyCode = keyEvent->getKeyCode();
-//     auto keyType = keyEvent->getKeyType();
-
-//     for (auto &entity : this->_gameEntities) {
-//         auto components = entity->getComponents();
-//         for (auto &component : components) {
-//             if (component->getType() == components::KEYBOARD) {
-//                 auto keyboard = std::dynamic_pointer_cast<components::IKeyboardComponent>(component);
-//                 auto keyCodeData = this->_convertKeyPressData(keyType, keyCode);
-//                 keyboard->onKeyRelease(this->_game, keyCodeData);
-//             }
-//         }
-//     }
-// }
-
-// void Core::_handleMouseButtonPress(std::shared_ptr<events::IMouseButtonEvent> &event)
-// {
-//     auto button = event->getButton();
-//     auto mousePosition = event->getPosition();
-
-//     for (auto &entity : this->_gameEntities) {
-//         auto components = entity->getComponents();
-//         for (auto &component : components) {
-//             auto type = component->getType();
-//             if (type == components::TEXTURE || type == components::TEXT) {
-//                 auto displayable = std::dynamic_pointer_cast<components::IDisplayableComponent>(component);
-//                 auto entityPosition = displayable->getPosition();
-//                 auto entitySize = displayable->getSize();
-//                 if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + entitySize.x &&
-//                     mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + entitySize.y)
-//                     displayable->onMousePress(this->_game);
-//             }
-//         }
-//     }
-// }
-
-// void Core::_handleMouseMove(std::shared_ptr<events::IMouseEvent> &event)
-// {
-//     auto mousePosition = event->getPosition();
-
-//     for (auto &entity : this->_gameEntities) {
-//         auto components = entity->getComponents();
-//         for (auto &component : components) {
-//             auto type = component->getType();
-//             if (type == components::TEXTURE || type == components::TEXT) {
-//                 auto displayable = std::dynamic_pointer_cast<components::IDisplayableComponent>(component);
-//                 auto entityPosition = displayable->getPosition();
-//                 auto entitySize = displayable->getSize();
-//                 if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + entitySize.x &&
-//                     mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + entitySize.y)
-//                     displayable->onMouseHover(this->_game);
-//             }
-//         }
-//     }
-// }
-
-// void Core::_handleMouseButtonRelease(std::shared_ptr<events::IMouseButtonEvent> &event)
-// {
-//     auto button = event->getButton();
-//     auto mousePosition = event->getPosition();
-
-//     for (auto &entity : this->_gameEntities) {
-//         auto components = entity->getComponents();
-//         for (auto &component : components) {
-//             auto type = component->getType();
-//             if (type == components::TEXTURE || type == components::TEXT) {
-//                 auto displayable = std::dynamic_pointer_cast<components::IDisplayableComponent>(component);
-//                 auto entityPosition = displayable->getPosition();
-//                 auto entitySize = displayable->getSize();
-//                 if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + entitySize.x &&
-//                     mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + entitySize.y)
-//                     displayable->onMouseRelease(this->_game);
-//             }
-//         }
-//     }
-// }
-
-// void Core::_handleEvents()
-// {
-//     auto gameEvents = this->_window->getEvents();
-
-//     for (auto &event : gameEvents) {
-//         auto type = event->getType();
-//         if (type == events::WINDOW_CLOSE)
-//             this->_window->close();
-//         if (type == events::WINDOW_RESIZE)
-//             std::cout << "Window resized" << std::endl;
-//         if (type == events::KEY_PRESS) {
-//             auto keyEvent = std::dynamic_pointer_cast<events::IKeyEvent>(event);
-//             this->_handleKeyPress(keyEvent);
-//         }
-//         if (type == events::KEY_RELEASE) {
-//             auto keyEvent = std::dynamic_pointer_cast<events::IKeyEvent>(event);
-//             this->_handleKeyRelease(keyEvent);
-//         }
-//     }
-// }
 
 void Core::run()
 {
