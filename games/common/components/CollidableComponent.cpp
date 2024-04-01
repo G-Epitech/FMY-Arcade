@@ -10,7 +10,7 @@
 
 using namespace arcade::games::common::components;
 
-CollidableComponent::CollidableComponent(shared::games::entity::IEntity &entity) : PositionComponent(entity) {
+CollidableComponent::CollidableComponent(shared::games::entity::IEntity &entity) : PositionableComponent(entity) {
     this->_type = shared::games::components::COLLIDABLE;
 }
 

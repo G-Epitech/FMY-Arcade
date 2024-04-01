@@ -44,7 +44,7 @@ shared::games::components::TextureProps arcade::games::snake::HeadEntity::_defau
 
 void arcade::games::snake::HeadEntity::forward() {
     for (auto &component: this->_components) {
-        std::shared_ptr<PositionComponent> posCmp = std::dynamic_pointer_cast<PositionComponent>(component);
+        std::shared_ptr<PositionableComponent> posCmp = std::dynamic_pointer_cast<PositionableComponent>(component);
         if (posCmp == nullptr) continue;
 
         posCmp->getPosition().x += this->direction.x;

@@ -56,7 +56,7 @@ void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
         this->_snake->head->forward();
 
         // DEBUG //
-        auto position = std::dynamic_pointer_cast<shared::games::components::IPositionComponent>(this->_snake->head->getComponents().at(1));
+        auto position = std::dynamic_pointer_cast<shared::games::components::IPositionableComponent>(this->_snake->head->getComponents().at(1));
         std::cout << "Snake Position [" << position->getPosition().x << ", " << position->getPosition().y << "]" << std::endl;
         // END DEBUG //
     }

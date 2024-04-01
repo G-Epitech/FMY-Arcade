@@ -5,8 +5,8 @@ target_sources(${PROJECT_NAME} PUBLIC
         entity/AEntity.hpp
         components/AComponent.cpp
         components/AComponent.hpp
-        components/PositionComponent.cpp
-        components/PositionComponent.hpp
+        components/PositionableComponent.cpp
+        components/PositionableComponent.hpp
         components/ADisplayableComponent.cpp
         components/ADisplayableComponent.hpp
         components/CollidableComponent.hpp

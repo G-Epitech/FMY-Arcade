@@ -8,13 +8,13 @@
 #pragma once
 
 #include "shared/games/components/IDisplayableComponent.hpp"
-#include "PositionComponent.hpp"
+#include "PositionableComponent.hpp"
 
 namespace arcade::games::common::components {
     class ADisplayableComponent;
 }
 
-class arcade::games::common::components::ADisplayableComponent : public virtual shared::games::components::IDisplayableComponent, public PositionComponent {
+class arcade::games::common::components::ADisplayableComponent : public virtual shared::games::components::IDisplayableComponent, public PositionableComponent {
 public:
     ~ADisplayableComponent() override = default;
 

@@ -8,13 +8,13 @@
 #pragma once
 
 #include "shared/games/components/ICollidableComponent.hpp"
-#include "PositionComponent.hpp"
+#include "PositionableComponent.hpp"
 
 namespace arcade::games::common::components {
     class CollidableComponent;
 }
 
-class arcade::games::common::components::CollidableComponent : public virtual shared::games::components::ICollidableComponent, public PositionComponent {
+class arcade::games::common::components::CollidableComponent : public virtual shared::games::components::ICollidableComponent, public PositionableComponent {
 public:
     ~CollidableComponent() override = default;
 

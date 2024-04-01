@@ -11,7 +11,7 @@ using namespace arcade::games::common::components;
 using namespace shared::games;
 
 ADisplayableComponent::ADisplayableComponent(entity::IEntity &entity, Vector2u size, unsigned int zindex)
-        : PositionComponent(entity),
+        : PositionableComponent(entity),
           _size(size), _zindex(zindex) {
 }
 
