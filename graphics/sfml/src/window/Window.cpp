@@ -13,7 +13,7 @@
 using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::common::exceptions;
 
-const Vector2u Window::tileSize = { 10, 10 };
+const Vector2u Window::tileSize = { 12, 12 };
 
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
@@ -108,7 +108,7 @@ void Window::setIcon(const std::string &path) {
 }
 
 void Window::render(const shared::graphics::TextureProps &props) {
-    (void) props;
+    _renderer.render(props);
 }
 
 void Window::render(const shared::graphics::TextProps &props) {
@@ -132,11 +132,12 @@ std::vector<EventPtr> Window::getEvents() {
 }
 
 Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) {
-    Vector2u real(1920, 1080);
+    auto mode = sf::VideoMode::getDesktopMode();
+    Vector2u real(mode.width, mode.height);
 
-    if (size.x * static_cast<unsigned int>(tileSize.x) < 1920)
+    if (size.x * static_cast<unsigned int>(tileSize.x) < mode.width)
         real.x = size.x * static_cast<unsigned int>(tileSize.x);
-    if (size.y * static_cast<unsigned int>(tileSize.y) < 1080)
+    if (size.y * static_cast<unsigned int>(tileSize.y) < mode.height)
         real.y = size.y * static_cast<unsigned int>(tileSize.y);
     return real;
 }

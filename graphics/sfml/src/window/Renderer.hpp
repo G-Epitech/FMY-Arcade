@@ -14,6 +14,7 @@
 
 namespace arcade::graphics::sfml::window {
     class Renderer;
+
     class Window;
 }
 
@@ -71,24 +72,24 @@ private:
      */
     void _textVerticalAlign(
         const shared::graphics::TextVerticalAlign &align,
-        const shared::types::Vector2f &entityPos,
         const shared::types::Vector2i &entitySize
     );
 
     /**
  * @brief Align the text
  * @param align Text alignment
- * @param entityPos Entity position
  * @param entitySize Entity size
  */
-    void _textAlign(
-        const shared::graphics::TextAlign &align,
-        const shared::types::Vector2f &entityPos,
-        const shared::types::Vector2i &entitySize
-    );
+    void _textAlign(const shared::graphics::TextAlign &align, const shared::types::Vector2i &entitySize);
 
     /**
      * @brief Adjust the text position
      */
     void _textAdjustPosition();
+
+    /**
+     * @brief Set texture rect depending on the texture properties
+     * @param props Texture properties
+     */
+    void _setTextureRectAndScale(const shared::graphics::TextureProps &props);
 };
