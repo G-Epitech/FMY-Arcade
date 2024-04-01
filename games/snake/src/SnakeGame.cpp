@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "SnakeGame.hpp"
+#include "entities/wall/WallEntity.hpp"
 #include "common/components/TextureComponent.hpp"
 #include "entities/snake/components/HeadKeyboardComponent.hpp"
 
@@ -30,13 +31,16 @@ const shared::games::GameManifest snake::SnakeGame::manifest = {
         }
 };
 
-snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(19, 19), 60) {
+snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
     this->_snake = std::make_unique<Snake>(2);
     this->_registerEntity(this->_snake->head);
 
     for (auto &tail: this->_snake->getTails()) {
         this->_registerEntity(tail);
     }
+
+    this->_registerEntity(std::make_unique<WallEntity>(Vector2u(20, 20)));
+
     this->_clock = std::chrono::milliseconds(0);
 }
 

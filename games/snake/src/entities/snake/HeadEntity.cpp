@@ -20,8 +20,14 @@ arcade::games::snake::HeadEntity::HeadEntity() : _textureProps(
     std::shared_ptr<components::HeadKeyboardComponent> keyboard = std::make_shared<components::HeadKeyboardComponent>(
             *this);
 
+    collide->getPosition().x = 8;
+    collide->getPosition().y = 4;
     this->_components.push_back(collide);
+
+    texture->getPosition().x = 8;
+    texture->getPosition().y = 4;
     this->_components.push_back(texture);
+
     this->_components.push_back(keyboard);
 }
 

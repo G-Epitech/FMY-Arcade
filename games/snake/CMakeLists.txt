@@ -11,6 +11,8 @@ add_library(${PROJECT_NAME} SHARED
         src/entities/snake/HeadEntity.hpp
         src/entities/snake/components/HeadKeyboardComponent.cpp
         src/entities/snake/components/HeadKeyboardComponent.hpp
+        src/entities/wall/WallEntity.cpp
+        src/entities/wall/WallEntity.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
