@@ -8,6 +8,7 @@
 #include <iostream>
 #include "SnakeGame.hpp"
 #include "common/components/TextureComponent.hpp"
+#include "entities/snake/components/HeadKeyboardComponent.hpp"
 
 using namespace arcade::games;
 

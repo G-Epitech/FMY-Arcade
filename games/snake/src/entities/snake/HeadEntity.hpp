@@ -29,6 +29,11 @@ public:
      */
     void forward();
 
+    /**
+     * @brief Direction of the snake
+     */
+    Vector2i direction;
+
 protected:
     /**
      * @brief Get default texture props
@@ -37,6 +42,4 @@ protected:
     static shared::games::components::TextureProps _defaultTextureProps();
 
     shared::games::components::TextureProps _textureProps;
-
-    Vector2i _direction;
 };

@@ -15,7 +15,7 @@ namespace arcade::games::common {
     class AGame;
 }
 
-class arcade::games::common::AGame : public shared::games::IGame {
+class arcade::games::common::AGame : public virtual shared::games::IGame {
 public:
     ~AGame() override = default;
 
