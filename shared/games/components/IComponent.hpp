@@ -13,9 +13,10 @@ namespace shared::games::components {
     typedef enum {
       TEXTURE,
       TEXT,
+      DISPLAYABLE,
       SOUND,
       COLLIDABLE,
-      POSITION,
+      POSITIONABLE,
       KEYBOARD
     } ComponentType;
 

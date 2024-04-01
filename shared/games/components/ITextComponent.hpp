@@ -13,7 +13,10 @@
 
 namespace shared::games::components {
     class ITextComponent;
+}
 
+class shared::games::components::ITextComponent : public virtual IDisplayableComponent {
+public:
     typedef enum {
         LEFT,
         CENTER,
@@ -38,10 +41,7 @@ namespace shared::games::components {
         TextFontProps font;                 // Font of the text
         types::Color color;                 // Color of the text
     } TextProps;
-}
 
-class shared::games::components::ITextComponent : public virtual IDisplayableComponent {
-public:
     virtual ~ITextComponent() = default;
 
     /**

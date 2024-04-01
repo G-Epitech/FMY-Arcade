@@ -159,3 +159,12 @@ Vector2i Window::tilesToPixels(const Vector2i &position) const {
     };
 }
 
+Vector2i Window::tilesToPixels(const Vector2u &position) const {
+    auto realSize = _window.getSize();
+
+    return {
+        static_cast<int>(position.x * realSize.x / _size.x),
+        static_cast<int>(position.y * realSize.y / _size.y)
+    };
+}
+

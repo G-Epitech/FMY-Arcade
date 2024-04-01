@@ -146,6 +146,12 @@ public:
     Vector2i tilesToPixels(const Vector2i &position) const;
 
     /**
+     * @brief Convert a position in tiles to a position in pixels
+     * @return Converted position
+     */
+    Vector2i tilesToPixels(const Vector2u &position) const;
+
+    /**
      * @brief Get the size of a tile
      * @return Size of a tile
      */

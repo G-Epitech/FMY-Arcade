@@ -20,6 +20,7 @@ namespace arcade::graphics::sfml::window {
 class arcade::graphics::sfml::window::Renderer {
 public:
     explicit Renderer(Window &window);
+
     ~Renderer() = default;
 
     /**
@@ -35,10 +36,10 @@ public:
     void render(const shared::graphics::TextProps &props);
 
 private:
-    Window              &_window;
-    sf::RenderWindow    &_layer;
-    sf::Text            _text;
-    sf::Sprite          _sprite;
+    Window &_window;
+    sf::RenderWindow &_layer;
+    sf::Text _text;
+    sf::Sprite _sprite;
 
     template<class From, class To>
     static std::shared_ptr<To> _castOrThrow(std::shared_ptr<From> from);
@@ -54,4 +55,40 @@ private:
      * @param sprite Sprite to reset
      */
     static void _reset(sf::Sprite &sprite);
+
+    /**
+     * @brief Convert a tile position to pixel position
+     * @param position Tile position
+     * @return Pixel position
+     */
+    Vector2f _entityPixelsPosition(const Vector2i &position);
+
+    /**
+     * @brief Align vertically the text
+     * @param align Text alignment
+     * @param entityPos Entity position
+     * @param entitySize Entity size
+     */
+    void _textVerticalAlign(
+        const shared::graphics::TextVerticalAlign &align,
+        const shared::types::Vector2f &entityPos,
+        const shared::types::Vector2i &entitySize
+    );
+
+    /**
+ * @brief Align the text
+ * @param align Text alignment
+ * @param entityPos Entity position
+ * @param entitySize Entity size
+ */
+    void _textAlign(
+        const shared::graphics::TextAlign &align,
+        const shared::types::Vector2f &entityPos,
+        const shared::types::Vector2i &entitySize
+    );
+
+    /**
+     * @brief Adjust the text position
+     */
+    void _textAdjustPosition();
 };

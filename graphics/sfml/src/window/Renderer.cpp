@@ -21,6 +21,8 @@ Renderer::Renderer(Window &window): _window(window), _layer(_window.getInnerWind
 
 void Renderer::render(const shared::graphics::TextProps &props) {
     auto font = _castOrThrow<shared::graphics::IFont, font::Font>(props.font);
+    auto entityPosition = _entityPixelsPosition(props.position);
+    auto entitySize = _window.tilesToPixels(props.size);
 
     _reset(_text);
     _text.setFont(font->getInnerFont());
@@ -32,11 +34,49 @@ void Renderer::render(const shared::graphics::TextProps &props) {
         props.color.b,
         props.color.a)
     );
+    _text.setPosition(entityPosition.x, entityPosition.y);
+    _textAlign(props.align, entityPosition, entitySize);
+    _textVerticalAlign(props.verticalAlign, entityPosition, entitySize);
+    _textAdjustPosition();
     _layer.draw(_text);
 }
 
-void Renderer::render(unused const shared::graphics::TextureProps &props) {
+void Renderer::_textVerticalAlign(const shared::graphics::TextVerticalAlign &align, const shared::types::Vector2f &entityPos,
+                                  const shared::types::Vector2i &entitySize) {
+    auto bounds = _text.getGlobalBounds();
+    auto position = _text.getPosition();
 
+    if (align == shared::graphics::MIDDLE) {
+        position.y += (static_cast<float>(entitySize.y) - bounds.height) / 2;
+    } else if (align == shared::graphics::BOTTOM) {
+        position.y += static_cast<float>(entitySize.y) - bounds.height;
+    }
+    _text.setPosition(position);
+}
+
+void Renderer::_textAlign(const shared::graphics::TextAlign &align, const shared::types::Vector2f &entityPos,
+                                  const shared::types::Vector2i &entitySize) {
+    auto bounds = _text.getGlobalBounds();
+    auto position = _text.getPosition();
+
+    if (align == shared::graphics::CENTER) {
+        position.x += (static_cast<float>(entitySize.x) - bounds.width) / 2;
+    } else if (align == shared::graphics::RIGHT) {
+        position.x += static_cast<float>(entitySize.x) - bounds.width;
+    }
+    _text.setPosition(position);
+}
+
+void Renderer::_textAdjustPosition() {
+    auto actual = _text.getPosition();
+    sf::FloatRect bounds = {0, 0, 0, 0 };
+
+    _text.setPosition(0, 0);
+    bounds = _text.getGlobalBounds();
+    _text.setPosition(actual.x - bounds.left, actual.y - bounds.top);
+}
+
+void Renderer::render(unused const shared::graphics::TextureProps &props) {
 }
 
 void Renderer::_reset(sf::Text &text) {
@@ -55,6 +95,15 @@ void Renderer::_reset(sf::Sprite &sprite) {
     sprite.setScale(1, 1);
     sprite.setPosition(0, 0);
     sprite.setOrigin(0, 0);
+}
+
+Vector2f Renderer::_entityPixelsPosition(const Vector2i &position) {
+    auto pixels = _window.tilesToPixels(position);
+
+    return {
+        static_cast<float>(pixels.x),
+        static_cast<float>(pixels.y)
+    };
 }
 
 template<class From, class To>
