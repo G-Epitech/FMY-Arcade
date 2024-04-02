@@ -13,7 +13,6 @@
 
 class Loader {
   public:
-
     /**
      * @brief Construct a new Loader object
      */

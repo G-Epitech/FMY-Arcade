@@ -13,7 +13,7 @@ namespace shared::graphics::events {
     class IKeyEvent;
 }
 
-class shared::graphics::events::IKeyEvent : public IEvent {
+class shared::graphics::events::IKeyEvent : public virtual IEvent {
 public:
     virtual ~IKeyEvent() = default;
 
