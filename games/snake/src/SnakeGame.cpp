@@ -42,6 +42,7 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
     this->_registerEntity(std::make_unique<WallEntity>(Vector2u(20, 20)));
 
     this->_clock = std::chrono::milliseconds(0);
+    this->_looseGame = false;
 }
 
 const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcept {
@@ -51,6 +52,9 @@ const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcep
 void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
     this->_clock += dt;
 
+    if (this->_looseGame) {
+        return this->_loose();
+    }
     if (this->_clock > std::chrono::milliseconds(300) + this->_snake->lastMove) {
         this->_snake->lastMove = this->_clock;
         this->_snake->head->forward();
@@ -58,15 +62,13 @@ void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
         // DEBUG //
         auto position = std::dynamic_pointer_cast<shared::games::components::IPositionableComponent>(this->_snake->head->getComponents().at(1));
         std::cout << "Snake Position [" << position->getPosition().x << ", " << position->getPosition().y << "]" << std::endl;
-
-        this->loose();
         // END DEBUG //
     }
 }
 
-void snake::SnakeGame::loose() {
+void snake::SnakeGame::_loose() {
     this->_clock = std::chrono::milliseconds(0);
-    this->_snake->lastMove = std::chrono::milliseconds(0);
+    this->_snake->lastMove = std::chrono::milliseconds(900);
 
     this->_entities.erase(std::remove_if(this->_entities.begin(), this->_entities.end(), [](const shared::games::entity::EntityPtr& entity) {
         auto tail = std::dynamic_pointer_cast<TailEntity>(entity);
@@ -81,4 +83,8 @@ void snake::SnakeGame::loose() {
     for (auto &tail: this->_snake->getTails()) {
         this->_registerEntity(tail);
     }
+}
+
+void snake::SnakeGame::setLooseGame(bool state) {
+    this->_looseGame = state;
 }

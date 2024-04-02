@@ -41,11 +41,19 @@ public:
     void compute(shared::games::DeltaTime dt) override;
 
     /**
-     * @brief Execute the process of the end of the game when the player loose
+     * @brief Set loose game state
+     *
+     * @param state If the game is loose or not
      */
-    void loose();
+    void setLooseGame(bool state);
 
 protected:
+    /**
+     * @brief Execute the process of the end of the game when the player _loose
+     */
+    void _loose();
+
     std::unique_ptr<Snake> _snake;
     shared::games::DeltaTime _clock;
+    bool _looseGame;
 };

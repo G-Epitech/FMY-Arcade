@@ -58,7 +58,7 @@ void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games:
             !dynamic_cast<const TailEntity *>(&target->getEntity()) ||
             !game)
         return;
-    game->loose();
+    game->setLooseGame(true);
 }
 
 void arcade::games::snake::HeadEntity::reset() {
