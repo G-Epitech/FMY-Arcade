@@ -60,21 +60,21 @@ class Loader {
      * @param loader DLLoader
      * @return getter function
      */
-    shared::types::LibraryType _getLibraryGetter(const std::string &filepath, std::shared_ptr<DLLoader> &loader);
+    shared::types::LibraryType _getLibraryGetter(const std::string &filepath, std::shared_ptr<DLLoader> loader);
 
     /**
      * @brief Load a game library
      * @param filepath file path of the library
      * @param loader DLLoader
      */
-    void _loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoader> &loader);
+    void _loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoader> loader);
 
     /**
      * @brief Load a graphics library
      * @param filepath file path of the library
      * @param loader DLLoader
      */
-    void _loadGraphicsLibrary(const std::string &filepath, std::shared_ptr<DLLoader> &loader);
+    void _loadGraphicsLibrary(const std::string &filepath, std::shared_ptr<DLLoader> loader);
 
     /**
      * @brief Throw an error when loading a library
