@@ -133,15 +133,3 @@ Vector2f Renderer::_entityPixelsPosition(const Vector2i &position) {
         static_cast<float>(pixels.y)
     };
 }
-
-template<class From, class To>
-std::shared_ptr<To> Renderer::_castOrThrow(std::shared_ptr<From> from) {
-    std::shared_ptr<To> to = std::dynamic_pointer_cast<To>(from);
-    if (!to) {
-        throw WindowException(
-            "Failed to cast shared pointer of:" + std::string(typeid(from).name()) + " to " + typeid(to).name(),
-            "SFML Library Renderer::_castOrThrow"
-        );
-    }
-    return to;
-}

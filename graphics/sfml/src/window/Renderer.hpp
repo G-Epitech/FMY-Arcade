@@ -11,6 +11,7 @@
 #include "shared/graphics/ITexture.hpp"
 #include "shared/graphics/types/TextureProps.hpp"
 #include "shared/graphics/types/TextProps.hpp"
+#include "common/exceptions/WindowException.hpp"
 
 namespace arcade::graphics::sfml::window {
     class Renderer;
@@ -41,9 +42,6 @@ private:
     sf::RenderWindow &_layer;
     sf::Text _text;
     sf::Sprite _sprite;
-
-    template<class From, class To>
-    static std::shared_ptr<To> _castOrThrow(std::shared_ptr<From> from);
 
     /**
      * @brief Reset the text properties
@@ -76,10 +74,10 @@ private:
     );
 
     /**
- * @brief Align the text
- * @param align Text alignment
- * @param entitySize Entity size
- */
+     * @brief Align the text
+     * @param align Text alignment
+     * @param entitySize Entity size
+     */
     void _textAlign(const shared::graphics::TextAlign &align, const shared::types::Vector2i &entitySize);
 
     /**
@@ -92,4 +90,23 @@ private:
      * @param props Texture properties
      */
     void _setTextureRectAndScale(const shared::graphics::TextureProps &props);
+
+    /**
+     * @brief Cast a shared pointer from a type to another
+     * @tparam From Type from which to cast
+     * @tparam To Type to which cast
+     * @param from Value to cast
+     * @return Casted value
+     */
+    template<class From, class To>
+    static std::shared_ptr<To> _castOrThrow(std::shared_ptr<From> from) {
+        std::shared_ptr<To> to = std::dynamic_pointer_cast<To>(from);
+        if (!to) {
+            throw common::exceptions::WindowException(
+                "Failed to cast shared pointer of:" + std::string(typeid(from).name()) + " to " + typeid(to).name(),
+                "SFML Library Renderer::_castOrThrow"
+            );
+        }
+        return to;
+    };
 };
