@@ -1,3 +1,3 @@
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+target_sources(arcade PRIVATE
     DLLoader.cpp
 )
