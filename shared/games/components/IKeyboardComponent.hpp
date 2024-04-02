@@ -12,7 +12,11 @@
 
 namespace shared::games::components {
   class IKeyboardComponent;
+}
 
+class shared::games::components::IKeyboardComponent: public virtual IComponent
+{
+public:
   typedef enum
   {
     CONTROL, // Control key (`Ctrl`, `Shift`, `Alt`)
@@ -50,11 +54,7 @@ namespace shared::games::components {
     KeyCode code; // Key code. Interpretation depends on the type
     KeyType type; // Type of the key
   } KeyData;
-}
 
-class shared::games::components::IKeyboardComponent: public virtual IComponent
-{
-public:
   virtual ~IKeyboardComponent() = default;
 
   /**

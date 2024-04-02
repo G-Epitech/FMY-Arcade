@@ -14,23 +14,24 @@
 #include "common/events/mouse/mouse.hpp"
 #include "common/events/key/key.hpp"
 
-namespace arcade::graphics::sfml::events {
+namespace arcade::graphics::sfml::window {
     class EventsHandler;
+    class Window;
 }
 
-class arcade::graphics::sfml::events::EventsHandler {
+class arcade::graphics::sfml::window::EventsHandler {
 public:
-    EventsHandler() = delete;
-    ~EventsHandler() = delete;
+    explicit EventsHandler(Window &window);
+    ~EventsHandler() = default;
 
-    typedef EventPtr (*EventHandler)(sf::Event &event, sf::RenderWindow &window);
+    typedef EventPtr (*EventHandler)(sf::Event &event, Window &window);
 
     /**
      * @brief Handle events from SFML
      * @param window Window object
      * @return Vector of events
      */
-    static std::vector<EventPtr> handleEvents(sf::RenderWindow &window);
+    std::vector<EventPtr> handleEvents();
 
 private:
 
@@ -74,7 +75,7 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleKeyPressEvent(sf::Event &event, sf::RenderWindow &window);
+    static EventPtr _handleKeyPressEvent(sf::Event &event, Window &window);
 
     /**
      * @brief Handle key release event
@@ -82,7 +83,7 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleKeyReleaseEvent(sf::Event &event, sf::RenderWindow &window);
+    static EventPtr _handleKeyReleaseEvent(sf::Event &event, Window &window);
 
     /**
      * @brief Handle mouse button press event
@@ -90,7 +91,7 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleMouseButtonPressEvent(sf::Event &event, sf::RenderWindow &window);
+    static EventPtr _handleMouseButtonPressEvent(sf::Event &event, Window &window);
 
     /**
      * @brief Handle mouse button release event
@@ -98,7 +99,7 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleMouseBtnReleaseEvent(sf::Event &event, sf::RenderWindow &window);
+    static  EventPtr _handleMouseBtnReleaseEvent(sf::Event &event, Window &window);
 
     /**
      * @brief Handle mouse move event
@@ -106,7 +107,7 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleMouseMoveEvent(sf::Event &event, sf::RenderWindow &window);
+    static EventPtr _handleMouseMoveEvent(sf::Event &event, Window &window);
 
     /**
      * @brief Handle window close event
@@ -114,7 +115,7 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleWindowCloseEvent(sf::Event &event, sf::RenderWindow &window);
+    static EventPtr _handleWindowCloseEvent(sf::Event &event, Window &window);
 
     /**
      * @brief Handle window resize event
@@ -122,5 +123,15 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleWindowResizeEvent(sf::Event &event, sf::RenderWindow &window);
+    static EventPtr _handleWindowResizeEvent(sf::Event &event, Window &window);
+
+    /**
+     * @brief Resolve position of the event to convert it in tiles unit
+     * @param position Position to resolve
+     * @param window Window object of which relate the position
+     * @return Resolved position
+     */
+    static Vector2i _resolvePosition(Vector2i position, Window &window);
+
+    window::Window &_window;
 };

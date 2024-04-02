@@ -8,17 +8,17 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include "Renderer.hpp"
 #include "shared/graphics/IWindow.hpp"
+#include "EventsHandler.hpp"
 
-using namespace shared::graphics;
-
-namespace arcade::graphics::sfml{
+namespace arcade::graphics::sfml::window {
     class Window;
 }
 
-class arcade::graphics::sfml::Window : public IWindow {
+class arcade::graphics::sfml::window::Window: public shared::graphics::IWindow {
 public:
-    explicit Window(const IWindow::WindowInitProps &props);
+    explicit Window(const WindowInitProps &props);
     ~Window() override;
 
     /**
@@ -82,14 +82,14 @@ public:
      *
      * @param props Properties of the entity to render
      */
-    void render(const TextProps &props) override;
+    void render(const shared::graphics::TextProps &props) override;
 
     /**
      * @brief Render the entity with given properties
      *
      * @param props Properties of the entity to render
      */
-    void render(const TextureProps &props) override;
+    void render(const shared::graphics::TextureProps &props) override;
 
     /**
      * @brief Clear the content of the window
@@ -119,17 +119,53 @@ public:
     /**
      * @brief Get the events object
      *
-     * @return Last events occured
+     * @return Last events occurred
      * @warning Call successively this method will result in losing events
      * @note Call `A` return `eventsA` containing 2 events,
      * but make another call `B` (directly after call `A`) `eventsB`
      * will result to an empty vector
      */
-    std::vector<events::EventPtr> getEvents() override;
+    std::vector<shared::graphics::events::EventPtr> getEvents() override;
+
+    /**
+     * @brief Get the window object
+     * @return Window object
+     */
+    sf::RenderWindow &getInnerWindow() noexcept;
+
+    /**
+     * @brief Convert a position in pixels to a position in tiles
+     * @return Converted position
+     */
+    Vector2i pixelsToTiles(const Vector2i &position) const;
+
+    /**
+     * @brief Convert a position in tiles to a position in pixels
+     * @return Converted position
+     */
+    Vector2i tilesToPixels(const Vector2i &position) const;
+
+    /**
+     * @brief Convert a position in tiles to a position in pixels
+     * @return Converted position
+     */
+    Vector2i tilesToPixels(const Vector2u &position) const;
+
+    /**
+     * @brief Get the size of a tile
+     * @return Size of a tile
+     */
+    static const Vector2u  tileSize;
 
 private:
-    std::unique_ptr<sf::RenderWindow> _window;
-    std::string _title;
-    unsigned int _fps;
-    WindowMode _mode;
+    static Vector2u _getPixelSizeFromTiles(const Vector2u &size);
+
+    EventsHandler       _eventsHandler;
+    Renderer            _renderer;
+    sf::RenderWindow    _window;
+    std::string         _title;
+    unsigned int        _fps;
+    WindowMode          _mode;
+    sf::Image           _icon;
+    Vector2u            _size;
 };
