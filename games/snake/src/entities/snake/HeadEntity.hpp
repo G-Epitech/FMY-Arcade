@@ -12,6 +12,8 @@
 #include "common/components/TextureComponent.hpp"
 
 namespace arcade::games::snake {
+    class SnakeGame;
+
     class HeadEntity;
 }
 
@@ -40,6 +42,15 @@ protected:
      * @return Texture props
      */
     static shared::games::components::TextureProps _defaultTextureProps();
+
+    /**
+     * @brief Represent the function that will be executed
+     * when the snake will collide with an other collidable component
+     * @param ctx Context of the game
+     * @param target Target component
+     */
+    static void _onCollide(std::shared_ptr<shared::games::IGame> &ctx,
+                           std::shared_ptr<shared::games::components::ICollidableComponent> target);
 
     shared::games::components::TextureProps _textureProps;
 };

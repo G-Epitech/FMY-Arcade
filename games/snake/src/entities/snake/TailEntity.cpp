@@ -12,7 +12,7 @@ using namespace shared::games::components;
 
 arcade::games::snake::TailEntity::TailEntity() : _textureProps(
         arcade::games::snake::TailEntity::_defaultTextureProps()) {
-    std::shared_ptr<CollidableComponent> collide = std::make_shared<CollidableComponent>(*this);
+    std::shared_ptr<CollidableComponent> collide = std::make_shared<CollidableComponent>(*this, nullptr);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 10,
                                                                                    this->_textureProps);
     this->_components.push_back(collide);

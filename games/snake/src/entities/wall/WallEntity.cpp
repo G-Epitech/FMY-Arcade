@@ -37,7 +37,7 @@ void WallEntity::_createWall(shared::types::Vector2i position) {
             },
             .origin = Vector2u(0, 0)
     };
-    std::shared_ptr<CollidableComponent> collision = std::make_shared<CollidableComponent>(*this);
+    std::shared_ptr<CollidableComponent> collision = std::make_shared<CollidableComponent>(*this, nullptr);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 10,
                                                                                    textureProps);
 

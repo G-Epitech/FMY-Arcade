@@ -16,13 +16,15 @@ namespace arcade::games::common::components {
 
 class arcade::games::common::components::CollidableComponent : public virtual shared::games::components::ICollidableComponent, public PositionableComponent {
 public:
+    typedef void (*onCollideFunction)(std::shared_ptr<shared::games::IGame> &ctx, std::shared_ptr<ICollidableComponent> target);
+
     ~CollidableComponent() override = default;
 
     /**
      * @brief Create a position component
      * @param entity
      */
-    explicit CollidableComponent(shared::games::entity::IEntity &entity);
+    explicit CollidableComponent(shared::games::entity::IEntity &entity, onCollideFunction function);
 
     /**
      * @brief On collide event handler for the component
@@ -30,4 +32,7 @@ public:
      * @param target Target entity
      */
     void onCollide(std::shared_ptr<shared::games::IGame> &ctx, std::shared_ptr<ICollidableComponent> target) override;
+
+protected:
+    onCollideFunction _collideFunction;
 };

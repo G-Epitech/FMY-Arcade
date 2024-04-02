@@ -5,7 +5,9 @@
 ** HeadEntity class
 */
 
+#include "SnakeGame.hpp"
 #include "HeadEntity.hpp"
+#include "../wall/WallEntity.hpp"
 #include "components/HeadKeyboardComponent.hpp"
 
 using namespace arcade::games::common::components;
@@ -14,7 +16,7 @@ using namespace shared::games::components;
 arcade::games::snake::HeadEntity::HeadEntity() : _textureProps(
         arcade::games::snake::HeadEntity::_defaultTextureProps()),
                                                  direction(1, 0) {
-    std::shared_ptr<CollidableComponent> collide = std::make_shared<CollidableComponent>(*this);
+    std::shared_ptr<CollidableComponent> collide = std::make_shared<CollidableComponent>(*this, HeadEntity::_onCollide);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 10,
                                                                                    this->_textureProps);
     std::shared_ptr<components::HeadKeyboardComponent> keyboard = std::make_shared<components::HeadKeyboardComponent>(
@@ -50,4 +52,12 @@ void arcade::games::snake::HeadEntity::forward() {
         posCmp->getPosition().x += this->direction.x;
         posCmp->getPosition().y += this->direction.y;
     }
+}
+
+void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games::IGame> &ctx,
+                                                  std::shared_ptr<shared::games::components::ICollidableComponent> target) {
+    const auto &wall = dynamic_cast<const WallEntity *>(&target->getEntity());
+    auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
+    if (!wall)
+        return;
 }
