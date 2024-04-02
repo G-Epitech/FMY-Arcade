@@ -56,7 +56,7 @@ void arcade::games::snake::HeadEntity::forward() {
             textureCmp->getTextureProps().origin.x = 2;
         if (this->direction.x > 0)
             textureCmp->getTextureProps().origin.x += 1;
-        if (this->direction.y < 0)
+        if (this->direction.y > 0)
             textureCmp->getTextureProps().origin.x += 1;
         std::cout << textureCmp->getTextureProps().origin.x << std::endl;
     }

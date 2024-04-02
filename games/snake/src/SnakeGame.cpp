@@ -55,7 +55,7 @@ void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
     if (this->_looseGame) {
         return this->_loose();
     }
-    if (this->_clock > std::chrono::milliseconds(300) + this->_snake->lastMove) {
+    if (this->_clock > std::chrono::milliseconds(100) + this->_snake->lastMove) {
         this->_snake->lastMove = this->_clock;
         this->_snake->head->forward();
 
