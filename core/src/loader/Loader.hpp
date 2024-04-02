@@ -39,13 +39,13 @@ class Loader {
      * @brief Get all games libraries
      * @return Loaded games libraries
      */
-    const GameProviders &getGamesLibraries() const;
+    GameProviders &getGamesLibraries();
 
     /**
      * @brief Get all graphics libraries
      * @return Loaded graphics libraries
      */
-    const GraphicsProviders &getGraphicsLibraries() const;
+    GraphicsProviders &getGraphicsLibraries();
 
   private:
     const std::string _path;

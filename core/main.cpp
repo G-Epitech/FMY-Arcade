@@ -5,6 +5,7 @@
 ** main
 */
 
+#include "Core.hpp"
 #include "loader/Loader.hpp"
 
 int main(void)
@@ -15,6 +16,8 @@ int main(void)
     loader.loadLibraries("./lib");
     std::cout << "Games libraries:" << loader.getGamesLibraries().size() << std::endl;
     std::cout << "Graphics libraries:" << loader.getGraphicsLibraries().size() << std::endl;
+    Core core(loader.getGamesLibraries(), loader.getGraphicsLibraries());
+    core.run();
   } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl;
   }

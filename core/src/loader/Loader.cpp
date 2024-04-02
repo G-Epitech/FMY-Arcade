@@ -56,10 +56,10 @@ void Loader::loadLibraries(std::string path) {
     }
 }
 
-const GameProviders &Loader::getGamesLibraries() const {
+GameProviders &Loader::getGamesLibraries() {
     return this->_gamesLibraries;
 }
 
-const GraphicsProviders &Loader::getGraphicsLibraries() const {
+GraphicsProviders &Loader::getGraphicsLibraries() {
     return this->_graphicsLibraries;
 }
