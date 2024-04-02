@@ -356,7 +356,7 @@ void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::sh
         auto keyboard = std::dynamic_pointer_cast<components::IKeyboardComponent>(component);
         this->_handleKeyBoardEvents(events, keyboard);
     }
-    if (type == components::DISPLAYABLE) {
+    if (type == components::TEXT || type == components::TEXTURE) {
         auto displayable = std::dynamic_pointer_cast<components::IDisplayableComponent>(component);
         this->_handleDisplayableEvents(events, displayable);
     }
