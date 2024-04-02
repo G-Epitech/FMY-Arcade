@@ -186,6 +186,7 @@ EventPtr EventsHandler::_handleWindowResizeEvent(
     unused sf::Event &event,
     Window &window
 ) {
+    window.viewResize(event);
     return std::make_shared<WindowResizeEvent>();
 }
 

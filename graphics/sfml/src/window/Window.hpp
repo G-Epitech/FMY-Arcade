@@ -157,9 +157,20 @@ public:
      */
     static const Vector2u  tileSize;
 
-private:
-    static Vector2u _getPixelSizeFromTiles(const Vector2u &size);
+    /**
+     * @brief Resize the view of the window
+     * @param event Event from SFML
+     */
+    void viewResize(const sf::Event &event);
 
+    /**
+     * @brief Get the size of the window in pixels
+     * @param size Size of the window in tiles
+     * @return Size of the window in pixels
+     */
+    static Vector2u getPixelSizeFromTiles(const Vector2u &size);
+
+private:
     EventsHandler       _eventsHandler;
     Renderer            _renderer;
     sf::RenderWindow    _window;
@@ -168,4 +179,5 @@ private:
     WindowMode          _mode;
     sf::Image           _icon;
     Vector2u            _size;
+    sf::View            _view;
 };

@@ -20,7 +20,7 @@ Window::Window(const IWindow::WindowInitProps &props):
     _renderer(*this),
     _eventsHandler(*this)
 {
-    auto size = _getPixelSizeFromTiles(props.size);
+    auto size = getPixelSizeFromTiles(props.size);
 
     _mode = props.mode;
     _fps = props.fps;
@@ -29,6 +29,8 @@ Window::Window(const IWindow::WindowInitProps &props):
         props.title
     );
     Window::setIcon(props.icon);
+    _view.setSize(size.x, size.y);
+    _view.setCenter(size.x / 2, size.y / 2);
 }
 
 Window::~Window()
@@ -45,7 +47,7 @@ void Window::setTitle(const std::string &title) {
 }
 
 void Window::setSize(shared::types::Vector2u size) {
-    auto real = _getPixelSizeFromTiles(size);
+    auto real = getPixelSizeFromTiles(size);
 
     _size = size;
     _window.setSize(sf::Vector2u(real.x, real.y));
@@ -131,7 +133,7 @@ std::vector<EventPtr> Window::getEvents() {
     return _eventsHandler.handleEvents();
 }
 
-Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) {
+Vector2u Window::getPixelSizeFromTiles(const Vector2u &size) {
     auto mode = sf::VideoMode::getDesktopMode();
     Vector2u real(mode.width, mode.height);
 
@@ -169,3 +171,19 @@ Vector2i Window::tilesToPixels(const Vector2u &position) const {
     };
 }
 
+void Window::viewResize(const sf::Event &event) {
+    Vector2u orignalPixels = getPixelSizeFromTiles(_size);
+    float widht = event.size.width;
+    float height = event.size.height;
+
+    _view.setSize(event.size.width, event.size.height);
+    _view.setCenter(orignalPixels.x / 2, orignalPixels.y / 2);
+    if (widht < height) {
+        auto zoom = static_cast<float>(orignalPixels.x) / event.size.width;
+        _view.zoom(zoom);
+    } else {
+        auto zoom = static_cast<float>(orignalPixels.y) / event.size.height;
+        _view.zoom(zoom);
+    }
+    _window.setView(_view);
+}
