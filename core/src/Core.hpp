@@ -9,6 +9,7 @@
 
 #include <map>
 #include "types/Providers.hpp"
+#include "shared/graphics/ISound.hpp"
 #include "shared/graphics/events/IKeyEvent.hpp"
 #include "shared/graphics/events/IMouseEvent.hpp"
 #include "shared/graphics/events/IMouseButtonEvent.hpp"
@@ -17,6 +18,7 @@
 #include "shared/games/components/IKeyboardComponent.hpp"
 #include "shared/games/components/IDisplayableComponent.hpp"
 #include "shared/games/components/ICollidableComponent.hpp"
+#include "shared/games/components/ISoundComponent.hpp"
 
 using namespace shared::graphics;
 using namespace shared::games;
@@ -34,14 +36,22 @@ class Core {
 
     protected:
     private:
+
+        typedef struct {
+            std::shared_ptr<ISound> sound;
+            ISound::SoundState previousGraphicState;
+            components::SoundState previousGameState;
+        } SoundProps;
+
         std::shared_ptr<IGame> _game;
         std::shared_ptr<IWindow> _window;
-        std::unique_ptr<IGameProvider> &_gameProvider;
-        std::unique_ptr<IGraphicsProvider> &_graphicsProvider;
+        std::shared_ptr<IGameProvider> &_gameProvider;
+        std::shared_ptr<IGraphicsProvider> &_graphicsProvider;
         std::map<std::string, std::shared_ptr<IFont>> _fonts;
         std::map<std::string, std::shared_ptr<ITexture>> _textures;
-        const GameProviders &_gameProviders;
-        const GraphicsProviders &_graphicsProviders;
+        std::map<std::string, SoundProps> _sounds;
+        GameProviders &_gameProviders;
+        GraphicsProviders &_graphicsProviders;
         entity::EntitiesMap _gameEntities;
 
         /**
@@ -78,6 +88,14 @@ class Core {
          * @return The correct font
          */
         std::shared_ptr<IFont> _getFont(std::string path);
+
+        /**
+         * @brief Get a sound
+         * 
+         * @param path Path to the sound file
+         * @return The correct sound
+         */
+        SoundProps _getSound(std::string path);
 
         /**
          * @brief Get the texture entity
@@ -246,4 +264,6 @@ class Core {
          * @return The converted key press data
          */
         components::IKeyboardComponent::KeyData _convertKeyPressData(events::IKeyEvent::KeyType type, events::IKeyEvent::KeyCode code);
+
+        void _handleSoundComponent(std::shared_ptr<components::ISoundComponent> &component);
 };

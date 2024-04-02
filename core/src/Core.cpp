@@ -51,6 +51,20 @@ std::shared_ptr<IFont> Core::_getFont(std::string path)
     return this->_fonts[path];
 }
 
+Core::SoundProps Core::_getSound(std::string path)
+{
+    if (this->_sounds.find(path) == this->_sounds.end()) {
+        SoundProps soundProps {
+            this->_graphicsProvider->createSound(path),
+            ISound::SoundState::STOP,
+            components::STOP
+        };
+        soundProps.sound->setState(ISound::SoundState::STOP);
+        this->_sounds[path] = soundProps;
+    }
+    return this->_sounds[path];
+}
+
 TextureProps Core::_getTextureEntity(std::shared_ptr<components::ITextureComponent> texture)
 {
     auto textureProps = texture->getTextureProps();
@@ -299,6 +313,41 @@ void Core::_handleCollidableComponents(std::shared_ptr<components::ICollidableCo
     }
 }
 
+void Core::_handleSoundComponent(std::shared_ptr<components::ISoundComponent> &gameSound)
+{
+    auto gameSoundPath = gameSound->getPath();
+    auto sound = this->_getSound(gameSoundPath);
+
+    auto gameSoundState = gameSound->getState();
+    auto gameSoundVolume = gameSound->getVolume();
+    auto gameSoundLoop = gameSound->getLoop();
+    auto graphicSoundState = sound.sound->getState();
+    auto graphicSoundVolume = sound.sound->getVolume();
+    auto graphicSoundLoop = sound.sound->getLoopState();
+
+    if (gameSoundState != sound.previousGameState) {
+        if (gameSoundState == components::PLAY)
+            sound.sound->setState(ISound::SoundState::PLAY);
+        if (gameSoundState == components::PAUSE)
+            sound.sound->setState(ISound::SoundState::PAUSE);
+        if (gameSoundState == components::STOP)
+            sound.sound->setState(ISound::SoundState::STOP);
+        sound.previousGameState = gameSoundState;
+    }
+    if (graphicSoundState != sound.previousGraphicState) {
+        if (graphicSoundState == ISound::SoundState::PLAY)
+            gameSound->onStateChange(this->_game, components::PLAY);
+        if (graphicSoundState == ISound::SoundState::PAUSE)
+            gameSound->onStateChange(this->_game, components::PAUSE);
+        if (graphicSoundState == ISound::SoundState::STOP)
+            gameSound->onStateChange(this->_game, components::STOP);
+    }
+    if (gameSoundVolume != graphicSoundVolume)
+        sound.sound->setVolume(gameSoundVolume);
+    if (gameSoundLoop != graphicSoundLoop)
+        sound.sound->setLoopState(gameSoundLoop);
+}
+
 void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IComponent> &component)
 {
     auto type = component->getType();
@@ -314,6 +363,10 @@ void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::sh
     if (type == components::COLLIDABLE) {
         auto collidable = std::dynamic_pointer_cast<components::ICollidableComponent>(component);
         this->_handleCollidableComponents(collidable);
+    }
+    if (type == components::SOUND) {
+        auto sound = std::dynamic_pointer_cast<components::ISoundComponent>(component);
+        this->_handleSoundComponent(sound);
     }
 }
 
