@@ -34,7 +34,6 @@ class Core {
          */
         void run();
 
-    protected:
     private:
 
         typedef struct {
@@ -157,7 +156,7 @@ class Core {
          * @param events Events to handle
          * @param component The keyboard component
          */
-        void _handleKeyBoardEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IKeyboardComponent> &component);
+        void _handleKeyboardEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IKeyboardComponent> &component);
 
         /**
          * @brief Handle the displayable events
@@ -265,5 +264,10 @@ class Core {
          */
         components::IKeyboardComponent::KeyData _convertKeyPressData(events::IKeyEvent::KeyType type, events::IKeyEvent::KeyCode code);
 
+        /**
+         * @brief Handle the mouse button press event
+         * 
+         * @param event The mouse button event
+         */
         void _handleSoundComponent(std::shared_ptr<components::ISoundComponent> &component);
 };

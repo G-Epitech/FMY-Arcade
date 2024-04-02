@@ -252,7 +252,7 @@ void Core::_handleWindowResize()
     std::cout << "Window resized" << std::endl;
 }
 
-void Core::_handleKeyBoardEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IKeyboardComponent> &component)
+void Core::_handleKeyboardEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IKeyboardComponent> &component)
 {
     for (auto &event : events) {
         auto type = event->getType();
@@ -354,7 +354,7 @@ void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::sh
 
     if (type == components::KEYBOARD) {
         auto keyboard = std::dynamic_pointer_cast<components::IKeyboardComponent>(component);
-        this->_handleKeyBoardEvents(events, keyboard);
+        this->_handleKeyboardEvents(events, keyboard);
     }
     if (type == components::TEXT || type == components::TEXTURE) {
         auto displayable = std::dynamic_pointer_cast<components::IDisplayableComponent>(component);
