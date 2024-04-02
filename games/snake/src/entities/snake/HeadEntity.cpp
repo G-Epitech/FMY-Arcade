@@ -9,6 +9,7 @@
 #include "HeadEntity.hpp"
 #include "../wall/WallEntity.hpp"
 #include "components/HeadKeyboardComponent.hpp"
+#include <iostream>
 
 using namespace arcade::games::common::components;
 using namespace shared::games::components;
@@ -35,17 +36,29 @@ shared::games::components::TextureProps arcade::games::snake::HeadEntity::_defau
                     .bin = "assets/snake/head.png",
                     .binTileSize = Vector2f(40, 40)
             },
-            .origin = Vector2u(0, 0)
+            .origin = Vector2u(3, 0)
     };
 }
 
 void arcade::games::snake::HeadEntity::forward() {
     for (auto &component: this->_components) {
-        std::shared_ptr<PositionableComponent> posCmp = std::dynamic_pointer_cast<PositionableComponent>(component);
+        auto posCmp = std::dynamic_pointer_cast<PositionableComponent>(component);
         if (posCmp == nullptr) continue;
 
         posCmp->getPosition().x += this->direction.x;
         posCmp->getPosition().y += this->direction.y;
+
+        auto textureCmp = std::dynamic_pointer_cast<TextureComponent>(component);
+        if (textureCmp == nullptr) continue;
+
+        textureCmp->getTextureProps().origin = Vector2u(0, 0);
+        if (this->direction.y == 0)
+            textureCmp->getTextureProps().origin.x = 2;
+        if (this->direction.x > 0)
+            textureCmp->getTextureProps().origin.x += 1;
+        if (this->direction.y < 0)
+            textureCmp->getTextureProps().origin.x += 1;
+        std::cout << textureCmp->getTextureProps().origin.x << std::endl;
     }
 }
 
