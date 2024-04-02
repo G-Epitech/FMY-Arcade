@@ -45,6 +45,11 @@ public:
      */
     std::vector<std::shared_ptr<TailEntity>> &getTails();
 
+    /**
+     * @brief Reset the snake
+     */
+    void reset();
+
     shared::games::DeltaTime lastMove;
 protected:
     /**

@@ -8,13 +8,13 @@
 #pragma once
 
 #include "shared/games/components/IDisplayableComponent.hpp"
-#include "PositionComponent.hpp"
+#include "PositionableComponent.hpp"
 
 namespace arcade::games::common::components {
     class ADisplayableComponent;
 }
 
-class arcade::games::common::components::ADisplayableComponent : public virtual shared::games::components::IDisplayableComponent, public PositionComponent {
+class arcade::games::common::components::ADisplayableComponent : public virtual shared::games::components::IDisplayableComponent, public PositionableComponent {
 public:
     ~ADisplayableComponent() override = default;
 
@@ -34,19 +34,19 @@ public:
      * @brief On click event handler for the entity
      * @param ctx Context of the game
      */
-    void onMousePress(std::shared_ptr<shared::games::IGame> &ctx) override;
+    void onMousePress(std::shared_ptr<shared::games::IGame> ctx) override;
 
     /**
      * @brief On release event handler for the entity
      * @param ctx Context of the game
      */
-    void onMouseRelease(std::shared_ptr<shared::games::IGame> &ctx) override;
+    void onMouseRelease(std::shared_ptr<shared::games::IGame> ctx) override;
 
     /**
      * @brief On hover event handler for the entity
      * @param ctx Context of the game
      */
-    void onMouseHover(std::shared_ptr<shared::games::IGame> &ctx) override;
+    void onMouseHover(std::shared_ptr<shared::games::IGame> ctx) override;
 
 protected:
     /**

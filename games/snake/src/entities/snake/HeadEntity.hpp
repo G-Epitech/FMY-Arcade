@@ -12,6 +12,8 @@
 #include "common/components/TextureComponent.hpp"
 
 namespace arcade::games::snake {
+    class SnakeGame;
+
     class HeadEntity;
 }
 
@@ -29,6 +31,16 @@ public:
      */
     void forward();
 
+    /**
+     * @brief Direction of the snake
+     */
+    Vector2i direction;
+
+    /**
+     * @brief Set the head at default position
+     */
+    void reset();
+
 protected:
     /**
      * @brief Get default texture props
@@ -36,7 +48,14 @@ protected:
      */
     static shared::games::components::TextureProps _defaultTextureProps();
 
-    shared::games::components::TextureProps _textureProps;
+    /**
+     * @brief Represent the function that will be executed
+     * when the snake will collide with an other collidable component
+     * @param ctx Context of the game
+     * @param target Target component
+     */
+    static void _onCollide(std::shared_ptr<shared::games::IGame> ctx,
+                           std::shared_ptr<shared::games::components::ICollidableComponent> target);
 
-    Vector2i _direction;
+    shared::games::components::TextureProps _textureProps;
 };

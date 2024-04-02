@@ -12,7 +12,11 @@
 
 namespace shared::games::components {
   class IKeyboardComponent;
+}
 
+class shared::games::components::IKeyboardComponent: public virtual IComponent
+{
+public:
   typedef enum
   {
     CONTROL, // Control key (`Ctrl`, `Shift`, `Alt`)
@@ -50,11 +54,7 @@ namespace shared::games::components {
     KeyCode code; // Key code. Interpretation depends on the type
     KeyType type; // Type of the key
   } KeyData;
-}
 
-class shared::games::components::IKeyboardComponent: public virtual IComponent
-{
-public:
   virtual ~IKeyboardComponent() = default;
 
   /**
@@ -62,12 +62,12 @@ public:
    * @param ctx Context of the game
    * @param keyData Key data of key pressed
    */
-  virtual void onKeyPress(std::shared_ptr<IGame> &ctx, KeyData keyData) = 0;
+  virtual void onKeyPress(std::shared_ptr<IGame> ctx, KeyData keyData) = 0;
 
   /**
    * @brief On key release event handler for the entity
    * @param ctx Context of the game
    * @param keyData Key data of key released
    */
-  virtual void onKeyRelease(std::shared_ptr<IGame> &ctx, KeyData keyData) = 0;
+  virtual void onKeyRelease(std::shared_ptr<IGame> ctx, KeyData keyData) = 0;
 };
