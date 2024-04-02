@@ -22,15 +22,10 @@ arcade::games::snake::HeadEntity::HeadEntity() : _textureProps(
     std::shared_ptr<components::HeadKeyboardComponent> keyboard = std::make_shared<components::HeadKeyboardComponent>(
             *this);
 
-    collide->getPosition().x = 8;
-    collide->getPosition().y = 4;
     this->_components.push_back(collide);
-
-    texture->getPosition().x = 8;
-    texture->getPosition().y = 4;
     this->_components.push_back(texture);
-
     this->_components.push_back(keyboard);
+    this->reset();
 }
 
 shared::games::components::TextureProps arcade::games::snake::HeadEntity::_defaultTextureProps() {
@@ -54,10 +49,22 @@ void arcade::games::snake::HeadEntity::forward() {
     }
 }
 
-void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games::IGame> &ctx,
+void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games::IGame> ctx,
                                                   std::shared_ptr<shared::games::components::ICollidableComponent> target) {
-    const auto &wall = dynamic_cast<const WallEntity *>(&target->getEntity());
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
-    if (!wall)
+
+    if (!dynamic_cast<const WallEntity *>(&target->getEntity()) || !game)
         return;
+    game->loose();
+}
+
+void arcade::games::snake::HeadEntity::reset() {
+    this->direction = Vector2i(1, 0);
+    for (auto &component: this->_components) {
+        std::shared_ptr<PositionableComponent> posCmp = std::dynamic_pointer_cast<PositionableComponent>(component);
+        if (posCmp == nullptr) continue;
+
+        posCmp->getPosition().x = 8;
+        posCmp->getPosition().y = 4;
+    }
 }

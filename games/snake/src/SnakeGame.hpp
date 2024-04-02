@@ -40,6 +40,11 @@ public:
      */
     void compute(shared::games::DeltaTime dt) override;
 
+    /**
+     * @brief Execute the process of the end of the game when the player loose
+     */
+    void loose();
+
 protected:
     std::unique_ptr<Snake> _snake;
     shared::games::DeltaTime _clock;

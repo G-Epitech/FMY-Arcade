@@ -58,6 +58,27 @@ void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
         // DEBUG //
         auto position = std::dynamic_pointer_cast<shared::games::components::IPositionableComponent>(this->_snake->head->getComponents().at(1));
         std::cout << "Snake Position [" << position->getPosition().x << ", " << position->getPosition().y << "]" << std::endl;
+
+        this->loose();
         // END DEBUG //
+    }
+}
+
+void snake::SnakeGame::loose() {
+    this->_clock = std::chrono::milliseconds(0);
+    this->_snake->lastMove = std::chrono::milliseconds(0);
+
+    this->_entities.erase(std::remove_if(this->_entities.begin(), this->_entities.end(), [](const shared::games::entity::EntityPtr& entity) {
+        auto tail = std::dynamic_pointer_cast<TailEntity>(entity);
+        return !(tail == nullptr);
+    }), this->_entities.end());
+
+    this->_snake->reset();
+
+    for (size_t i = 0; i < 2; i++) {
+        this->_snake->addTail();
+    }
+    for (auto &tail: this->_snake->getTails()) {
+        this->_registerEntity(tail);
     }
 }

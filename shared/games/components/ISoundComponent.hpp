@@ -34,28 +34,28 @@ public:
    *
    * @return Sound path
    */
-  virtual const std::string &getPath(void) const noexcept = 0;
+  virtual const std::string &getPath() const noexcept = 0;
 
   /**
    * @brief Get state of the sound
    *
    * @return Sound state
    */
-  virtual SoundState &getState(void) noexcept = 0;
+  virtual SoundState &getState() noexcept = 0;
 
   /**
    * @brief Get volume of the sound
    *
    * @return Sound volume
    */
-  virtual SoundVolume &getVolume(void) noexcept = 0;
+  virtual SoundVolume &getVolume() noexcept = 0;
 
   /**
    * @brief Get loop of the sound
    *
    * @return Sound loop
    */
-  virtual bool &getLoop(void) noexcept = 0;
+  virtual bool &getLoop() noexcept = 0;
 
   /**
    * @brief On state change event handler for the component
@@ -63,5 +63,5 @@ public:
    * @param ctx Context of the game
    * @param state New state of the sound
    */
-  virtual void onStateChange(std::shared_ptr<IGame> &ctx, SoundState state) = 0;
+  virtual void onStateChange(std::shared_ptr<IGame> ctx, SoundState state) = 0;
 };

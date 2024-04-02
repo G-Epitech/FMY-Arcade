@@ -33,3 +33,8 @@ std::shared_ptr<TailEntity> Snake::addTail() {
     this->_tails.push_back(newTail);
     return newTail;
 }
+
+void Snake::reset() {
+    this->head->reset();
+    this->_tails.clear();
+}

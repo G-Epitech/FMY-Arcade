@@ -34,19 +34,19 @@ public:
      * @brief On click event handler for the entity
      * @param ctx Context of the game
      */
-    void onMousePress(std::shared_ptr<shared::games::IGame> &ctx) override;
+    void onMousePress(std::shared_ptr<shared::games::IGame> ctx) override;
 
     /**
      * @brief On release event handler for the entity
      * @param ctx Context of the game
      */
-    void onMouseRelease(std::shared_ptr<shared::games::IGame> &ctx) override;
+    void onMouseRelease(std::shared_ptr<shared::games::IGame> ctx) override;
 
     /**
      * @brief On hover event handler for the entity
      * @param ctx Context of the game
      */
-    void onMouseHover(std::shared_ptr<shared::games::IGame> &ctx) override;
+    void onMouseHover(std::shared_ptr<shared::games::IGame> ctx) override;
 
 protected:
     /**

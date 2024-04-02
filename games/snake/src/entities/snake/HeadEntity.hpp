@@ -36,6 +36,11 @@ public:
      */
     Vector2i direction;
 
+    /**
+     * @brief Set the head at default position
+     */
+    void reset();
+
 protected:
     /**
      * @brief Get default texture props
@@ -49,7 +54,7 @@ protected:
      * @param ctx Context of the game
      * @param target Target component
      */
-    static void _onCollide(std::shared_ptr<shared::games::IGame> &ctx,
+    static void _onCollide(std::shared_ptr<shared::games::IGame> ctx,
                            std::shared_ptr<shared::games::components::ICollidableComponent> target);
 
     shared::games::components::TextureProps _textureProps;

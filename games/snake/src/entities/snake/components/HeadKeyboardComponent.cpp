@@ -12,7 +12,7 @@ using namespace shared::games::components;
 
 HeadKeyboardComponent::HeadKeyboardComponent(HeadEntity &entity) : AComponent(KEYBOARD, entity), _parent(entity) {}
 
-void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> &ctx,
+void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> ctx,
                                    shared::games::components::IKeyboardComponent::KeyData keyData) {
     if (keyData.type == ARROW) {
         if (keyData.code.arrow == UP) {
@@ -44,5 +44,5 @@ void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> &ct
     }
 }
 
-void HeadKeyboardComponent::onKeyRelease(std::shared_ptr<shared::games::IGame> &ctx,
+void HeadKeyboardComponent::onKeyRelease(std::shared_ptr<shared::games::IGame> ctx,
                                      shared::games::components::IKeyboardComponent::KeyData keyData) {}

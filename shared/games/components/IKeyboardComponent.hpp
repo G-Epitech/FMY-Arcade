@@ -62,12 +62,12 @@ public:
    * @param ctx Context of the game
    * @param keyData Key data of key pressed
    */
-  virtual void onKeyPress(std::shared_ptr<IGame> &ctx, KeyData keyData) = 0;
+  virtual void onKeyPress(std::shared_ptr<IGame> ctx, KeyData keyData) = 0;
 
   /**
    * @brief On key release event handler for the entity
    * @param ctx Context of the game
    * @param keyData Key data of key released
    */
-  virtual void onKeyRelease(std::shared_ptr<IGame> &ctx, KeyData keyData) = 0;
+  virtual void onKeyRelease(std::shared_ptr<IGame> ctx, KeyData keyData) = 0;
 };

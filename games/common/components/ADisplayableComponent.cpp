@@ -23,8 +23,8 @@ unsigned int &ADisplayableComponent::getZIndex() noexcept {
     return this->_zindex;
 }
 
-void ADisplayableComponent::onMousePress(std::shared_ptr<IGame> &ctx) {}
+void ADisplayableComponent::onMousePress(std::shared_ptr<IGame> ctx) {}
 
-void ADisplayableComponent::onMouseHover(std::shared_ptr<IGame> &ctx) {}
+void ADisplayableComponent::onMouseHover(std::shared_ptr<IGame> ctx) {}
 
-void ADisplayableComponent::onMouseRelease(std::shared_ptr<IGame> &ctx) {}
+void ADisplayableComponent::onMouseRelease(std::shared_ptr<IGame> ctx) {}

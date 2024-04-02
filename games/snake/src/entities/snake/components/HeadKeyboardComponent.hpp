@@ -31,14 +31,14 @@ public:
      * @param ctx Context of the game
      * @param keyData Key data of key pressed
      */
-    void onKeyPress(std::shared_ptr<shared::games::IGame> &ctx, shared::games::components::IKeyboardComponent::KeyData keyData) override;
+    void onKeyPress(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::IKeyboardComponent::KeyData keyData) override;
 
     /**
      * @brief On key release event handler for the entity
      * @param ctx Context of the game
      * @param keyData Key data of key released
      */
-    void onKeyRelease(std::shared_ptr<shared::games::IGame> &ctx, shared::games::components::IKeyboardComponent::KeyData keyData) override;
+    void onKeyRelease(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::IKeyboardComponent::KeyData keyData) override;
 
 protected:
     HeadEntity &_parent;
