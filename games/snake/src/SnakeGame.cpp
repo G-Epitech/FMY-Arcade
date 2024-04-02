@@ -83,6 +83,7 @@ void snake::SnakeGame::_loose() {
     for (auto &tail: this->_snake->getTails()) {
         this->_registerEntity(tail);
     }
+    this->_looseGame = false;
 }
 
 void snake::SnakeGame::setLooseGame(bool state) {
