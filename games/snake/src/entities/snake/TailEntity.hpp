@@ -28,6 +28,12 @@ public:
     void setPosition(Vector2i position);
 
     /**
+     * @brief Set texture origin for direction of the tail
+     * @param origin
+     */
+    void setTextureOrigin(Vector2u origin);
+
+    /**
      * @brief Get position of the tail
      * @return Vector of the position
      */

@@ -33,7 +33,7 @@ const shared::games::GameManifest snake::SnakeGame::manifest = {
 };
 
 snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
-    this->_snake = std::make_unique<Snake>(2);
+    this->_snake = std::make_unique<Snake>(5);
     this->_registerEntity(this->_snake->head);
 
     for (auto &tail: this->_snake->getTails()) {

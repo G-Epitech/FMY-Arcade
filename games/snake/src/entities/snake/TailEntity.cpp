@@ -42,6 +42,15 @@ void arcade::games::snake::TailEntity::setPosition(Vector2i position) {
     }
 }
 
+void arcade::games::snake::TailEntity::setTextureOrigin(shared::types::Vector2u origin) {
+    for (auto &component: this->_components) {
+        auto txCmp = std::dynamic_pointer_cast<TextureComponent>(component);
+        if (txCmp == nullptr) continue;
+
+        txCmp->getTextureProps().origin = origin;
+    }
+}
+
 Vector2i arcade::games::snake::TailEntity::getPosition() {
     return this->_position;
 }
