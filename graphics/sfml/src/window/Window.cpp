@@ -17,6 +17,7 @@ const Vector2u Window::tileSize = { 12, 12 };
 
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
+    _initialSize(0, 0),
     _renderer(*this),
     _eventsHandler(*this)
 {
@@ -29,8 +30,12 @@ Window::Window(const IWindow::WindowInitProps &props):
         props.title
     );
     Window::setIcon(props.icon);
-    _view.setSize(size.x, size.y);
-    _view.setCenter(size.x / 2, size.y / 2);
+    _view.setSize(static_cast<float>(size.x), static_cast<float>(size.y));
+    _view.setCenter(static_cast<float>(size.x) / 2, static_cast<float>(size.y) / 2);
+    _initialSize = {
+        static_cast<unsigned int>(_window.getSize().x),
+        static_cast<unsigned int>(_window.getSize().y)
+    };
 }
 
 Window::~Window()
@@ -144,46 +149,42 @@ Vector2u Window::getPixelSizeFromTiles(const Vector2u &size) {
     return real;
 }
 
-Vector2i Window::pixelsToTiles(const shared::types::Vector2i &position) const {
-    auto realSize = _window.getSize();
+Vector2i Window::mapPositionToTile(const Vector2i &position) const {
+    auto pixelsPosition = _window.mapPixelToCoords({
+        position.x,
+        position.y
+    });
+    Vector2f size = { static_cast<float>(_size.x), static_cast<float>(_size.y) };
+    Vector2f initialSize = { static_cast<float>(_initialSize.x), static_cast<float>(_initialSize.y) };
 
+    Vector2f tilesPosition = {
+        pixelsPosition.x * size.x / initialSize.x,
+        pixelsPosition.y * size.y / initialSize.y
+    };
+
+    if (tilesPosition.x >= size.x || tilesPosition.y >= size.y || pixelsPosition.x < 0)
+        return {-1, -1};
     return {
-        static_cast<int>(position.x * _size.x / realSize.x),
-        static_cast<int>(position.y * _size.y / realSize.y)
+        static_cast<int>(tilesPosition.x),
+        static_cast<int>(tilesPosition.y)
     };
 }
 
-Vector2i Window::tilesToPixels(const Vector2i &position) const {
-    auto realSize = _window.getSize();
+void Window::onResize()
+{
+    Vector2u originalPixels = getPixelSizeFromTiles(_size);
+    auto size = _window.getSize();
+    auto width = static_cast<float>(size.x);
+    auto height = static_cast<float>(size.y);
 
-    return {
-        static_cast<int>(position.x * realSize.x / _size.x),
-        static_cast<int>(position.y * realSize.y / _size.y)
-    };
-}
-
-Vector2i Window::tilesToPixels(const Vector2u &position) const {
-    auto realSize = _window.getSize();
-
-    return {
-        static_cast<int>(position.x * realSize.x / _size.x),
-        static_cast<int>(position.y * realSize.y / _size.y)
-    };
-}
-
-void Window::viewResize(const sf::Event &event) {
-    Vector2u orignalPixels = getPixelSizeFromTiles(_size);
-    float widht = event.size.width;
-    float height = event.size.height;
-
-    _view.setSize(event.size.width, event.size.height);
-    _view.setCenter(orignalPixels.x / 2, orignalPixels.y / 2);
-    if (widht < height) {
-        auto zoom = static_cast<float>(orignalPixels.x) / event.size.width;
-        _view.zoom(zoom);
+    _view.setSize(width, height);
+    _view.setCenter( static_cast<float>(originalPixels.x) / 2,
+                     static_cast<float>(originalPixels.y) / 2
+    );
+    if (width < height) {
+        _view.zoom(static_cast<float>(originalPixels.x) / width);
     } else {
-        auto zoom = static_cast<float>(orignalPixels.y) / event.size.height;
-        _view.zoom(zoom);
+        _view.zoom(static_cast<float>(originalPixels.y) / height);
     }
     _window.setView(_view);
 }
