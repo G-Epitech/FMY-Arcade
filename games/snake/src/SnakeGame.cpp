@@ -9,6 +9,7 @@
 #include "SnakeGame.hpp"
 #include "entities/wall/WallEntity.hpp"
 #include "entities/background/BackgroundEntity.hpp"
+#include "entities/apple/AppleEntity.hpp"
 #include "common/components/TextureComponent.hpp"
 #include "entities/snake/components/HeadKeyboardComponent.hpp"
 
@@ -33,7 +34,7 @@ const shared::games::GameManifest snake::SnakeGame::manifest = {
 };
 
 snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
-    this->_snake = std::make_unique<Snake>(5);
+    this->_snake = std::make_unique<Snake>(2);
     this->_registerEntity(this->_snake->head);
 
     for (auto &tail: this->_snake->getTails()) {
@@ -42,6 +43,9 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
 
     this->_registerEntity(std::make_unique<WallEntity>(this->getSize()));
     this->_registerEntity(std::make_unique<BackgroundEntity>(this->getSize()));
+
+    this->_apple = std::make_unique<AppleEntity>(this->getSize());
+    this->_registerEntity(this->_apple);
 
     this->_clock = std::chrono::milliseconds(0);
     this->_looseGame = false;
@@ -82,4 +86,11 @@ void snake::SnakeGame::_loose() {
 
 void snake::SnakeGame::setLooseGame(bool state) {
     this->_looseGame = state;
+}
+
+void snake::SnakeGame::addNewPoint() {
+    std::shared_ptr<TailEntity> newTail = this->_snake->addTail();
+
+    this->_registerEntity(newTail);
+    this->_apple->generateApple();
 }

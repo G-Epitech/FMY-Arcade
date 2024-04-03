@@ -15,16 +15,16 @@ HeadKeyboardComponent::HeadKeyboardComponent(HeadEntity &entity) : AComponent(KE
 void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> ctx,
                                    shared::games::components::IKeyboardComponent::KeyData keyData) {
     if (keyData.type == ARROW) {
-        if (keyData.code.arrow == UP) {
+        if (keyData.code.arrow == UP && this->_parent.direction.y != 1) {
             this->_parent.direction = Vector2i(0, -1);
         }
-        if (keyData.code.arrow == DOWN) {
+        if (keyData.code.arrow == DOWN && this->_parent.direction.y != -1) {
             this->_parent.direction = Vector2i(0, 1);
         }
-        if (keyData.code.arrow == LEFT) {
+        if (keyData.code.arrow == LEFT && this->_parent.direction.x != 1) {
             this->_parent.direction = Vector2i(-1, 0);
         }
-        if (keyData.code.arrow == RIGHT) {
+        if (keyData.code.arrow == RIGHT && this->_parent.direction.x != -1) {
             this->_parent.direction = Vector2i(1, 0);
         }
     }

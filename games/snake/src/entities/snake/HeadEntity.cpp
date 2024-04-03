@@ -7,6 +7,7 @@
 
 #include "SnakeGame.hpp"
 #include "HeadEntity.hpp"
+#include "../apple/AppleEntity.hpp"
 #include "../wall/WallEntity.hpp"
 #include "components/HeadKeyboardComponent.hpp"
 
@@ -68,11 +69,14 @@ void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games:
                                                   std::shared_ptr<shared::games::components::ICollidableComponent> target) {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
 
-    if (!dynamic_cast<const WallEntity *>(&target->getEntity()) && !dynamic_cast<const TailEntity *>(&target->getEntity()))
-        return;
     if (!game)
         return;
-    game->setLooseGame(true);
+    if (dynamic_cast<const WallEntity *>(&target->getEntity()) || dynamic_cast<const TailEntity *>(&target->getEntity())) {
+        game->setLooseGame(true);
+    }
+    if (dynamic_cast<const AppleEntity *>(&target->getEntity())) {
+        game->addNewPoint();
+    }
 }
 
 void arcade::games::snake::HeadEntity::reset() {

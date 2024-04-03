@@ -15,6 +15,8 @@ add_library(${PROJECT_NAME} SHARED
         src/entities/wall/WallEntity.hpp
         src/entities/background/BackgroundEntity.cpp
         src/entities/background/BackgroundEntity.hpp
+        src/entities/apple/AppleEntity.cpp
+        src/entities/apple/AppleEntity.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
