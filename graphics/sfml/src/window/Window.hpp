@@ -137,19 +137,7 @@ public:
      * @brief Convert a position in pixels to a position in tiles
      * @return Converted position
      */
-    Vector2i pixelsToTiles(const Vector2i &position) const;
-
-    /**
-     * @brief Convert a position in tiles to a position in pixels
-     * @return Converted position
-     */
-    Vector2i tilesToPixels(const Vector2i &position) const;
-
-    /**
-     * @brief Convert a position in tiles to a position in pixels
-     * @return Converted position
-     */
-    Vector2i tilesToPixels(const Vector2u &position) const;
+    Vector2i mapPositionToTile(const Vector2i &pixelsPosition) const;
 
     /**
      * @brief Get the size of a tile
@@ -157,9 +145,19 @@ public:
      */
     static const Vector2u  tileSize;
 
-private:
-    static Vector2u _getPixelSizeFromTiles(const Vector2u &size);
+    /**
+     * @brief Resize the view of the window
+     */
+    void onResize();
 
+    /**
+     * @brief Get the size of the window in pixels
+     * @param size Size of the window in tiles
+     * @return Size of the window in pixels
+     */
+    static Vector2u getPixelSizeFromTiles(const Vector2u &size);
+
+private:
     EventsHandler       _eventsHandler;
     Renderer            _renderer;
     sf::RenderWindow    _window;
@@ -168,4 +166,6 @@ private:
     WindowMode          _mode;
     sf::Image           _icon;
     Vector2u            _size;
+    Vector2u            _initialSize;
+    sf::View            _view;
 };
