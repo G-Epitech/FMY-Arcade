@@ -9,6 +9,7 @@
 
 #include "common/game/AGame.hpp"
 #include "games/snake/src/entities/snake/Snake.hpp"
+#include "entities/apple/AppleEntity.hpp"
 
 namespace arcade::games::snake {
     class SnakeGame;
@@ -47,6 +48,15 @@ public:
      */
     void setLooseGame(bool state);
 
+    /**
+     * @brief Add new point to player and re-generate an apple
+     */
+    void addNewPoint();
+
+    unsigned int speedTime;
+
+    unsigned int speedBoost;
+
 protected:
     /**
      * @brief Execute the process of the end of the game when the player _loose
@@ -54,6 +64,7 @@ protected:
     void _loose();
 
     std::unique_ptr<Snake> _snake;
+    std::shared_ptr<AppleEntity> _apple;
     shared::games::DeltaTime _clock;
     bool _looseGame;
 };

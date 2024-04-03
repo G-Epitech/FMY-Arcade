@@ -15,16 +15,15 @@ namespace arcade::games::snake {
     class WallEntity;
 }
 
-
 class arcade::games::snake::WallEntity : public common::AEntity {
 public:
     ~WallEntity() override = default;
 
     explicit WallEntity(shared::types::Vector2u size);
 
-    class WallExeption : public std::exception {
+    class WallException : public std::exception {
     public:
-        WallExeption(const std::string &message);
+        WallException(const std::string &message);
 
         const char *what() const noexcept override;
 

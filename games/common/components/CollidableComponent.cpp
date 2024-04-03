@@ -16,5 +16,6 @@ CollidableComponent::CollidableComponent(shared::games::entity::IEntity &entity,
 
 void CollidableComponent::onCollide(std::shared_ptr<shared::games::IGame> ctx,
                                     std::shared_ptr<ICollidableComponent> target) {
-    return this->_collideFunction(ctx, target);
+    if (this->_collideFunction)
+        this->_collideFunction(ctx, target);
 }

@@ -6,6 +6,7 @@
 */
 
 #include "HeadKeyboardComponent.hpp"
+#include "../../../SnakeGame.hpp"
 
 using namespace arcade::games::snake::components;
 using namespace shared::games::components;
@@ -15,32 +16,37 @@ HeadKeyboardComponent::HeadKeyboardComponent(HeadEntity &entity) : AComponent(KE
 void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> ctx,
                                    shared::games::components::IKeyboardComponent::KeyData keyData) {
     if (keyData.type == ARROW) {
-        if (keyData.code.arrow == UP) {
+        if (keyData.code.arrow == UP && this->_parent.direction.y != 1) {
             this->_parent.direction = Vector2i(0, -1);
         }
-        if (keyData.code.arrow == DOWN) {
+        if (keyData.code.arrow == DOWN && this->_parent.direction.y != -1) {
             this->_parent.direction = Vector2i(0, 1);
         }
-        if (keyData.code.arrow == LEFT) {
+        if (keyData.code.arrow == LEFT && this->_parent.direction.x != 1) {
             this->_parent.direction = Vector2i(-1, 0);
         }
-        if (keyData.code.arrow == RIGHT) {
+        if (keyData.code.arrow == RIGHT && this->_parent.direction.x != -1) {
             this->_parent.direction = Vector2i(1, 0);
         }
     }
     if (keyData.type == CHAR) {
-        if (keyData.code.character == 'z') {
+        if (keyData.code.character == 'z' && this->_parent.direction.y != 1) {
             this->_parent.direction = Vector2i(0, -1);
         }
-        if (keyData.code.character == 's') {
+        if (keyData.code.character == 's' && this->_parent.direction.y != -1) {
             this->_parent.direction = Vector2i(0, 1);
         }
-        if (keyData.code.character == 'q') {
+        if (keyData.code.character == 'q' && this->_parent.direction.x != 1) {
             this->_parent.direction = Vector2i(-1, 0);
         }
-        if (keyData.code.character == 'd') {
+        if (keyData.code.character == 'd' && this->_parent.direction.x != -1) {
             this->_parent.direction = Vector2i(1, 0);
         }
+    }
+    if (keyData.type == CHAR && keyData.code.character == ' ') {
+        auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
+
+        game->speedBoost = 3;
     }
 }
 

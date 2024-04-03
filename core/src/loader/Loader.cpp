@@ -11,16 +11,19 @@
 
 Loader::Loader() {}
 
-Loader::~Loader() {}
+Loader::~Loader() {
+    this->_gamesLibraries.clear();
+    this->_graphicsLibraries.clear();
+}
 
-shared::types::LibraryType Loader::_getLibraryGetter(const std::string &filepath, std::shared_ptr<DLLoader> &dlLoader) {
+shared::types::LibraryType Loader::_getLibraryGetter(const std::string &filepath, std::shared_ptr<DLLoader> dlLoader) {
     shared::types::LibraryTypeGetter getter = nullptr;
 
     getter = dlLoader->loadSymbol<shared::types::LibraryTypeGetter>(SHARED_STRINGIFY(SHARED_LIBRARY_TYPE_GETTER_NAME));
     return getter();
 }
 
-void Loader::_loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoader> &dlLoader) {
+void Loader::_loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoader> dlLoader) {
     shared::types::GameProviderGetter game = nullptr;
 
     game = dlLoader->loadSymbol<shared::types::GameProviderGetter>(SHARED_STRINGIFY(SHARED_GAME_PROVIDER_GETTER_NAME));
@@ -28,7 +31,7 @@ void Loader::_loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoa
     this->_libraries.push_back(dlLoader);
 }
 
-void Loader::_loadGraphicsLibrary(const std::string &filepath, std::shared_ptr<DLLoader> &dlLoader) {
+void Loader::_loadGraphicsLibrary(const std::string &filepath, std::shared_ptr<DLLoader> dlLoader) {
     shared::types::GraphicsProviderGetter graphics = nullptr;
 
     graphics = dlLoader->loadSymbol<shared::types::GraphicsProviderGetter>(SHARED_STRINGIFY(SHARED_GRAPHICS_PROVIDER_GETTER_NAME));
@@ -56,10 +59,10 @@ void Loader::loadLibraries(std::string path) {
     }
 }
 
-const GameProviders &Loader::getGamesLibraries() const {
+GameProviders &Loader::getGamesLibraries() {
     return this->_gamesLibraries;
 }
 
-const GraphicsProviders &Loader::getGraphicsLibraries() const {
+GraphicsProviders &Loader::getGraphicsLibraries() {
     return this->_graphicsLibraries;
 }

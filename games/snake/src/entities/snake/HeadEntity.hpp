@@ -32,9 +32,14 @@ public:
     void forward();
 
     /**
-     * @brief Direction of the snake
+     * @brief Direction of the snake head
      */
     Vector2i direction;
+
+    /**
+     * @brief Position of the snake head
+     */
+    Vector2i position;
 
     /**
      * @brief Set the head at default position

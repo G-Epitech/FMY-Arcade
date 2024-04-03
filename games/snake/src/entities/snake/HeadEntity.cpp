@@ -7,16 +7,17 @@
 
 #include "SnakeGame.hpp"
 #include "HeadEntity.hpp"
+#include "../apple/AppleEntity.hpp"
 #include "../wall/WallEntity.hpp"
 #include "components/HeadKeyboardComponent.hpp"
-#include <iostream>
 
 using namespace arcade::games::common::components;
 using namespace shared::games::components;
 
 arcade::games::snake::HeadEntity::HeadEntity() : _textureProps(
         arcade::games::snake::HeadEntity::_defaultTextureProps()),
-                                                 direction(1, 0) {
+                                                 direction(1, 0),
+                                                 position(6, 10) {
     std::shared_ptr<CollidableComponent> collide = std::make_shared<CollidableComponent>(*this, HeadEntity::_onCollide);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 10,
                                                                                    this->_textureProps);
@@ -41,6 +42,9 @@ shared::games::components::TextureProps arcade::games::snake::HeadEntity::_defau
 }
 
 void arcade::games::snake::HeadEntity::forward() {
+    this->position.x += this->direction.x;
+    this->position.y += this->direction.y;
+
     for (auto &component: this->_components) {
         auto posCmp = std::dynamic_pointer_cast<PositionableComponent>(component);
         if (posCmp == nullptr) continue;
@@ -56,9 +60,8 @@ void arcade::games::snake::HeadEntity::forward() {
             textureCmp->getTextureProps().origin.x = 2;
         if (this->direction.x > 0)
             textureCmp->getTextureProps().origin.x += 1;
-        if (this->direction.y < 0)
+        if (this->direction.y > 0)
             textureCmp->getTextureProps().origin.x += 1;
-        std::cout << textureCmp->getTextureProps().origin.x << std::endl;
     }
 }
 
@@ -66,21 +69,21 @@ void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games:
                                                   std::shared_ptr<shared::games::components::ICollidableComponent> target) {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
 
-    if (
-            !dynamic_cast<const WallEntity *>(&target->getEntity()) ||
-            !dynamic_cast<const TailEntity *>(&target->getEntity()) ||
-            !game)
+    if (!game)
         return;
-    game->setLooseGame(true);
+    if (dynamic_cast<const WallEntity *>(&target->getEntity()) || dynamic_cast<const TailEntity *>(&target->getEntity())) {
+        game->setLooseGame(true);
+    }
 }
 
 void arcade::games::snake::HeadEntity::reset() {
     this->direction = Vector2i(1, 0);
+    this->position = Vector2i(6, 10);
     for (auto &component: this->_components) {
         std::shared_ptr<PositionableComponent> posCmp = std::dynamic_pointer_cast<PositionableComponent>(component);
         if (posCmp == nullptr) continue;
 
-        posCmp->getPosition().x = 8;
-        posCmp->getPosition().y = 4;
+        posCmp->getPosition().x = this->position.x;
+        posCmp->getPosition().y = this->position.y;
     }
 }

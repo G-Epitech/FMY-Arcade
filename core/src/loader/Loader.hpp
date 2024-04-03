@@ -13,7 +13,6 @@
 
 class Loader {
   public:
-
     /**
      * @brief Construct a new Loader object
      */
@@ -40,13 +39,13 @@ class Loader {
      * @brief Get all games libraries
      * @return Loaded games libraries
      */
-    const GameProviders &getGamesLibraries() const;
+    GameProviders &getGamesLibraries();
 
     /**
      * @brief Get all graphics libraries
      * @return Loaded graphics libraries
      */
-    const GraphicsProviders &getGraphicsLibraries() const;
+    GraphicsProviders &getGraphicsLibraries();
 
   private:
     const std::string _path;
@@ -60,21 +59,21 @@ class Loader {
      * @param loader DLLoader
      * @return getter function
      */
-    shared::types::LibraryType _getLibraryGetter(const std::string &filepath, std::shared_ptr<DLLoader> &loader);
+    shared::types::LibraryType _getLibraryGetter(const std::string &filepath, std::shared_ptr<DLLoader> loader);
 
     /**
      * @brief Load a game library
      * @param filepath file path of the library
      * @param loader DLLoader
      */
-    void _loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoader> &loader);
+    void _loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoader> loader);
 
     /**
      * @brief Load a graphics library
      * @param filepath file path of the library
      * @param loader DLLoader
      */
-    void _loadGraphicsLibrary(const std::string &filepath, std::shared_ptr<DLLoader> &loader);
+    void _loadGraphicsLibrary(const std::string &filepath, std::shared_ptr<DLLoader> loader);
 
     /**
      * @brief Throw an error when loading a library

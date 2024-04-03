@@ -21,6 +21,24 @@ public:
 
     explicit TailEntity();
 
+    /**
+     * @brief Set position of the tail
+     * @param position
+     */
+    void setPosition(Vector2i position);
+
+    /**
+     * @brief Set texture origin for direction of the tail
+     * @param origin
+     */
+    void setTextureOrigin(Vector2u origin);
+
+    /**
+     * @brief Get position of the tail
+     * @return Vector of the position
+     */
+    Vector2i getPosition();
+
 protected:
     /**
      * @brief Get default texture props
@@ -29,4 +47,5 @@ protected:
     static shared::games::components::TextureProps _defaultTextureProps();
 
     shared::games::components::TextureProps _textureProps;
+    Vector2i _position;
 };
