@@ -391,7 +391,7 @@ void Core::run()
     this->_initWindow();
     while (this->_window->isOpen()) {
         auto currentTime = std::chrono::high_resolution_clock::now();
-        auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(previousTime - currentTime);
+        auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
         this->_game->compute(deltaTime);

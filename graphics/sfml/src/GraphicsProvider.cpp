@@ -30,6 +30,11 @@ const shared::graphics::GraphicsManifest GraphicsProvider::_manifest = {
             .name = "Flavien Chenu",
             .email = "flavien.chenu@epitech.eu",
             .website = "https://github.com/flavien-chenu"
+        },
+        {
+            .name = "Yann Masson",
+            .email = "yann.masson@epitech.eu",
+            .website = "yannmasson.fr"
         }
     }
 };

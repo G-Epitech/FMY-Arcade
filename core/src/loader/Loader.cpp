@@ -11,7 +11,10 @@
 
 Loader::Loader() {}
 
-Loader::~Loader() {}
+Loader::~Loader() {
+    this->_gamesLibraries.clear();
+    this->_graphicsLibraries.clear();
+}
 
 shared::types::LibraryType Loader::_getLibraryGetter(const std::string &filepath, std::shared_ptr<DLLoader> dlLoader) {
     shared::types::LibraryTypeGetter getter = nullptr;
