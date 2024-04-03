@@ -50,6 +50,11 @@ public:
      */
     void reset();
 
+    /**
+     * @brief Update the position of the snake
+     */
+    void forward();
+
     shared::games::DeltaTime lastMove;
 protected:
     /**
@@ -57,4 +62,6 @@ protected:
      *
      */
     std::vector<std::shared_ptr<TailEntity>> _tails;
+
+    unsigned int _baseTails;
 };

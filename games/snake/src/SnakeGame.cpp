@@ -40,8 +40,8 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
         this->_registerEntity(tail);
     }
 
-    this->_registerEntity(std::make_unique<WallEntity>(Vector2u(20, 20)));
-    this->_registerEntity(std::make_unique<BackgroundEntity>(Vector2u(20, 20)));
+    this->_registerEntity(std::make_unique<WallEntity>(this->getSize()));
+    this->_registerEntity(std::make_unique<BackgroundEntity>(this->getSize()));
 
     this->_clock = std::chrono::milliseconds(0);
     this->_looseGame = false;
@@ -59,12 +59,7 @@ void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
     }
     if (this->_clock > std::chrono::milliseconds(100) + this->_snake->lastMove) {
         this->_snake->lastMove = this->_clock;
-        this->_snake->head->forward();
-
-        // DEBUG //
-        auto position = std::dynamic_pointer_cast<shared::games::components::IPositionableComponent>(this->_snake->head->getComponents().at(1));
-        std::cout << "Snake Position [" << position->getPosition().x << ", " << position->getPosition().y << "]" << std::endl;
-        // END DEBUG //
+        this->_snake->forward();
     }
 }
 
@@ -78,13 +73,10 @@ void snake::SnakeGame::_loose() {
     }), this->_entities.end());
 
     this->_snake->reset();
-
-    for (size_t i = 0; i < 2; i++) {
-        this->_snake->addTail();
-    }
     for (auto &tail: this->_snake->getTails()) {
         this->_registerEntity(tail);
     }
+
     this->_looseGame = false;
 }
 

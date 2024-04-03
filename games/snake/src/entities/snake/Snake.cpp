@@ -15,10 +15,9 @@ using namespace arcade::games::snake;
 Snake::Snake(unsigned int tails) {
     this->lastMove = std::chrono::milliseconds(0);
     this->head = std::make_shared<HeadEntity>();
+    this->_baseTails = tails;
 
-    for (size_t i = 0; i < tails; i++) {
-        this->addTail();
-    }
+    this->reset();
 }
 
 Snake::~Snake() = default;
@@ -34,7 +33,23 @@ std::shared_ptr<TailEntity> Snake::addTail() {
     return newTail;
 }
 
+void Snake::forward() {
+    Vector2i oldPosition = this->head->position;
+    Vector2i tempOldPosition = oldPosition;
+
+    this->head->forward();
+    for (auto &tail: this->_tails) {
+        tempOldPosition = tail->getPosition();
+        tail->setPosition(oldPosition);
+        oldPosition = tempOldPosition;
+    }
+}
+
 void Snake::reset() {
     this->head->reset();
     this->_tails.clear();
+
+    for (size_t i = 0; i < this->_baseTails; i++) {
+        this->addTail();
+    }
 }
