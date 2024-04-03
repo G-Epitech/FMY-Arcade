@@ -8,6 +8,7 @@
 #include <iostream>
 #include "SnakeGame.hpp"
 #include "entities/wall/WallEntity.hpp"
+#include "entities/background/BackgroundEntity.hpp"
 #include "common/components/TextureComponent.hpp"
 #include "entities/snake/components/HeadKeyboardComponent.hpp"
 
@@ -40,6 +41,7 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
     }
 
     this->_registerEntity(std::make_unique<WallEntity>(Vector2u(20, 20)));
+    this->_registerEntity(std::make_unique<BackgroundEntity>(Vector2u(20, 20)));
 
     this->_clock = std::chrono::milliseconds(0);
     this->_looseGame = false;
