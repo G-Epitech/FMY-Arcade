@@ -74,9 +74,6 @@ void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games:
     if (dynamic_cast<const WallEntity *>(&target->getEntity()) || dynamic_cast<const TailEntity *>(&target->getEntity())) {
         game->setLooseGame(true);
     }
-    if (dynamic_cast<const AppleEntity *>(&target->getEntity())) {
-        game->addNewPoint();
-    }
 }
 
 void arcade::games::snake::HeadEntity::reset() {

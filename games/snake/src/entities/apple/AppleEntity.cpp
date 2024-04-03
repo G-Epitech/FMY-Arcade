@@ -9,6 +9,9 @@
 #include "AppleEntity.hpp"
 #include "common/components/CollidableComponent.hpp"
 #include "common/components/TextureComponent.hpp"
+#include "../snake/HeadEntity.hpp"
+#include "../snake/TailEntity.hpp"
+#include "../../SnakeGame.hpp"
 
 using namespace arcade::games::snake;
 using namespace arcade::games::common::components;
@@ -42,10 +45,21 @@ void AppleEntity::_create() {
             },
             .origin = Vector2u(0, 0)
     };
-    std::shared_ptr<CollidableComponent> collision = std::make_shared<CollidableComponent>(*this, nullptr);
+    std::shared_ptr<CollidableComponent> collision = std::make_shared<CollidableComponent>(*this, this->_onCollide);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 9,
                                                                                    textureProps);
 
     this->_components.push_back(collision);
     this->_components.push_back(texture);
+}
+
+void arcade::games::snake::AppleEntity::_onCollide(std::shared_ptr<shared::games::IGame> ctx,
+                                                  std::shared_ptr<shared::games::components::ICollidableComponent> target) {
+    auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
+
+    if (!game)
+        return;
+    if (dynamic_cast<const HeadEntity *>(&target->getEntity()) || dynamic_cast<const TailEntity *>(&target->getEntity())) {
+        game->addNewPoint();
+    }
 }

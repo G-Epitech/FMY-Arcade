@@ -9,6 +9,7 @@
 
 #include "common/entity/AEntity.hpp"
 #include "shared/types/Vector.hpp"
+#include "shared/games/components/ICollidableComponent.hpp"
 
 namespace arcade::games::snake {
     class AppleEntity;
@@ -36,6 +37,16 @@ protected:
      * @brief Create the apple components
      */
     void _create();
+
+    /**
+     * @brief Represent the function that will be executed
+     * when the apple will collide with an other collidable component
+     * @param ctx Context of the game
+     * @param target Target component
+     */
+    static void _onCollide(std::shared_ptr<shared::games::IGame> ctx,
+                           std::shared_ptr<shared::games::components::ICollidableComponent> target);
+
 
     shared::types::Vector2u _mapSize;
 };

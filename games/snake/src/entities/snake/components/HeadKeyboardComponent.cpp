@@ -29,16 +29,16 @@ void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> ctx
         }
     }
     if (keyData.type == CHAR) {
-        if (keyData.code.character == 'z') {
+        if (keyData.code.character == 'z' && this->_parent.direction.y != 1) {
             this->_parent.direction = Vector2i(0, -1);
         }
-        if (keyData.code.character == 's') {
+        if (keyData.code.character == 's' && this->_parent.direction.y != -1) {
             this->_parent.direction = Vector2i(0, 1);
         }
-        if (keyData.code.character == 'q') {
+        if (keyData.code.character == 'q' && this->_parent.direction.x != 1) {
             this->_parent.direction = Vector2i(-1, 0);
         }
-        if (keyData.code.character == 'd') {
+        if (keyData.code.character == 'd' && this->_parent.direction.x != -1) {
             this->_parent.direction = Vector2i(1, 0);
         }
     }
