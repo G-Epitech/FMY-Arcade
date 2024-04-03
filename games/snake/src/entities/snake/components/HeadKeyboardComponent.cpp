@@ -6,6 +6,7 @@
 */
 
 #include "HeadKeyboardComponent.hpp"
+#include "../../../SnakeGame.hpp"
 
 using namespace arcade::games::snake::components;
 using namespace shared::games::components;
@@ -41,6 +42,11 @@ void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> ctx
         if (keyData.code.character == 'd' && this->_parent.direction.x != -1) {
             this->_parent.direction = Vector2i(1, 0);
         }
+    }
+    if (keyData.type == CHAR && keyData.code.character == ' ') {
+        auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
+
+        game->speedBoost = 3;
     }
 }
 

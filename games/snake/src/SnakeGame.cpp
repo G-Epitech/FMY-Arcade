@@ -34,7 +34,7 @@ const shared::games::GameManifest snake::SnakeGame::manifest = {
 };
 
 snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
-    this->_snake = std::make_unique<Snake>(2);
+    this->_snake = std::make_unique<Snake>(4);
     this->_registerEntity(this->_snake->head);
 
     for (auto &tail: this->_snake->getTails()) {
@@ -49,6 +49,8 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
 
     this->_clock = std::chrono::milliseconds(0);
     this->_looseGame = false;
+    this->speedTime = 100;
+    this->speedBoost = 0;
 }
 
 const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcept {
@@ -56,12 +58,17 @@ const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcep
 }
 
 void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
+    unsigned int speed = this->speedTime;
     this->_clock += dt;
 
     if (this->_looseGame) {
         return this->_loose();
     }
-    if (this->_clock > std::chrono::milliseconds(100) + this->_snake->lastMove) {
+    if (this->speedBoost > 0) {
+        speed = 0;
+        this->speedBoost -= 1;
+    }
+    if (this->_clock > std::chrono::milliseconds(speed) + this->_snake->lastMove) {
         this->_snake->lastMove = this->_clock;
         this->_snake->forward();
     }
@@ -93,4 +100,5 @@ void snake::SnakeGame::addNewPoint() {
 
     this->_registerEntity(newTail);
     this->_apple->generateApple();
+    this->speedTime -= 2;
 }

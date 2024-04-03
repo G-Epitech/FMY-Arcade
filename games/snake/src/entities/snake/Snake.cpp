@@ -13,7 +13,7 @@ using namespace shared::games::entity;
 using namespace arcade::games::snake;
 
 Snake::Snake(unsigned int tails) {
-    this->lastMove = std::chrono::milliseconds(0);
+    this->lastMove = std::chrono::milliseconds(900);
     this->head = std::make_shared<HeadEntity>();
     this->_baseTails = tails;
 
@@ -70,5 +70,6 @@ void Snake::reset() {
 
     for (size_t i = 0; i < this->_baseTails; i++) {
         this->addTail();
+        this->forward();
     }
 }

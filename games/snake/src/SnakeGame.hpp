@@ -53,6 +53,10 @@ public:
      */
     void addNewPoint();
 
+    unsigned int speedTime;
+
+    unsigned int speedBoost;
+
 protected:
     /**
      * @brief Execute the process of the end of the game when the player _loose

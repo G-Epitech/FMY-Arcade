@@ -17,7 +17,7 @@ using namespace shared::games::components;
 arcade::games::snake::HeadEntity::HeadEntity() : _textureProps(
         arcade::games::snake::HeadEntity::_defaultTextureProps()),
                                                  direction(1, 0),
-                                                 position(8, 4) {
+                                                 position(6, 10) {
     std::shared_ptr<CollidableComponent> collide = std::make_shared<CollidableComponent>(*this, HeadEntity::_onCollide);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 10,
                                                                                    this->_textureProps);
@@ -78,7 +78,7 @@ void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games:
 
 void arcade::games::snake::HeadEntity::reset() {
     this->direction = Vector2i(1, 0);
-    this->position = Vector2i(8, 4);
+    this->position = Vector2i(6, 10);
     for (auto &component: this->_components) {
         std::shared_ptr<PositionableComponent> posCmp = std::dynamic_pointer_cast<PositionableComponent>(component);
         if (posCmp == nullptr) continue;
