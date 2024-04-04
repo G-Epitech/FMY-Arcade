@@ -17,22 +17,21 @@ Menu::~Menu() {}
 
 void Menu::_initCheckBoxes()
 {
-    if (!this->_graphicsProvider) {
-        if (this->_graphicsProviders.empty()) {
-            throw std::runtime_error("No graphics provider found");
-        }
-        this->_graphicsProvider = this->_graphicsProviders.at(0);
-        std::cout << "No graphics provider found, using default provider" << std::endl;
-    }
     int index = 8;
 
-    this->_checkBoxes.clear();
+    this->_gamesCheckBoxes.clear();
     for (auto gameProvider : this->_gameProviders) {
         std::cout << "Game: " << gameProvider->getManifest().name << std::endl;
-        auto checkBox = std::make_shared<CheckBox>(gameProvider->getManifest(), this->_graphicsProvider, Vector2i{15, index});
-        this->_checkBoxes.push_back(checkBox);
+        auto checkBox = std::make_shared<CheckBox>(gameProvider->getManifest().name, this->_graphicsProvider, Vector2i{15, index});
+        this->_gamesCheckBoxes.push_back(checkBox);
         index += 2;
     }
+}
+
+void Menu::_initTextures()
+{
+    auto texture = this->_graphicsProvider->createTexture("assets/menu/img/yellow.png", "assets/menu/img/yellow.ascii");
+    this->_textures.push_back(std::make_shared<Texture>(texture, Vector2f{1, 1}, Vector2u{5, 5}, Vector2u{50, 20}, Vector2i{0, 0}));
 }
 
 void Menu::_initWindow()
@@ -45,21 +44,27 @@ void Menu::_initWindow()
         .icon = "assets/menu/img/icon.png"
     };
 
+    if (!this->_graphicsProvider) {
+        if (this->_graphicsProviders.empty())
+            throw std::runtime_error("No graphics provider found");
+        this->_graphicsProvider = this->_graphicsProviders.at(0);
+        std::cout << "No graphics provider found, using default provider" << std::endl;
+    }
+    this->_initTextures();
     this->_initCheckBoxes();
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
 }
 
 void Menu::_handleSelectUpperCheckBox()
 {
-    for (auto checkBox : this->_checkBoxes) {
-        if (checkBox->isChecked()) {
-            checkBox->uncheck();
-            auto index = std::distance(this->_checkBoxes.begin(), std::find(this->_checkBoxes.begin(), this->_checkBoxes.end(), checkBox));
-            if (index == 0) {
-                this->_checkBoxes.at(this->_checkBoxes.size() - 1)->check();
-                break;
-            }
-            this->_checkBoxes.at(index - 1)->check();
+    for (auto checkBox : this->_gamesCheckBoxes) {
+        if (checkBox->isHovered()) {
+            checkBox->unhover();
+            auto index = std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox));
+            if (index == 0)
+                this->_gamesCheckBoxes.at(this->_gamesCheckBoxes.size() - 1)->hover();
+            else
+                this->_gamesCheckBoxes.at(index - 1)->hover();
             break;
         }
     }
@@ -67,15 +72,14 @@ void Menu::_handleSelectUpperCheckBox()
 
 void Menu::_handleSelectLowerCheckBox()
 {
-    for (auto checkBox : this->_checkBoxes) {
-        if (checkBox->isChecked()) {
-            checkBox->uncheck();
-            auto index = std::distance(this->_checkBoxes.begin(), std::find(this->_checkBoxes.begin(), this->_checkBoxes.end(), checkBox));
-            if (index == this->_checkBoxes.size() - 1) {
-                this->_checkBoxes.at(0)->check();
-                break;
-            }
-            this->_checkBoxes.at(index + 1)->check();
+    for (auto checkBox : this->_gamesCheckBoxes) {
+        if (checkBox->isHovered()) {
+            checkBox->unhover();
+            auto index = std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox));
+            if (index == this->_gamesCheckBoxes.size() - 1)
+                this->_gamesCheckBoxes.at(0)->hover();
+            else 
+                this->_gamesCheckBoxes.at(index + 1)->hover();
             break;
         }
     }
@@ -83,6 +87,8 @@ void Menu::_handleSelectLowerCheckBox()
 
 void Menu::_handleKeyboardEvents(std::shared_ptr<events::IKeyEvent> key)
 {
+    if (!key)
+        return;
     auto type = key->getKeyType();
     auto code = key->getKeyCode();
 
@@ -94,9 +100,20 @@ void Menu::_handleKeyboardEvents(std::shared_ptr<events::IKeyEvent> key)
     }
     if (type == events::IKeyEvent::KeyType::CHAR) {
         if (code.character == '\n')
-            this->_exitWithNewGame();
+            this->_selectGame();
         if (code.character == 27)
             this->_exitAndPlayOldGame();
+    }
+}
+
+void Menu::_selectGame()
+{
+    for (auto checkBox : this->_gamesCheckBoxes) {
+        if (checkBox->isHovered()) {
+            checkBox->check();
+        } else {
+            checkBox->uncheck();
+        }
     }
 }
 
@@ -108,9 +125,9 @@ void Menu::_exitAndPlayOldGame()
 
 void Menu::_exitWithNewGame()
 {
-    for (auto checkBox : this->_checkBoxes) {
+    for (auto checkBox : this->_gamesCheckBoxes) {
         if (checkBox->isChecked()) {
-            this->_gameProvider = this->_gameProviders.at(std::distance(this->_checkBoxes.begin(), std::find(this->_checkBoxes.begin(), this->_checkBoxes.end(), checkBox)));
+            this->_gameProvider = this->_gameProviders.at(std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox)));
             break;
         }
     }
@@ -133,17 +150,26 @@ void Menu::_handleEvents()
     }
 }
 
+void Menu::_render()
+{
+    this->_window->clear();
+    for (auto texture : this->_textures) {
+        texture->draw(this->_window);
+    }
+    for (auto checkBox : this->_gamesCheckBoxes) {
+        checkBox->draw(this->_window);
+    }
+    this->_window->display();
+}
+
 void Menu::run()
 {
     this->_sceneStage = MENU;
     this->_initWindow();
-    this->_checkBoxes.at(0)->check();
+    this->_gamesCheckBoxes.at(0)->check();
+    this->_gamesCheckBoxes.at(0)->hover();
     while (this->_window->isOpen()) {
         this->_handleEvents();
-        this->_window->clear();
-        for (auto checkBox : this->_checkBoxes) {
-            checkBox->draw(this->_window);
-        }
-        this->_window->display();
+        this->_render();
     }
 }

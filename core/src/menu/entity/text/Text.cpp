@@ -10,23 +10,28 @@
 Text::Text(std::shared_ptr<IFont> font, unsigned int fontSize, std::string content,
         TextAlign align, TextVerticalAlign verticalAlign, Color color, Vector2u size,
         Vector2i position) :
-    font(font), fontSize(fontSize), content(content), align(align), verticalAlign(verticalAlign),
-    color(color), size(size), position(position) {}
+    _font(font), _fontSize(fontSize), _content(content), _align(align), _verticalAlign(verticalAlign),
+    _color(color), _size(size), _position(position) {}
 
 Text::~Text() {}
 
 void Text::draw(std::shared_ptr<IWindow> &window)
 {
     TextProps textProps = {
-        .font = this->font,
-        .fontSize = this->fontSize,
-        .content = this->content,
-        .align = this->align,
-        .verticalAlign = this->verticalAlign,
-        .color = this->color,
-        .size = this->size,
-        .position = this->position
+        .font = this->_font,
+        .fontSize = this->_fontSize,
+        .content = this->_content,
+        .align = this->_align,
+        .verticalAlign = this->_verticalAlign,
+        .color = this->_color,
+        .size = this->_size,
+        .position = this->_position
     };
 
     window->render(textProps);
+}
+
+void Text::setColor(Color color)
+{
+    this->_color = color;
 }

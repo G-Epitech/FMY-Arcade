@@ -37,13 +37,20 @@ public:
      */
     void draw(std::shared_ptr<IWindow> &window);
 
+    /**
+     * @brief Set the Color object
+     * 
+     * @param color 
+     */
+    void setColor(Color color);
+
 private:
-    std::shared_ptr<IFont> font;
-    unsigned int fontSize;
-    std::string content;
-    TextAlign align;
-    TextVerticalAlign verticalAlign;
-    Color color;
-    Vector2u size;
-    Vector2i position;
+    std::shared_ptr<IFont> _font;
+    unsigned int _fontSize;
+    std::string _content;
+    TextAlign _align;
+    TextVerticalAlign _verticalAlign;
+    Color _color;
+    Vector2u _size;
+    Vector2i _position;
 };

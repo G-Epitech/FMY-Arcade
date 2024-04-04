@@ -14,13 +14,12 @@
 #include "shared/types/Libraries.hpp"
 #include "shared/graphics/events/IKeyEvent.hpp"
 
-using namespace shared::games;
 using namespace shared::graphics;
 
 class CheckBox {
 public:
 
-    CheckBox(const GameManifest manifest, std::shared_ptr<IGraphicsProvider> graphicsProvider,
+    CheckBox(const std::string &name, std::shared_ptr<IGraphicsProvider> graphicsProvider,
         Vector2i position, unsigned int fontSize = 10, Vector2u size = {20, 1});
 
     /**
@@ -55,9 +54,29 @@ public:
      */
     bool isChecked() const;
 
+    /**
+     * @brief Hover the checkbox
+     * 
+     */
+    void hover();
+
+    /**
+     * @brief Unhover the checkbox
+     * 
+     */
+    void unhover();
+
+    /**
+     * @brief Check if the checkbox is hovered
+     * 
+     * @return true if hovered
+     * @return false if not hovered
+     */
+    bool isHovered() const;
+
 private:
-    const GameManifest _manifest;
     std::shared_ptr<Text> _name;
     std::shared_ptr<Texture> _checkbox;
     bool _checked;
+    bool _hovered;
 };

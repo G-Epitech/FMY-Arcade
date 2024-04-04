@@ -43,7 +43,9 @@ class Menu {
         GraphicsProviders &_graphicsProviders;
         std::shared_ptr<IGameProvider> &_gameProvider;
         std::shared_ptr<IGraphicsProvider> &_graphicsProvider;
-        std::vector<std::shared_ptr<CheckBox>> _checkBoxes;
+        std::vector<std::shared_ptr<CheckBox>> _gamesCheckBoxes;
+        std::vector<std::shared_ptr<CheckBox>> _graphicsCheckBoxes;
+        std::shared_ptr<CheckBox> _startGameCheckBox;
         std::vector<std::shared_ptr<Text>> _texts;
         std::vector<std::shared_ptr<Texture>> _textures;
 
@@ -52,6 +54,12 @@ class Menu {
          * 
          */
         void _initWindow();
+
+        /**
+         * @brief Render the menu
+         * 
+         */
+        void _render();
 
         /**
          * @brief Handle events
@@ -77,6 +85,12 @@ class Menu {
          * 
          */
         void _handleSelectLowerCheckBox();
+
+        /**
+         * @brief Select the hovered game
+         * 
+         */
+        void _selectGame();
 
         /**
          * @brief Exit the menu
