@@ -14,13 +14,19 @@
 
 Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders) :
     _gameProviders(gameProviders), _graphicsProviders(graphicsProviders),
-    _gameProvider(gameProviders.at(0)), _graphicsProvider(graphicsProviders.at(0)) {}
+    _menu(gameProviders, graphicsProviders, this->_gameProvider, this->_graphicsProvider, this->_sceneStage)
+{
+    this->_sceneStage = MENU;
+    this->_gameProvider = nullptr;
+    this->_graphicsProvider = nullptr;
+}
 
 Core::~Core() {}
 
 void Core::_initGame()
 {
     this->_game = this->_gameProvider->createInstance();
+    this->_sceneStage = RESUME;
 }
 
 void Core::_initWindow()
@@ -35,6 +41,7 @@ void Core::_initWindow()
     };
 
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
+    this->_sceneStage = PLAY;
 }
 
 std::shared_ptr<ITexture> Core::_getTexture(std::string bin, std::string ascii)
@@ -180,12 +187,20 @@ components::IKeyboardComponent::KeyData Core::_convertKeyPressData(events::IKeyE
     return keyCodeData;
 }
 
-void Core::_preventWindowClose(std::vector<events::EventPtr> events)
+void Core::_preventWindowEvents(std::vector<events::EventPtr> events)
 {
     for (auto &event : events) {
         auto type = event->getType();
         if (type == events::WINDOW_CLOSE)
             this->_handleWindowClose();
+        if (type == events::KEY_PRESS) {
+            auto keyEvent = std::dynamic_pointer_cast<events::IKeyEvent>(event);
+            auto keyCode = keyEvent->getKeyCode();
+            auto keyType = keyEvent->getKeyType();
+            if (keyType == events::IKeyEvent::CHAR && keyCode.character == 27) {
+                this->_sceneStage = MENU;
+            }
+        }
     }
 }
 
@@ -374,7 +389,9 @@ void Core::_handleEvents()
 {
     auto gameEvents = this->_window->getEvents();
 
-    this->_preventWindowClose(gameEvents);
+    this->_preventWindowEvents(gameEvents);
+    if (this->_sceneStage == MENU)
+        return;
     for (auto &entity : this->_gameEntities) {
         auto components = entity->getComponents();
         for (auto &component : components) {
@@ -387,6 +404,9 @@ void Core::run()
 {
     auto previousTime = std::chrono::high_resolution_clock::now();
 
+    this->_menu.run();
+    if (!this->_gameProvider || !this->_graphicsProvider)
+        return;
     this->_initGame();
     this->_initWindow();
     while (this->_window->isOpen()) {
@@ -394,6 +414,17 @@ void Core::run()
         auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
+        if (this->_sceneStage == MENU) {
+            this->_handleWindowClose();
+            this->_menu.run();
+            previousTime = std::chrono::high_resolution_clock::now();
+        }
+        if (this->_sceneStage == EXIT)
+            return;
+        if (this->_sceneStage == NEWGAME)
+            this->_initGame();
+        if (this->_sceneStage == RESUME)
+            this->_initWindow();
         this->_game->compute(deltaTime);
         this->_gameEntities = this->_game->getEntities();
         this->_handleEvents();

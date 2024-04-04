@@ -8,6 +8,7 @@
 #pragma once
 
 #include <map>
+#include "types/Stages.hpp"
 #include "types/Providers.hpp"
 #include "shared/graphics/ISound.hpp"
 #include "shared/graphics/events/IKeyEvent.hpp"
@@ -19,6 +20,8 @@
 #include "shared/games/components/IDisplayableComponent.hpp"
 #include "shared/games/components/ICollidableComponent.hpp"
 #include "shared/games/components/ISoundComponent.hpp"
+
+#include "menu/Menu.hpp"
 
 using namespace shared::graphics;
 using namespace shared::games;
@@ -44,14 +47,16 @@ class Core {
 
         std::shared_ptr<IGame> _game;
         std::shared_ptr<IWindow> _window;
-        std::shared_ptr<IGameProvider> &_gameProvider;
-        std::shared_ptr<IGraphicsProvider> &_graphicsProvider;
+        std::shared_ptr<IGameProvider> _gameProvider;
+        std::shared_ptr<IGraphicsProvider> _graphicsProvider;
         std::map<std::string, std::shared_ptr<IFont>> _fonts;
         std::map<std::string, std::shared_ptr<ITexture>> _textures;
         std::map<std::string, SoundProps> _sounds;
         GameProviders &_gameProviders;
         GraphicsProviders &_graphicsProviders;
         entity::EntitiesMap _gameEntities;
+        arcade::core::SceneStage _sceneStage;
+        Menu _menu;
 
         /**
          * @brief Initialize the window
@@ -239,7 +244,7 @@ class Core {
          * 
          * @param events The events
          */
-        void _preventWindowClose(std::vector<events::EventPtr> events);
+        void _preventWindowEvents(std::vector<events::EventPtr> events);
 
         /**
          * @brief Handle the key press event
