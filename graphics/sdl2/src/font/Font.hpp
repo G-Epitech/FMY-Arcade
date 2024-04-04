@@ -8,7 +8,7 @@
 #pragma once
 
 #include <string>
-#include <SFML/Graphics.hpp>
+#include "sdl/text/Font.hpp"
 #include "shared/graphics/IFont.hpp"
 #include "utils/compiler.hpp"
 
@@ -25,8 +25,8 @@ public:
      * @brief Get the inner SDL2 font
      * @return Reference to the inner SDL2 font
      */
-    sf::Font &getInnerFont();
+    sdl::SharedFont getInnerFont();
 
 private:
-    sf::Font _font;
+    sdl::SharedFont _font;
 };

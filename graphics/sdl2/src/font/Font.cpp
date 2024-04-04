@@ -13,14 +13,17 @@ using namespace arcade::graphics::common::exceptions;
 
 Font::Font(const std::string &path)
 {
-    if (!_font.loadFromFile(path))
+    try {
+        _font = std::make_shared<sdl::Font>(path);
+    } catch (const std::exception &e) {
         throw FontException(
             "Failed to load font at: " + path,
             "Font constructor in SDL2 library"
         );
+    }
 }
 
-sf::Font &Font::getInnerFont()
+sdl::SharedFont Font::getInnerFont()
 {
     return _font;
 }

@@ -15,11 +15,18 @@ add_library(sdl2 SHARED
         src/font/Font.hpp
         src/window/Renderer.cpp
         src/window/Renderer.hpp
+        src/types/window.hpp
+        src/types/surface.hpp
+        src/types/renderer.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/sdl)
 
-target_include_directories(sdl2 PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
-target_include_directories(sdl2 PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../..)
-target_include_directories(sdl2 PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
+target_include_directories(sdl2 PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src)
+target_include_directories(sdl2 PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../..)
+target_include_directories(sdl2 PRIVATE ${CMAKE_CURRENT_LIST_DIR}/..)
+target_include_directories(sdl2 PRIVATE ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(sdl2 sfml-graphics sfml-window sfml-system sfml-audio)
+target_link_libraries(sdl2
+        SDL2 SDL2_image SDL2_ttf
+)

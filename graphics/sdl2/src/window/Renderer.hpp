@@ -7,15 +7,19 @@
 
 #pragma once
 
-#include <SFML/Graphics.hpp>
 #include "shared/graphics/ITexture.hpp"
 #include "shared/graphics/types/TextureProps.hpp"
 #include "shared/graphics/types/TextProps.hpp"
 #include "common/exceptions/WindowException.hpp"
+#include "types/renderer.hpp"
+#include "sdl/text/Text.hpp"
+
+
 
 namespace arcade::graphics::sdl2::window {
-    class Renderer;
+    using namespace arcade::graphics::sdl2::types;
 
+    class Renderer;
     class Window;
 }
 
@@ -39,21 +43,22 @@ public:
 
 private:
     Window &_window;
-    sf::RenderWindow &_layer;
-    sf::Text _text;
-    sf::Sprite _sprite;
+    sdl::Renderer &_renderer;
+    sdl::Text _text;
+/*    sf::Sprite _sprite;*/
+
 
     /**
      * @brief Reset the text properties
      * @param text Text to reset
      */
-    static void _reset(sf::Text &text);
+    static void _reset(sdl::Text &text);
 
-    /**
+ /*   *//**
      * @brief Reset the sprite properties
      * @param sprite Sprite to reset
-     */
-    static void _reset(sf::Sprite &sprite);
+     *//*
+    static void _reset(sf::Sprite &sprite);*/
 
     /**
      * @brief Convert a tile position to pixel position

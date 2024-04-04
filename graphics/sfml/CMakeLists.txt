@@ -18,8 +18,8 @@ add_library(sfml SHARED
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 
-target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
-target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../..)
-target_include_directories(sfml PUBLIC ${CMAKE_CURRENT_LIST_DIR}/..)
+target_include_directories(sfml PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src)
+target_include_directories(sfml PRIVATE ${CMAKE_CURRENT_LIST_DIR}/../..)
+target_include_directories(sfml PRIVATE ${CMAKE_CURRENT_LIST_DIR}/..)
 
 target_link_libraries(sfml sfml-graphics sfml-window sfml-system sfml-audio)

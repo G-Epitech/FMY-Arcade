@@ -7,12 +7,16 @@
 
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include "Renderer.hpp"
-#include "shared/graphics/IWindow.hpp"
 #include "EventsHandler.hpp"
+#include "shared/graphics/IWindow.hpp"
+#include "graphics/sdl2/sdl/window/Window.hpp"
 
 namespace arcade::graphics::sdl2::window {
+    using namespace arcade::graphics::sdl2::types;
+
     class Window;
 }
 
@@ -131,7 +135,7 @@ public:
      * @brief Get the window object
      * @return Window object
      */
-    sf::RenderWindow &getInnerWindow() noexcept;
+    sdl::Window &getInnerWindow() noexcept;
 
     /**
      * @brief Convert a position in pixels to a position in tiles
@@ -160,12 +164,17 @@ public:
 private:
     static Vector2u _getPixelSizeFromTiles(const Vector2u &size);
 
+    /**
+     * @brief Initialize the inner window
+     * @param props Properties of the window
+     */
+    void _initInnerWindow(const WindowInitProps &props);
+
     EventsHandler       _eventsHandler;
     Renderer            _renderer;
-    sf::RenderWindow    _window;
-    std::string         _title;
+    sdl::Window         _window;
     unsigned int        _fps;
     WindowMode          _mode;
-    sf::Image           _icon;
     Vector2u            _size;
+    bool                _isOpen;
 };

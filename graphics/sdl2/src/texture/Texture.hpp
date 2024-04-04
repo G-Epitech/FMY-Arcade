@@ -10,6 +10,7 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include "shared/graphics/ITexture.hpp"
+#include "sdl/texture/Texture.hpp"
 
 namespace arcade::graphics::sdl2::texture {
     class Texture;
@@ -21,11 +22,11 @@ public:
     ~Texture() override = default;
 
     /**
-     * @brief Get the inner SDL2 texture
-     * @return Reference to the inner SDL2 texture
+     * @brief Get the inner SDL2 surface
+     * @return Reference to the inner SDL2 surface
      */
-    sf::Texture &getInnerTexture();
+    sdl::Surface &getInnerSurface();
 
 private:
-    sf::Texture _texture;
+    sdl::Surface _surface;
 };

@@ -5,40 +5,43 @@
 ** Renderer.cpp
 */
 
+#include <iostream>
 #include "Window.hpp"
 #include "Renderer.hpp"
 #include "font/Font.hpp"
 #include "texture/Texture.hpp"
-#include "common/exceptions/WindowException.hpp"
 
-using namespace arcade::graphics::sdl2::window;
+using namespace arcade::graphics::sdl2::window;;
 using namespace arcade::graphics::common::exceptions;
 
-Renderer::Renderer(Window &window) : _window(window), _layer(_window.getInnerWindow()) {
-    _text.setFont(sf::Font());
-    _sprite.setTexture(sf::Texture());
-}
+Renderer::Renderer(Window &window) : _window(window), _renderer(window.getInnerWindow().getRenderer()) {}
 
 void Renderer::render(const shared::graphics::TextProps &props) {
     auto font = _castOrThrow<shared::graphics::IFont, font::Font>(props.font);
     auto entityPosition = _entityPixelsPosition(props.position);
     auto entitySize = _window.tilesToPixels(props.size);
+    sdl::Texture texture;
 
     _reset(_text);
     _text.setFont(font->getInnerFont());
-    _text.setString(props.content);
-    _text.setCharacterSize(props.fontSize);
-    _text.setFillColor(sf::Color(
+    _text.setContent(props.content);
+    _text.setFontSize(props.fontSize);
+    _text.setColor({
         props.color.r,
         props.color.g,
         props.color.b,
-        props.color.a)
-    );
-    _text.setPosition(entityPosition.x, entityPosition.y);
+        props.color.a
+    });
+    _text.setPosition(entityPosition);
+    _text.render(_renderer);
     _textAlign(props.align, entitySize);
     _textVerticalAlign(props.verticalAlign, entitySize);
     _textAdjustPosition();
-    _layer.draw(_text);
+    _renderer.copy(
+        _text.toTexture(_renderer),
+        nullptr,
+        std::make_unique<sdl::FRect>(_text.getGlobalBounds())
+    );
 }
 
 void
@@ -48,9 +51,9 @@ Renderer::_textVerticalAlign(const shared::graphics::TextVerticalAlign &align, c
     auto position = _text.getPosition();
 
     if (align == shared::graphics::MIDDLE) {
-        position.y += (static_cast<float>(entitySize.y) - bounds.height) / 2;
+        position.y += (static_cast<float>(entitySize.y) - bounds.h) / 2;
     } else if (align == shared::graphics::BOTTOM) {
-        position.y += static_cast<float>(entitySize.y) - bounds.height;
+        position.y += static_cast<float>(entitySize.y) - bounds.h;
     }
     _text.setPosition(position);
 }
@@ -60,23 +63,22 @@ void Renderer::_textAlign(const shared::graphics::TextAlign &align, const shared
     auto position = _text.getPosition();
 
     if (align == shared::graphics::CENTER) {
-        position.x += (static_cast<float>(entitySize.x) - bounds.width) / 2;
+        position.x += (static_cast<float>(entitySize.x) - bounds.w) / 2;
     } else if (align == shared::graphics::RIGHT) {
-        position.x += static_cast<float>(entitySize.x) - bounds.width;
+        position.x += static_cast<float>(entitySize.x) - bounds.w;
     }
     _text.setPosition(position);
 }
 
 void Renderer::_textAdjustPosition() {
-    auto actual = _text.getPosition();
+/*    auto actual = _text.getPosition();
     sf::FloatRect bounds;
 
-    _text.setPosition(0, 0);
-    bounds = _text.getGlobalBounds();
-    _text.setPosition(actual.x - bounds.left, actual.y - bounds.top);
+    _text.setPosition({0, 0});
+    _text.setPosition(actual.x - bounds.left, actual.y - bounds.top);*/
 }
 
-void Renderer::render(const shared::graphics::TextureProps &props) {
+/*void Renderer::render(const shared::graphics::TextureProps &props) {
     auto texture = _castOrThrow<shared::graphics::ITexture, texture::Texture>(props.texture);
     auto entityPosition = _entityPixelsPosition(props.position);
 
@@ -84,9 +86,9 @@ void Renderer::render(const shared::graphics::TextureProps &props) {
     _sprite.setTexture(texture->getInnerTexture());
     _sprite.setPosition(entityPosition.x, entityPosition.y);
     _setTextureRectAndScale(props);
-    _layer.draw(_sprite);
-}
-
+    //_layer.draw(_sprite);
+}*/
+/*
 void Renderer::_setTextureRectAndScale(const shared::graphics::TextureProps &props) {
     auto size = _window.tilesToPixels(props.size);
     float width = static_cast<float>(props.size.x) * props.binTileSize.x;
@@ -105,17 +107,16 @@ void Renderer::_setTextureRectAndScale(const shared::graphics::TextureProps &pro
         static_cast<float>(size.x) / width,
         static_cast<float>(size.y) / height
     );
-}
+}*/
 
-void Renderer::_reset(sf::Text &text) {
-    text.setString("");
-    text.setCharacterSize(0);
-    text.setFillColor(sf::Color::White);
-    text.setStyle(sf::Text::Regular);
-    text.setPosition(0, 0);
-    text.setScale(1, 1);
-    text.setOrigin(0, 0);
+void Renderer::_reset(sdl::Text &text) {
+    text.setContent("");
+    text.setFont(nullptr);
+    text.setPosition({0, 0});
+    text.setColor(sdl::ColorWhite);
+    text.setFontSize(12);
 }
+/*
 
 void Renderer::_reset(sf::Sprite &sprite) {
     sprite.setTextureRect(sf::IntRect(0, 0, 0, 0));
@@ -124,6 +125,7 @@ void Renderer::_reset(sf::Sprite &sprite) {
     sprite.setPosition(0, 0);
     sprite.setOrigin(0, 0);
 }
+*/
 
 Vector2f Renderer::_entityPixelsPosition(const Vector2i &position) {
     auto pixels = _window.tilesToPixels(position);
@@ -133,3 +135,4 @@ Vector2f Renderer::_entityPixelsPosition(const Vector2i &position) {
         static_cast<float>(pixels.y)
     };
 }
+

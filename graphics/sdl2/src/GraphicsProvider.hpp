@@ -9,6 +9,7 @@
 
 #include "shared/graphics/ITexture.hpp"
 #include "shared/graphics/IGraphicsProvider.hpp"
+#include "sdl/initializer/Initializer.hpp"
 
 namespace arcade::graphics::sdl2
 {

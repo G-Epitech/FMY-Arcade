@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include "GraphicsProvider.hpp"
-#include "utils/compiler.hpp"
 #include "window/Window.hpp"
 #include "font/Font.hpp"
 #include "sound/Sound.hpp"
@@ -28,7 +27,9 @@ const GraphicsManifest GraphicsProvider::_manifest = {
     }
 };
 
-GraphicsProvider::GraphicsProvider() = default;
+GraphicsProvider::GraphicsProvider() {
+    sdl::Initializer::init();
+}
 
 const shared::graphics::GraphicsManifest &GraphicsProvider::getManifest() const noexcept {
     return GraphicsProvider::_manifest;
@@ -42,7 +43,7 @@ std::shared_ptr<ISound> GraphicsProvider::createSound(const std::string &path) {
     return std::make_shared<sound::Sound>(path);
 }
 
-std::shared_ptr<ITexture>GraphicsProvider::createTexture(const std::string &bin, unused const std::string &ascii) {
+std::shared_ptr<ITexture>GraphicsProvider::createTexture(const std::string &bin, const std::string &ascii) {
     return std::make_shared<texture::Texture>(bin);
 }
 

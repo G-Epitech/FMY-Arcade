@@ -12,14 +12,14 @@ using namespace arcade::graphics::sdl2::texture;
 using namespace arcade::graphics::common::exceptions;
 
 Texture::Texture(const std::string &path) {
-    if (!_texture.loadFromFile(path))
+    if (!_surface.load(path)) {
         throw TextureException(
-            "Failed to load texture at: " + path,
+            "Failed to load texture from file: " + path,
             "Texture constructor in SDL2 library"
         );
+    }
 }
 
-sf::Texture &Texture::getInnerTexture()
-{
-    return _texture;
+sdl::Surface &Texture::getInnerSurface() {
+    return _surface;
 }

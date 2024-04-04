@@ -32,7 +32,7 @@ EventsHandler::EventsHandler(Window &window): _window(window) {}
 
 std::vector<EventPtr> EventsHandler::handleEvents() {
     std::vector<EventPtr> events;
-    sf::Event SFMLEvent{};
+   /* sf::Event SFMLEvent{};
 
     while (_window.getInnerWindow().pollEvent(SFMLEvent)) {
         auto handler = _getHandler(SFMLEvent.type);
@@ -40,7 +40,7 @@ std::vector<EventPtr> EventsHandler::handleEvents() {
 
         if (event)
             events.push_back(event);
-    }
+    }*/
     return events;
 }
 
