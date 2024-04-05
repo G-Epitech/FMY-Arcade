@@ -26,7 +26,7 @@ Core::~Core() {}
 std::shared_ptr<IGameProvider> Core::_getGameProvider(const unsigned char &index)
 {
     if (index > this->_gameProviders.size() - 1) {
-        std::cout << "Invalid game provider index" << std::endl;
+        std::cerr << "Invalid game provider index" << std::endl;
         return nullptr;
     }
     auto it = this->_gameProviders.begin();
@@ -37,7 +37,7 @@ std::shared_ptr<IGameProvider> Core::_getGameProvider(const unsigned char &index
 std::shared_ptr<IGraphicsProvider> Core::_getGraphicsProvider(const unsigned char &index)
 {
     if (index > this->_graphicsProviders.size() - 1) {
-        std::cout << "Invalid game provider index" << std::endl;
+        std::cerr << "Invalid game provider index" << std::endl;
         return nullptr;
     }
     auto it = this->_graphicsProviders.begin();
@@ -50,7 +50,7 @@ void Core::_initGame()
     if (!this->_gameProvider) {
         if (this->_gameProviders.empty())
             throw ArcadeError("No game provider available");
-        this->_gameProvider = this->_gameProviders.at(0);
+        this->_gameProvider = this->_getGameProvider(0);
         std::cout << "No game provider selected, using default provider" << std::endl;
     }
     this->_game = this->_gameProvider->createInstance();
@@ -74,7 +74,7 @@ void Core::_initWindow()
     if (!this->_graphicsProvider) {
         if (this->_graphicsProviders.empty())
             throw ArcadeError("No graphic provider available");
-        this->_graphicsProvider = this->_graphicsProviders.at(0);
+        this->_graphicsProvider = this->_getGraphicsProvider(0);
         std::cout << "No graphic provider selected, using default provider" << std::endl;
     }
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
@@ -83,6 +83,10 @@ void Core::_initWindow()
 
 std::shared_ptr<ITexture> Core::_getTexture(std::string bin, std::string ascii)
 {
+    for (auto &failedTexture : this->_failedTextures) {
+        if (failedTexture == bin + ascii)
+            return nullptr;
+    }
     if (this->_textures.find(bin + ascii) == this->_textures.end())
         this->_textures[bin + ascii] = this->_graphicsProvider->createTexture(bin, ascii);
     return this->_textures[bin + ascii];
@@ -90,6 +94,10 @@ std::shared_ptr<ITexture> Core::_getTexture(std::string bin, std::string ascii)
 
 std::shared_ptr<IFont> Core::_getFont(std::string path)
 {
+    for (auto &failedTexture : this->_failedTextures) {
+        if (failedTexture == path)
+            return nullptr;
+    }
     if (this->_fonts.find(path) == this->_fonts.end())
         this->_fonts[path] = this->_graphicsProvider->createFont(path);
     return this->_fonts[path];
@@ -107,6 +115,22 @@ Core::SoundProps Core::_getSound(std::string path)
         this->_sounds[path] = soundProps;
     }
     return this->_sounds[path];
+}
+
+void Core::_loadFailed(std::shared_ptr<components::ITextureComponent> texture)
+{
+    if (!texture)
+        return;
+    auto textureProps = texture->getTextureProps();
+    this->_failedTextures.push_back(textureProps.sources.bin + textureProps.sources.ascii);
+}
+
+void Core::_loadFailed(std::shared_ptr<components::ITextComponent> text)
+{
+    if (!text)
+        return;
+    auto textProps = text->getTextProps();
+    this->_failedTextures.push_back(textProps.font.path);
 }
 
 TextureProps Core::_getTextureEntity(std::shared_ptr<components::ITextureComponent> texture)
@@ -188,14 +212,28 @@ void Core::_renderEntities()
         auto components = entity->getComponents();
         for (auto &component : components) {
             if (component->getType() == components::TEXTURE) {
-                auto texture = std::dynamic_pointer_cast<components::ITextureComponent>(component);
-                unsigned int index = texture->getZIndex();
-                entitiesTextureProps[index].push_back(this->_getTextureEntity(texture));
+                try {
+                    auto texture = std::dynamic_pointer_cast<components::ITextureComponent>(component);
+                    unsigned int index = texture->getZIndex();
+                    auto entityTextureProps = this->_getTextureEntity(texture);
+                    if (entityTextureProps.texture)
+                        entitiesTextureProps[index].push_back(entityTextureProps);
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                    this->_loadFailed(std::dynamic_pointer_cast<components::ITextureComponent>(component));
+                }
             }
             if (component->getType() == components::TEXT) {
-                auto texture = std::dynamic_pointer_cast<components::ITextComponent>(component);
-                unsigned int index = texture->getZIndex();
-                entitiesTextProps[index].push_back(this->_getTextEntity(texture));
+                try {
+                    auto text = std::dynamic_pointer_cast<components::ITextComponent>(component);
+                    unsigned int index = text->getZIndex();
+                    auto entityTextProps = this->_getTextEntity(text);
+                    if (entityTextProps.font)
+                        entitiesTextProps[index].push_back(entityTextProps);
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                    this->_loadFailed(std::dynamic_pointer_cast<components::ITextComponent>(component));
+                }
             }
         }
     }
@@ -279,7 +317,7 @@ void Core::_handleFunctionKeys(std::shared_ptr<events::IKeyEvent> &keyEvent)
         else if (keyCode.func >= 7 && keyCode.func <= 12)
             this->_changeGraphicProvider(keyCode.func - 7);
         else
-            std::cout << "Invalid function key" << std::endl;
+            std::cerr << "Invalid function key" << std::endl;
     }
 }
 
@@ -486,7 +524,7 @@ void Core::run()
     auto previousTime = std::chrono::high_resolution_clock::now();
 
     this->_menu.run();
-    if (this->_sceneStage == EXIT)
+    if (this->_sceneStage == EXIT || this->_sceneStage == RESUME)
         return;
     this->_initGame();
     this->_initWindow();

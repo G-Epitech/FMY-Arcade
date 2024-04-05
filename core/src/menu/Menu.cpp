@@ -284,8 +284,10 @@ void Menu::_handleEvents()
 
     for (auto event : events) {
         auto type = event->getType();
-        if (type == events::WINDOW_CLOSE)
+        if (type == events::WINDOW_CLOSE) {
             this->_window->close();
+            this->_sceneStage = EXIT;
+        }
         if (type == events::KEY_PRESS) {
             auto key = std::dynamic_pointer_cast<events::IKeyEvent>(event);
             this->_handleKeyboardEvents(key);

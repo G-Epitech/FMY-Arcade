@@ -16,8 +16,8 @@
 using namespace arcade::games;
 
 const shared::games::GameManifest pacman::PacmanGame::manifest = {
-        .name = "pacman really really good good good game",
-        .description = "The pacman original game",
+        .name = "pacman",
+        .description = "Pacman original game",
         .version = "1.0.0",
         .authors = {
                 {

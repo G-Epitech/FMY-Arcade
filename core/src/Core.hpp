@@ -8,6 +8,7 @@
 #pragma once
 
 #include <map>
+#include "menu/Menu.hpp"
 #include "types/Stages.hpp"
 #include "types/Providers.hpp"
 #include "shared/graphics/ISound.hpp"
@@ -20,8 +21,6 @@
 #include "shared/games/components/IDisplayableComponent.hpp"
 #include "shared/games/components/ICollidableComponent.hpp"
 #include "shared/games/components/ISoundComponent.hpp"
-
-#include "menu/Menu.hpp"
 
 using namespace shared::graphics;
 using namespace shared::games;
@@ -45,12 +44,15 @@ class Core {
             components::SoundState previousGameState;
         } SoundProps;
 
+        int _playerScore;
+        std::string _playerName;
         std::shared_ptr<IGame> _game;
         std::shared_ptr<IWindow> _window;
         std::shared_ptr<IGameProvider> _gameProvider;
         std::shared_ptr<IGraphicsProvider> _graphicsProvider;
         std::map<std::string, std::shared_ptr<IFont>> _fonts;
         std::map<std::string, std::shared_ptr<ITexture>> _textures;
+        std::vector<std::string> _failedTextures;
         std::map<std::string, SoundProps> _sounds;
         GameProviders &_gameProviders;
         GraphicsProviders &_graphicsProviders;
@@ -75,6 +77,26 @@ class Core {
          * 
          */
         void _renderEntities();
+
+        /**
+         * @brief Save score
+         * 
+         */
+        void _saveScore();
+
+        /**
+         * @brief Load the failed texture
+         * 
+         * @param texture The texture component
+         */
+        void _loadFailed(std::shared_ptr<components::ITextureComponent> texture);
+
+        /**
+         * @brief Load the failed text
+         * 
+         * @param text The text component
+         */
+        void _loadFailed(std::shared_ptr<components::ITextComponent> text);
 
         /**
          * @brief Get a texture
