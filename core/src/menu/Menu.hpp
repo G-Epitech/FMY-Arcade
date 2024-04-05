@@ -151,5 +151,28 @@ class Menu {
          */
         void _previousSelectedGame();
 
+        /**
+         * @brief Truncate a string
+         * 
+         * @param str 
+         * @param size 
+         * @return std::string 
+         */
         std::string _truncString(const std::string &str, int size);
+
+        /**
+         * @brief Get the game provider object
+         * 
+         * @param index 
+         * @return std::shared_ptr<IGameProvider> 
+         */
+        std::shared_ptr<IGameProvider>& _getGameProvider(const unsigned char &index);
+
+        /**
+         * @brief Get the graphics provider object
+         * 
+         * @param index 
+         * @return std::shared_ptr<IGraphicsProvider> 
+         */
+        std::shared_ptr<IGraphicsProvider>& _getGraphicsProvider(const unsigned char &index);
 };

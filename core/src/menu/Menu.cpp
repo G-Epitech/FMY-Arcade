@@ -15,6 +15,24 @@ Menu::Menu(GameProviders &gameProviders, GraphicsProviders &graphicsProviders,
 
 Menu::~Menu() {}
 
+std::shared_ptr<IGameProvider> &Menu::_getGameProvider(const unsigned char &index)
+{
+    if (index > this->_gameProviders.size() - 1)
+        throw ArcadeError("Invalid game provider index");
+    auto it = this->_gameProviders.begin();
+    std::advance(it, index);
+    return it->second;
+}
+
+std::shared_ptr<IGraphicsProvider> &Menu::_getGraphicsProvider(const unsigned char &index)
+{
+    if (index > this->_graphicsProviders.size() - 1)
+        throw ArcadeError("Invalid graphics provider index");
+    auto it = this->_graphicsProviders.begin();
+    std::advance(it, index);
+    return it->second;
+}
+
 std::string Menu::_truncString(const std::string &str, int size)
 {
     auto strPadding = size - static_cast<int>(str.size());
@@ -64,13 +82,13 @@ void Menu::_initCheckBoxes()
     float index = 8.0;
 
     for (auto gameProvider : this->_gameProviders) {
-        auto marginRight = 23 - static_cast<float>(gameProvider->getManifest().name.size());
-        std::string truncatedName = gameProvider->getManifest().name.substr(0, 20);
+        auto marginRight = 23 - static_cast<float>(gameProvider.second->getManifest().name.size());
+        std::string truncatedName = gameProvider.second->getManifest().name.substr(0, 20);
         if (marginRight < 0) {
             truncatedName += "...";
             marginRight = 0;
         } else {
-            truncatedName = gameProvider->getManifest().name;
+            truncatedName = gameProvider.second->getManifest().name;
             marginRight -= 3;
         }
         auto textCheckBox = std::make_shared<Text>(font, 10, truncatedName, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{20, 1}, Vector2f{3 + marginRight, index});
@@ -79,7 +97,7 @@ void Menu::_initCheckBoxes()
         this->_texts.push_back(textCheckBox);
         this->_textures.push_back(textureCheckBox);
         this->_gamesCheckBoxes.push_back(checkBox);
-        this->_initHiddenTextures(gameProvider->getManifest(), checkBox, font);
+        this->_initHiddenTextures(gameProvider.second->getManifest(), checkBox, font);
         index += 2;
     }
 }
@@ -121,7 +139,7 @@ void Menu::_initWindow()
     if (!this->_graphicsProvider) {
         if (this->_graphicsProviders.empty())
             throw ArcadeError("No graphics provider found");
-        this->_graphicsProvider = this->_graphicsProviders.at(0);
+        this->_graphicsProvider = this->_getGraphicsProvider(0);
         std::cout << "No graphics provider found, using default provider" << std::endl;
     }
     this->_initTexts();
@@ -203,7 +221,7 @@ void Menu::_exitWithNewGame()
 {
     for (auto checkBox : this->_gamesCheckBoxes) {
         if (checkBox->isChecked()) {
-            this->_gameProvider = this->_gameProviders.at(std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox)));
+            this->_gameProvider = this->_getGameProvider(std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox)));
             break;
         }
     }
@@ -298,7 +316,7 @@ void Menu::_render()
 void Menu::_previousSelectedGame()
 {
     for (auto gameProvider : this->_gameProviders) {
-        if (this->_gameProvider == gameProvider) {
+        if (this->_gameProvider == gameProvider.second) {
             auto index = std::distance(this->_gameProviders.begin(), std::find(this->_gameProviders.begin(), this->_gameProviders.end(), gameProvider));
             auto checkBox = this->_gamesCheckBoxes.at(index);
             checkBox->check();

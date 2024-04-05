@@ -23,6 +23,28 @@ Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders) :
 
 Core::~Core() {}
 
+std::shared_ptr<IGameProvider> Core::_getGameProvider(const unsigned char &index)
+{
+    if (index > this->_gameProviders.size() - 1) {
+        std::cout << "Invalid game provider index" << std::endl;
+        return nullptr;
+    }
+    auto it = this->_gameProviders.begin();
+    std::advance(it, index);
+    return it->second;
+}
+
+std::shared_ptr<IGraphicsProvider> Core::_getGraphicsProvider(const unsigned char &index)
+{
+    if (index > this->_graphicsProviders.size() - 1) {
+        std::cout << "Invalid game provider index" << std::endl;
+        return nullptr;
+    }
+    auto it = this->_graphicsProviders.begin();
+    std::advance(it, index);
+    return it->second;
+}
+
 void Core::_initGame()
 {
     if (!this->_gameProvider) {
@@ -225,7 +247,7 @@ void Core::_changeGraphicProvider(const unsigned char &index)
         std::cout << "Invalid graphic provider index" << std::endl;
         return;
     }
-    auto newProvider = this->_graphicsProviders[index];
+    auto newProvider = this->_getGraphicsProvider(index);
     if (newProvider == this->_graphicsProvider)
         return;
     this->_graphicsProvider = newProvider;
@@ -238,7 +260,7 @@ void Core::_changeGameProvider(const unsigned char &index)
         std::cout << "Invalid game provider index" << std::endl;
         return;
     }
-    auto newProvider = this->_gameProviders[index];
+    auto newProvider = this->_getGameProvider(index);
     if (newProvider == this->_gameProvider)
         return;
     this->_gameProvider = newProvider;
@@ -464,7 +486,7 @@ void Core::run()
     auto previousTime = std::chrono::high_resolution_clock::now();
 
     this->_menu.run();
-    if (!this->_gameProvider || !this->_graphicsProvider)
+    if (this->_sceneStage == EXIT)
         return;
     this->_initGame();
     this->_initWindow();

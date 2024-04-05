@@ -296,4 +296,20 @@ class Core {
          * @param event The mouse button event
          */
         void _handleSoundComponent(std::shared_ptr<components::ISoundComponent> &component);
+
+        /**
+         * @brief Get the game provider
+         * 
+         * @param index The index of the game provider
+         * @return The game provider
+         */
+        std::shared_ptr<IGameProvider> _getGameProvider(const unsigned char &index);
+
+        /**
+         * @brief Get the graphic provider
+         * 
+         * @param index The index of the graphic provider
+         * @return The graphic provider
+         */
+        std::shared_ptr<IGraphicsProvider> _getGraphicsProvider(const unsigned char &index);
 };
