@@ -72,6 +72,8 @@ class Menu {
         std::vector<std::shared_ptr<Texture>> _textures;
         std::map<std::shared_ptr<CheckBox>, std::vector<std::shared_ptr<Text>>> _hiddenTexts;
         std::map<std::shared_ptr<CheckBox>, std::vector<std::shared_ptr<Text>>> _hiddenAuthors;
+        std::shared_ptr<IFont> _font;
+        std::shared_ptr<Text> _nameField;
 
         /**
          * @brief Initialize the window
@@ -84,6 +86,12 @@ class Menu {
          * 
          */
         void _render();
+
+        /**
+         * @brief Render the field name
+         * 
+         */
+        void _renderField();
 
         /**
          * @brief Handle events

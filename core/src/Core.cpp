@@ -12,13 +12,17 @@
 #include "Core.hpp"
 #include "shared/games/components/IComponent.hpp"
 
-Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders) :
+Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders, const std::string &graphicNameProvider) :
     _gameProviders(gameProviders), _graphicsProviders(graphicsProviders),
     _menu(gameProviders, graphicsProviders, this->_gameProvider, this->_graphicsProvider, this->_sceneStage)
 {
     this->_sceneStage = MENU;
     this->_gameProvider = nullptr;
     this->_graphicsProvider = nullptr;
+    for (auto &gameProvider : this->_gameProviders) {
+        if (gameProvider.first == graphicNameProvider)
+            this->_gameProvider = gameProvider.second;
+    }
 }
 
 Core::~Core() {}

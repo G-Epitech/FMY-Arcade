@@ -15,7 +15,7 @@ Menu::Menu(GameProviders &gameProviders, GraphicsProviders &graphicsProviders,
     _gameProviders(gameProviders), _graphicsProviders(graphicsProviders),
     _gameProvider(gameProvider), _graphicsProvider(graphicsProvider), _sceneStage(sceneStage)
 {
-    this->_score.player = "Player2";
+    this->_score.player = "";
     this->_score.score = 0;
     this->_readScores();
     this->_textType = GAME;
@@ -152,7 +152,7 @@ void Menu::_initTextures()
 
     if (!this->_gameProviders.empty()) {
         auto middleTexture = this->_graphicsProvider->createTexture("assets/menu/img/middle.png", "assets/menu/img/middle.ascii");
-        this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 17}, Vector2f{24, 7}));
+        this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 15}, Vector2f{24, 7}));
     }
 }
 
@@ -160,6 +160,7 @@ void Menu::_initTexts()
 {
     auto font = this->_graphicsProvider->createFont("assets/menu/fonts/arcade.ttf");
 
+    this->_font = font;
     if (this->_gameProviders.empty()) {
         auto noGames = std::make_shared<Text>(font, 12, "NO GAMES FOUND !", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{15, 1}, Vector2f{17, 12});
         this->_texts.push_back(noGames);
@@ -243,8 +244,12 @@ void Menu::_handleKeyboardEvents(std::shared_ptr<events::IKeyEvent> key)
     if (type == events::IKeyEvent::KeyType::CHAR) {
         if (code.character == '\n')
             this->_selectGame();
-        if (code.character == 27)
+        else if (code.character == 27)
             this->_exitAndPlayOldGame();
+        else if (code.character == 8)
+            this->_score.player = this->_score.player.substr(0, this->_score.player.size() - 1);
+        else if (code.character >= 33 && code.character <= 126)
+            this->_score.player += code.character;
     }
 }
 
@@ -341,8 +346,21 @@ void Menu::_handleEvents()
             auto mouse = std::dynamic_pointer_cast<events::IMouseButtonEvent>(event);
             this->_handleMouseButtonEvents(mouse);
         }
-        
     }
+}
+
+void Menu::_renderField()
+{
+    if (this->_score.player.empty()) {
+        auto placeholder = std::make_shared<Text>(this->_font, 6, "As Guest", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
+        this->_nameField = placeholder;
+    } else {
+        auto truncatName = this->_truncString(this->_score.player, 17);
+        auto name = std::make_shared<Text>(this->_font, 8, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
+        this->_nameField = name;
+    }
+    if (this->_nameField)
+        this->_nameField->draw(this->_window);
 }
 
 void Menu::_render()
@@ -367,6 +385,7 @@ void Menu::_render()
             }
         }
     }
+    this->_renderField();
     this->_window->display();
 }
 
@@ -392,7 +411,6 @@ void Menu::_previousSelectedGame()
 void Menu::run()
 {
     this->_sceneStage = MENU;
-    this->_score.player = "Player";
     this->_initWindow();
     this->_previousSelectedGame();
     while (this->_window->isOpen()) {
@@ -444,7 +462,8 @@ void Menu::updateScore(std::shared_ptr<IGame> game)
     this->_score.score = game->getScore();
 
     for (auto &score : this->_scores) {
-        if (score.game == this->_score.game && score.player == this->_score.player) {
+        auto name = this->_score.player.empty() ? "Guest" : this->_score.player;
+        if (score.game == this->_score.game && score.player == name) {
             if (score.score < this->_score.score)
                 score.score = this->_score.score;
             return;

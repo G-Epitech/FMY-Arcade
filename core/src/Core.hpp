@@ -27,7 +27,7 @@ using namespace shared::games;
 
 class Core {
     public:
-        Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders);
+        Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders, const std::string &graphicNameProvider);
         ~Core();
 
         /**

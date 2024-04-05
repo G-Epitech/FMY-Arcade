@@ -25,7 +25,7 @@ int main(int ac, char **av)
       std::cerr << "Game library not found" << std::endl;
       return 84;
     }
-    Core core(games, graphics);
+    Core core(games, graphics, av[1]);
     core.run();
   } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl;
