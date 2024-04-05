@@ -89,6 +89,7 @@ void snake::SnakeGame::_loose() {
     }
 
     this->_looseGame = false;
+    this->_score = 0;
 }
 
 void snake::SnakeGame::setLooseGame(bool state) {

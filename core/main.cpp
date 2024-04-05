@@ -5,6 +5,7 @@
 ** main
 */
 
+#include <filesystem>
 #include "Core.hpp"
 #include "loader/Loader.hpp"
 
@@ -16,16 +17,16 @@ int main(int ac, char **av)
     std::cerr << "Usage: ./arcade path_to_lib" << std::endl;
     return 84;
   }
+
   try {
     loader.loadLibraries("./lib");
     auto &games = loader.getGamesLibraries();
     auto &graphics = loader.getGraphicsLibraries();
-    auto it = graphics.find(av[1]);
-    if (it == graphics.end()) {
-      std::cerr << "Game library not found" << std::endl;
-      return 84;
-    }
-    Core core(games, graphics, av[1]);
+    auto libName = std::filesystem::canonical(av[1]).string();
+    auto it = graphics.find(libName);
+    if (it == graphics.end())
+      throw ArcadeError("No such graphics library: " + libName);
+    Core core(games, graphics, libName);
     core.run();
   } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl;

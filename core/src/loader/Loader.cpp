@@ -27,7 +27,8 @@ void Loader::_loadGameLibrary(const std::string &filepath, std::shared_ptr<DLLoa
     shared::types::GameProviderGetter game = nullptr;
 
     game = dlLoader->loadSymbol<shared::types::GameProviderGetter>(SHARED_STRINGIFY(SHARED_GAME_PROVIDER_GETTER_NAME));
-    this->_gamesLibraries.insert({filepath, std::shared_ptr<shared::games::IGameProvider>(game())});
+    auto realFilePath = std::filesystem::canonical(filepath).string();
+    this->_gamesLibraries.insert({realFilePath, std::shared_ptr<shared::games::IGameProvider>(game())});
     this->_libraries.push_back(dlLoader);
 }
 
@@ -35,7 +36,8 @@ void Loader::_loadGraphicsLibrary(const std::string &filepath, std::shared_ptr<D
     shared::types::GraphicsProviderGetter graphics = nullptr;
 
     graphics = dlLoader->loadSymbol<shared::types::GraphicsProviderGetter>(SHARED_STRINGIFY(SHARED_GRAPHICS_PROVIDER_GETTER_NAME));
-    this->_graphicsLibraries.insert({filepath, std::shared_ptr<shared::graphics::IGraphicsProvider>(graphics())});
+    auto realFilePath = std::filesystem::canonical(filepath).string();
+    this->_graphicsLibraries.insert({realFilePath, std::shared_ptr<shared::graphics::IGraphicsProvider>(graphics())});
     this->_libraries.push_back(dlLoader);
 }
 

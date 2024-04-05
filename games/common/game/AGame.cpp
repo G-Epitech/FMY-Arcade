@@ -13,6 +13,7 @@ using namespace arcade::games;
 
 common::AGame::AGame(shared::types::Vector2u size, unsigned int fps) : _size(size), _fps(fps) {
     this->_entities = {};
+    this->_score = 0;
 }
 
 const shared::games::entity::EntitiesMap &common::AGame::getEntities() const {

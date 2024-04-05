@@ -19,9 +19,9 @@ Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders, c
     this->_sceneStage = MENU;
     this->_gameProvider = nullptr;
     this->_graphicsProvider = nullptr;
-    for (auto &gameProvider : this->_gameProviders) {
-        if (gameProvider.first == graphicNameProvider)
-            this->_gameProvider = gameProvider.second;
+    for (auto &graphicsProvider : this->_graphicsProviders) {
+        if (graphicsProvider.first == graphicNameProvider)
+            this->_graphicsProvider = graphicsProvider.second;
     }
 }
 
@@ -276,9 +276,8 @@ void Core::_preventWindowEvents(std::vector<events::EventPtr> events)
             auto keyEvent = std::dynamic_pointer_cast<events::IKeyEvent>(event);
             auto keyCode = keyEvent->getKeyCode();
             auto keyType = keyEvent->getKeyType();
-            if (keyType == events::IKeyEvent::CHAR && keyCode.character == 27) {
+            if (keyType == events::IKeyEvent::CHAR && keyCode.character == 27)
                 this->_sceneStage = MENU;
-            }
         }
     }
 }
@@ -303,8 +302,6 @@ void Core::_changeGameProvider(const unsigned char &index)
         return;
     }
     auto newProvider = this->_getGameProvider(index);
-    if (newProvider == this->_gameProvider)
-        return;
     this->_gameProvider = newProvider;
     this->_initGame();
     this->_initWindow();
@@ -381,9 +378,10 @@ void Core::_handleMouseMove(std::shared_ptr<events::IMouseEvent> &event, std::sh
 
 void Core::_handleWindowClose()
 {
-    if (this->_window && this->_window->isOpen())
+    if (this->_window && this->_window->isOpen()) {
         this->_window->close();
-    this->_menu.updateScore(this->_game);
+        this->_menu.updateScore(this->_game);
+    }
 }
 
 void Core::_handleWindowResize()
@@ -513,14 +511,18 @@ void Core::_handleEvents()
 {
     auto gameEvents = this->_window->getEvents();
 
-    this->_preventWindowEvents(gameEvents);
-    if (this->_sceneStage == MENU)
-        return;
-    for (auto &entity : this->_gameEntities) {
-        auto components = entity->getComponents();
-        for (auto &component : components) {
-            this->_handleComponentEvents(gameEvents, component);
+    try {
+        this->_preventWindowEvents(gameEvents);
+        if (this->_sceneStage == MENU)
+            return;
+        for (auto &entity : this->_gameEntities) {
+            auto components = entity->getComponents();
+            for (auto &component : components) {
+                this->_handleComponentEvents(gameEvents, component);
+            }
         }
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
     }
 }
 
