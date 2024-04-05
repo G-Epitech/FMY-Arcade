@@ -114,14 +114,16 @@ void Menu::_initHiddenScore(const GameManifest &gameManifest, std::shared_ptr<Ch
     }
 }
 
-
-void Menu::_initCheckBoxes()
+void Menu::_initCheckBoxesGames()
 {
     auto texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
     auto font = this->_graphicsProvider->createFont("assets/menu/fonts/arcade.ttf");
-    float index = 8.0;
+    float index = 9.0;
+    int count = 0;
 
     for (auto gameProvider : this->_gameProviders) {
+        if (count > 5)
+            break;
         auto marginRight = 23 - static_cast<float>(gameProvider.second->getManifest().name.size());
         std::string truncatedName = gameProvider.second->getManifest().name.substr(0, 20);
         if (marginRight < 0) {
@@ -131,7 +133,7 @@ void Menu::_initCheckBoxes()
             truncatedName = gameProvider.second->getManifest().name;
             marginRight -= 3;
         }
-        auto textCheckBox = std::make_shared<Text>(font, 10, truncatedName, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{20, 1}, Vector2f{3 + marginRight, index});
+        auto textCheckBox = std::make_shared<Text>(font, 10, truncatedName, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{20 - static_cast<unsigned int >(marginRight) - 1, 1}, Vector2f{3 + marginRight, index});
         auto textureCheckBox = std::make_shared<Texture>(texture, Vector2f{360, 360}, Vector2u{0, 0}, Vector2u{1, 1}, Vector2f{1 + marginRight, index});
         auto checkBox = std::make_shared<CheckBox>(textureCheckBox, textCheckBox);
         this->_texts.push_back(textCheckBox);
@@ -139,7 +141,62 @@ void Menu::_initCheckBoxes()
         this->_gamesCheckBoxes.push_back(checkBox);
         this->_initHiddenAuthors(gameProvider.second->getManifest(), checkBox, font);
         this->_initHiddenScore(gameProvider.second->getManifest(), checkBox, font);
-        index += 2;
+        index += 1;
+        count += 1;
+    }
+}
+
+void Menu::_initHiddenGraphics(const GraphicsManifest &graphicsManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font)
+{
+    auto truncatName = this->_truncString(graphicsManifest.name, 23);
+    auto nameText = std::make_shared<Text>(font, 11, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 8});
+    this->_hiddenTexts[checkBox].push_back(nameText);
+
+    auto truncatDesc = this->_truncString(graphicsManifest.description, 23);
+    auto descriptionText = std::make_shared<Text>(font, 9, truncatDesc, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 10});
+    this->_hiddenTexts[checkBox].push_back(descriptionText);
+
+    auto authors = graphicsManifest.authors;
+    float index = 12.0;
+    for (auto author : authors) {
+        auto authorNameText = std::make_shared<Text>(font, 7, this->_truncString(author.name, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index});
+        auto authorMailText = std::make_shared<Text>(font, 7, this->_truncString(author.email, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index + 1});
+        auto authorSiteText = std::make_shared<Text>(font, 7, this->_truncString(author.website, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index + 2});
+        this->_hiddenTexts[checkBox].push_back(authorNameText);
+        this->_hiddenTexts[checkBox].push_back(authorMailText);
+        this->_hiddenTexts[checkBox].push_back(authorSiteText);
+        index += 4;
+    }
+}
+
+void Menu::_initCheckBoxesGraphics()
+{
+    auto texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
+    auto font = this->_graphicsProvider->createFont("assets/menu/fonts/arcade.ttf");
+    float index = 17.0;
+    int count = 0;
+
+    for (auto graphicsProvider : this->_graphicsProviders) {
+        if (count > 5)
+            break;
+        auto marginRight = 23 - static_cast<float>(graphicsProvider.second->getManifest().name.size());
+        std::string truncatedName = graphicsProvider.second->getManifest().name.substr(0, 20);
+        if (marginRight < 0) {
+            truncatedName += "...";
+            marginRight = 0;
+        } else {
+            truncatedName = graphicsProvider.second->getManifest().name;
+            marginRight -= 3;
+        }
+        auto textCheckBox = std::make_shared<Text>(font, 10, truncatedName, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{20 - static_cast<unsigned int >(marginRight) - 1, 1}, Vector2f{3 + marginRight, index});
+        auto textureCheckBox = std::make_shared<Texture>(texture, Vector2f{360, 360}, Vector2u{0, 0}, Vector2u{1, 1}, Vector2f{1 + marginRight, index});
+        auto checkBox = std::make_shared<CheckBox>(textureCheckBox, textCheckBox);
+        this->_texts.push_back(textCheckBox);
+        this->_textures.push_back(textureCheckBox);
+        this->_graphicsCheckBoxes.push_back(checkBox);
+        this->_initHiddenGraphics(graphicsProvider.second->getManifest(), checkBox, font);
+        index += 1;
+        count += 1;
     }
 }
 
@@ -164,6 +221,11 @@ void Menu::_initTexts()
     if (this->_gameProviders.empty()) {
         auto noGames = std::make_shared<Text>(font, 12, "NO GAMES FOUND !", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{15, 1}, Vector2f{17, 12});
         this->_texts.push_back(noGames);
+    } else {
+        auto games = std::make_shared<Text>(font, 12, "Games", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{5, 1}, Vector2f{8, 7});
+        this->_texts.push_back(games);
+        auto graphics = std::make_shared<Text>(font, 12, "Graphics", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{7, 15});
+        this->_texts.push_back(graphics);
     }
 }
 
@@ -182,6 +244,7 @@ void Menu::_initWindow()
     this->_texts.clear();
     this->_textures.clear();
     this->_gamesCheckBoxes.clear();
+    this->_graphicsCheckBoxes.clear();
     if (!this->_graphicsProvider) {
         if (this->_graphicsProviders.empty())
             throw ArcadeError("No graphics provider found");
@@ -190,7 +253,8 @@ void Menu::_initWindow()
     }
     this->_initTexts();
     this->_initTextures();
-    this->_initCheckBoxes();
+    this->_initCheckBoxesGames();
+    this->_initCheckBoxesGraphics();
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
 }
 
@@ -200,10 +264,23 @@ void Menu::_handleSelectUpperCheckBox()
         if (checkBox->isHovered()) {
             checkBox->unhover();
             auto index = std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox));
-            if (index == 0)
-                this->_gamesCheckBoxes.at(this->_gamesCheckBoxes.size() - 1)->hover();
-            else
+            if (index != 0)
                 this->_gamesCheckBoxes.at(index - 1)->hover();
+            else
+                checkBox->hover();
+            break;
+        }
+    }
+    for (auto checkBox : this->_graphicsCheckBoxes) {
+        if (checkBox->isHovered()) {
+            checkBox->unhover();
+            auto index = std::distance(this->_graphicsCheckBoxes.begin(), std::find(this->_graphicsCheckBoxes.begin(), this->_graphicsCheckBoxes.end(), checkBox));
+            if (index == 0) {
+                this->_gamesCheckBoxes.at(this->_gamesCheckBoxes.size() - 1)->hover();
+                this->_textType = GAME;
+            } else {
+                this->_graphicsCheckBoxes.at(index - 1)->hover();
+            }
             break;
         }
     }
@@ -211,14 +288,27 @@ void Menu::_handleSelectUpperCheckBox()
 
 void Menu::_handleSelectLowerCheckBox()
 {
+    for (auto checkBox : this->_graphicsCheckBoxes) {
+        if (checkBox->isHovered()) {
+            checkBox->unhover();
+            auto index = std::distance(this->_graphicsCheckBoxes.begin(), std::find(this->_graphicsCheckBoxes.begin(), this->_graphicsCheckBoxes.end(), checkBox));
+            if (index != this->_graphicsCheckBoxes.size() - 1)
+                this->_graphicsCheckBoxes.at(index + 1)->hover();
+            else
+                checkBox->hover();
+            break;
+        }
+    }
     for (auto checkBox : this->_gamesCheckBoxes) {
         if (checkBox->isHovered()) {
             checkBox->unhover();
             auto index = std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox));
-            if (index == this->_gamesCheckBoxes.size() - 1)
-                this->_gamesCheckBoxes.at(0)->hover();
-            else 
+            if (index == this->_gamesCheckBoxes.size() - 1) {
+                this->_graphicsCheckBoxes.at(0)->hover();
+                this->_textType = GRAPHICS;
+            } else {
                 this->_gamesCheckBoxes.at(index + 1)->hover();
+            } 
             break;
         }
     }
@@ -248,20 +338,47 @@ void Menu::_handleKeyboardEvents(std::shared_ptr<events::IKeyEvent> key)
             this->_exitAndPlayOldGame();
         else if (code.character == 8)
             this->_score.player = this->_score.player.substr(0, this->_score.player.size() - 1);
-        else if (code.character >= 33 && code.character <= 126)
+        else if (this->_score.player.size() < 15 && code.character >= 33 && code.character <= 126)
             this->_score.player += code.character;
     }
 }
 
 void Menu::_selectGame()
 {
-    for (auto checkBox : this->_gamesCheckBoxes) {
-        if (checkBox->isHovered() && checkBox->isChecked())
-            this->_exitWithNewGame();
-        if (checkBox->isHovered())
-            checkBox->check();
-        else
-            checkBox->uncheck();
+    if (this->_textType == GAME || this->_textType == AUTHOR) {
+        for (auto checkBox : this->_gamesCheckBoxes) {
+            if (checkBox->isHovered() && checkBox->isChecked())
+                this->_exitWithNewGame();
+            if (checkBox->isHovered())
+                checkBox->check();
+            else
+                checkBox->uncheck();
+        }
+    } else {
+        for (auto checkBox : this->_graphicsCheckBoxes) {
+            if (checkBox->isHovered() && checkBox->isChecked())
+                this->_changeGraphics();
+            if (checkBox->isHovered())
+                checkBox->check();
+            else
+                checkBox->uncheck();
+        }
+    }
+}
+
+void Menu::_changeGraphics()
+{
+    for (auto checkBox : this->_graphicsCheckBoxes) {
+        if (checkBox->isHovered()) {
+            auto index = std::distance(this->_graphicsCheckBoxes.begin(), std::find(this->_graphicsCheckBoxes.begin(), this->_graphicsCheckBoxes.end(), checkBox));
+            auto graphicsProvider = this->_getGraphicsProvider(index);
+            if (graphicsProvider != this->_graphicsProvider) {
+                this->_graphicsProvider = graphicsProvider;
+                this->_window->close();
+                this->_initWindow();
+            }
+            break;
+        }
     }
 }
 
@@ -292,12 +409,22 @@ void Menu::_handleMouseMouveEvents(std::shared_ptr<events::IMouseEvent> mouse)
     bool hoveredAtLeastOne = false;
 
     for (auto checkBox : this->_gamesCheckBoxes) {
-        if (checkBox->isHovered()) {
+        if (checkBox->isHovered())
             lastHoveredCheckBox = checkBox;
-            break;
-        }
+    }
+    for (auto checkBox : this->_graphicsCheckBoxes) {
+        if (checkBox->isHovered())
+            lastHoveredCheckBox = checkBox;
     }
     for (auto checkBox : this->_gamesCheckBoxes) {
+        if (checkBox->isHovered())
+            checkBox->unhover();
+        if (checkBox->isHovered(position)) {
+            checkBox->hover();
+            hoveredAtLeastOne = true;
+        }
+    }
+    for (auto checkBox : this->_graphicsCheckBoxes) {
         if (checkBox->isHovered())
             checkBox->unhover();
         if (checkBox->isHovered(position)) {
@@ -352,7 +479,7 @@ void Menu::_handleEvents()
 void Menu::_renderField()
 {
     if (this->_score.player.empty()) {
-        auto placeholder = std::make_shared<Text>(this->_font, 6, "As Guest", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
+        auto placeholder = std::make_shared<Text>(this->_font, 6, "Guest", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
         this->_nameField = placeholder;
     } else {
         auto truncatName = this->_truncString(this->_score.player, 17);
@@ -385,6 +512,13 @@ void Menu::_render()
             }
         }
     }
+    for (auto checkBox : this->_graphicsCheckBoxes) {
+        if (checkBox->isHovered()) {
+            for (auto text : this->_hiddenTexts[checkBox]) {
+                text->draw(this->_window);
+            }
+        }
+    }
     this->_renderField();
     this->_window->display();
 }
@@ -408,11 +542,29 @@ void Menu::_previousSelectedGame()
     }
 }
 
+void Menu::_previousSelectedGraphics()
+{
+    for (auto graphicsProvider : this->_graphicsProviders) {
+        if (this->_graphicsProvider == graphicsProvider.second) {
+            auto index = std::distance(this->_graphicsProviders.begin(), std::find(this->_graphicsProviders.begin(), this->_graphicsProviders.end(), graphicsProvider));
+            auto checkBox = this->_graphicsCheckBoxes.at(index);
+            checkBox->check();
+            return;
+        }
+    }
+    if (!this->_graphicsCheckBoxes.empty()) {
+        this->_graphicsCheckBoxes.at(0)->check();
+    } else {
+        std::cout << "Can't select a previous graphics, no graphics found" << std::endl;
+    }
+}
+
 void Menu::run()
 {
     this->_sceneStage = MENU;
     this->_initWindow();
     this->_previousSelectedGame();
+    this->_previousSelectedGraphics();
     while (this->_window->isOpen()) {
         this->_handleEvents();
         this->_render();

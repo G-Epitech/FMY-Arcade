@@ -56,6 +56,7 @@ class Menu {
         typedef enum {
             GAME,
             AUTHOR,
+            GRAPHICS
         } TextType;
 
         TextType _textType;
@@ -68,6 +69,7 @@ class Menu {
         std::shared_ptr<IGameProvider> &_gameProvider;
         std::shared_ptr<IGraphicsProvider> &_graphicsProvider;
         std::vector<std::shared_ptr<CheckBox>> _gamesCheckBoxes;
+        std::vector<std::shared_ptr<CheckBox>> _graphicsCheckBoxes;
         std::vector<std::shared_ptr<Text>> _texts;
         std::vector<std::shared_ptr<Texture>> _textures;
         std::map<std::shared_ptr<CheckBox>, std::vector<std::shared_ptr<Text>>> _hiddenTexts;
@@ -151,10 +153,22 @@ class Menu {
         void _exitAndPlayOldGame();
 
         /**
-         * @brief Initialize checkboxes
+         * @brief Change the text type
          * 
          */
-        void _initCheckBoxes();
+        void _changeGraphics();
+
+        /**
+         * @brief Initialize checkboxes for games
+         * 
+         */
+        void _initCheckBoxesGames();
+
+        /**
+         * @brief Initialize checkboxes for graphics
+         * 
+         */
+        void _initCheckBoxesGraphics();
 
         /**
          * @brief Initialize textures
@@ -178,6 +192,8 @@ class Menu {
          */
         void _initHiddenScore(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
 
+        void _initHiddenGraphics(const GraphicsManifest &graphicsManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+
         /**
          * @brief Initialize texts
          * 
@@ -189,6 +205,12 @@ class Menu {
          * 
          */
         void _previousSelectedGame();
+
+        /**
+         * @brief Define the previous selected graphics
+         * 
+         */
+        void _previousSelectedGraphics();
 
         /**
          * @brief Truncate a string
