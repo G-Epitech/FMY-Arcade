@@ -77,7 +77,7 @@ public:
      * @return true if hovered
      * @return false if not hovered
      */
-    bool isHovered(const shared::types::Vector2i &mousePos) const;
+    bool isHovered(const shared::types::Vector2f &mousePos) const;
 
 private:
     bool _checked;

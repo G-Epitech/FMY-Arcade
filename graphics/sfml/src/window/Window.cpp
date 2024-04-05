@@ -150,7 +150,7 @@ Vector2u Window::getPixelSizeFromTiles(const Vector2u &size) {
     return real;
 }
 
-Vector2i Window::mapPositionToTile(const Vector2i &position) const {
+Vector2f Window::mapPositionToTile(const Vector2i &position) const {
     auto pixelsPosition = _window.mapPixelToCoords({
         position.x,
         position.y
@@ -165,10 +165,7 @@ Vector2i Window::mapPositionToTile(const Vector2i &position) const {
 
     if (tilesPosition.x >= size.x || tilesPosition.y >= size.y || pixelsPosition.x < 0)
         return {-1, -1};
-    return {
-        static_cast<int>(tilesPosition.x),
-        static_cast<int>(tilesPosition.y)
-    };
+    return tilesPosition;
 }
 
 void Window::onResize()

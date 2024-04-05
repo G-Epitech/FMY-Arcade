@@ -9,7 +9,7 @@
 
 Text::Text(std::shared_ptr<IFont> font, unsigned int fontSize, std::string content,
         TextAlign align, TextVerticalAlign verticalAlign, Color color, Vector2u size,
-        Vector2i position) :
+        Vector2f position) :
     _font(font), _fontSize(fontSize), _content(content), _align(align), _verticalAlign(verticalAlign),
     _color(color), _size(size), _position(position) {}
 
@@ -41,7 +41,7 @@ Vector2u Text::getSize() const
     return this->_size;
 }
 
-Vector2i Text::getPosition() const
+Vector2f Text::getPosition() const
 {
     return this->_position;
 }

@@ -37,6 +37,6 @@ namespace shared::graphics {
         TextVerticalAlign verticalAlign;    // Vertical alignment of the text
         types::Color color;                 // Color of the text
         Vector2u size;                      // Size of the entity
-        Vector2i position;                  // Position of the entity
+        Vector2f position;                  // Position of the entity
     } TextProps;
 }

@@ -8,7 +8,7 @@
 #include "Texture.hpp"
 
 Texture::Texture(std::shared_ptr<ITexture> texture, Vector2f binTileSize, Vector2u origin,
-        Vector2u size, Vector2i position) : _texture(texture), _binTileSize(binTileSize), _origin(origin),
+        Vector2u size, Vector2f position) : _texture(texture), _binTileSize(binTileSize), _origin(origin),
         _size(size), _position(position) {}
 
 Texture::~Texture() {}

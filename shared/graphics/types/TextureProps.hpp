@@ -20,6 +20,6 @@ namespace shared::graphics {
         Vector2f binTileSize;                 // Size of a binary tile
         Vector2u origin;                      // Origin of the texture
         Vector2u size;                              // Size of the entity
-        Vector2i position;                          // Position of the entity
+        Vector2f position;                          // Position of the entity
     } TextureProps;
 }

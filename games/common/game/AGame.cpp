@@ -30,3 +30,7 @@ const unsigned int common::AGame::getFps() const noexcept {
 void common::AGame::_registerEntity(shared::games::entity::EntityPtr entity) {
     this->_entities.push_back(std::move(entity));
 }
+
+const int common::AGame::getScore() const noexcept {
+    return this->_score;
+}

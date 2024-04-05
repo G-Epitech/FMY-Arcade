@@ -27,7 +27,7 @@ public:
      * @param size Size
      */
     Texture(std::shared_ptr<ITexture> texture, Vector2f binTileSize, Vector2u origin,
-        Vector2u size, Vector2i position);
+        Vector2u size, Vector2f position);
 
     /**
      * @brief Destructor for Texture object
@@ -53,5 +53,5 @@ private:
     Vector2f _binTileSize;
     Vector2u _origin;
     Vector2u _size;
-    Vector2i _position;
+    Vector2f _position;
 };

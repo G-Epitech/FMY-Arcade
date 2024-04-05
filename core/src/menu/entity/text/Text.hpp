@@ -23,7 +23,7 @@ public:
         TextVerticalAlign verticalAlign,
         Color color,
         Vector2u size,
-        Vector2i position);
+        Vector2f position);
 
     /**
      * @brief Destructor for Text object
@@ -54,7 +54,7 @@ public:
      * @brief Get the position of the text
      * 
      */
-    Vector2i getPosition() const;
+    Vector2f getPosition() const;
 
 private:
     std::shared_ptr<IFont> _font;
@@ -64,5 +64,5 @@ private:
     TextVerticalAlign _verticalAlign;
     Color _color;
     Vector2u _size;
-    Vector2i _position;
+    Vector2f _position;
 };

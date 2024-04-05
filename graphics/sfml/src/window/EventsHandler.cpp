@@ -207,9 +207,9 @@ EventPtr EventsHandler::_handleMouseButtonPressEvent(
     sf::Event &event,
     Window &window
 ) {
-    Vector2i pos = window.mapPositionToTile({
-        event.mouseMove.x,
-        event.mouseMove.y
+    auto pos = window.mapPositionToTile({
+        event.mouseButton.x,
+        event.mouseButton.y
     });
 
     if (pos.x < 0 || pos.y < 0)

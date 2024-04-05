@@ -26,7 +26,7 @@ public:
         return T;
     }
 
-    const Vector2i getPosition() const noexcept override {
+    const Vector2f getPosition() const noexcept override {
         return _pos;
     }
 
@@ -36,7 +36,7 @@ protected:
      *
      * @param pos Position of the mouse
      */
-    explicit AMouseEvent(Vector2i pos): _pos(pos){};
+    explicit AMouseEvent(Vector2f pos): _pos(pos){};
 
-    Vector2i        _pos;
+    Vector2f        _pos;
 };
