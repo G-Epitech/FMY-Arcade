@@ -44,6 +44,18 @@ public:
      */
     void setColor(Color color);
 
+    /**
+     * @brief Get the size of the text
+     *  
+     */
+    Vector2u getSize() const;
+
+    /**
+     * @brief Get the position of the text
+     * 
+     */
+    Vector2i getPosition() const;
+
 private:
     std::shared_ptr<IFont> _font;
     unsigned int _fontSize;

@@ -35,3 +35,13 @@ void Text::setColor(Color color)
 {
     this->_color = color;
 }
+
+Vector2u Text::getSize() const
+{
+    return this->_size;
+}
+
+Vector2i Text::getPosition() const
+{
+    return this->_position;
+}

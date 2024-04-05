@@ -12,6 +12,7 @@
 #include "types/Providers.hpp"
 #include "checkBox/CheckBox.hpp"
 #include "exception/ArcadeError.hpp"
+#include "shared/graphics/events/IMouseButtonEvent.hpp"
 
 using namespace arcade::core;
 using namespace shared::games;
@@ -66,6 +67,20 @@ class Menu {
          * 
          */
         void _handleEvents();
+
+        /**
+         * @brief Handle mouse mouve events
+         * 
+         * @param mouse Mouse event
+         */
+        void _handleMouseMouveEvents(std::shared_ptr<events::IMouseEvent> mouse);
+
+        /**
+         * @brief Handle mouse button events
+         * 
+         * @param mouse Mouse event
+         */
+        void _handleMouseButtonEvents(std::shared_ptr<events::IMouseButtonEvent> mouse);
 
         /**
          * @brief Handle checkbox events

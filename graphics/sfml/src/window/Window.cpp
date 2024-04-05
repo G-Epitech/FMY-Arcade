@@ -15,6 +15,7 @@ using namespace arcade::graphics::common::exceptions;
 
 const Vector2u Window::tileSize = { 12, 12 };
 
+#include <iostream>
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
     _initialSize(0, 0),
@@ -181,7 +182,7 @@ void Window::onResize()
     _view.setCenter( static_cast<float>(originalPixels.x) / 2,
                      static_cast<float>(originalPixels.y) / 2
     );
-    if (width < height) {
+    if ((static_cast<float>(originalPixels.x) / width) > static_cast<float>(originalPixels.y) / height) {
         _view.zoom(static_cast<float>(originalPixels.x) / width);
     } else {
         _view.zoom(static_cast<float>(originalPixels.y) / height);

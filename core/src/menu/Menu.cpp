@@ -211,6 +211,49 @@ void Menu::_exitWithNewGame()
     this->_window->close();
 }
 
+void Menu::_handleMouseMouveEvents(std::shared_ptr<events::IMouseEvent> mouse)
+{
+    if (!mouse)
+        return;
+    auto position = mouse->getPosition();
+    std::shared_ptr<CheckBox> lastHoveredCheckBox = nullptr;
+    bool hoveredAtLeastOne = false;
+
+    for (auto checkBox : this->_gamesCheckBoxes) {
+        if (checkBox->isHovered()) {
+            lastHoveredCheckBox = checkBox;
+            break;
+        }
+    }
+    for (auto checkBox : this->_gamesCheckBoxes) {
+        if (checkBox->isHovered())
+            checkBox->unhover();
+        if (checkBox->isHovered(position)) {
+            checkBox->hover();
+            hoveredAtLeastOne = true;
+        }
+    }
+    if (!hoveredAtLeastOne && lastHoveredCheckBox)
+        lastHoveredCheckBox->hover();
+}
+
+void Menu::_handleMouseButtonEvents(std::shared_ptr<events::IMouseButtonEvent> mouse)
+{
+    if (!mouse)
+        return;
+    auto position = mouse->getPosition();
+    auto button = mouse->getButton();
+
+    if (button != events::IMouseButtonEvent::MouseButton::LEFT)
+        return;
+    std::cout << "Left click" << std::endl;
+    std::cout << "Position: " << position.x << " " << position.y << std::endl;
+    for (auto checkBox : this->_gamesCheckBoxes) {
+        if (checkBox->isHovered(position))
+            this->_selectGame();
+    }
+}
+
 void Menu::_handleEvents()
 {
     auto events = this->_window->getEvents();
@@ -223,6 +266,15 @@ void Menu::_handleEvents()
             auto key = std::dynamic_pointer_cast<events::IKeyEvent>(event);
             this->_handleKeyboardEvents(key);
         }
+        if (type == events::MOUSE_MOVE) {
+            auto mouse = std::dynamic_pointer_cast<events::IMouseEvent>(event);
+            this->_handleMouseMouveEvents(mouse);
+        }
+        if (type == events::MOUSE_BTN_PRESS) {
+            auto mouse = std::dynamic_pointer_cast<events::IMouseButtonEvent>(event);
+            this->_handleMouseButtonEvents(mouse);
+        }
+        
     }
 }
 

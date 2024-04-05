@@ -70,6 +70,15 @@ public:
      */
     bool isHovered() const;
 
+    /**
+     * @brief Check if the checkbox is hovered by the mouse
+     * 
+     * @param mousePos Mouse event
+     * @return true if hovered
+     * @return false if not hovered
+     */
+    bool isHovered(const shared::types::Vector2i &mousePos) const;
+
 private:
     bool _checked;
     bool _hovered;

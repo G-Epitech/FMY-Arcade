@@ -50,3 +50,14 @@ bool CheckBox::isHovered() const
 {
     return this->_hovered;
 }
+
+bool CheckBox::isHovered(const Vector2i &mousePos) const
+{
+    auto pos = this->_text->getPosition();
+    auto size = this->_text->getSize();
+
+    if (mousePos.x >= pos.x && mousePos.x <= pos.x + size.x &&
+        mousePos.y >= pos.y && mousePos.y <= pos.y + size.y)
+        return true;
+    return false;
+}
