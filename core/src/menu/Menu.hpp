@@ -11,6 +11,7 @@
 #include "types/Stages.hpp"
 #include "types/Providers.hpp"
 #include "checkBox/CheckBox.hpp"
+#include "exception/ArcadeError.hpp"
 
 using namespace arcade::core;
 using namespace shared::games;
@@ -134,4 +135,6 @@ class Menu {
          * 
          */
         void _previousSelectedGame();
+
+        std::string _truncString(const std::string &str, int size);
 };
