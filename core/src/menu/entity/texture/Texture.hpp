@@ -39,7 +39,7 @@ public:
      * 
      * @param window Window to draw on
      */
-    void draw(std::shared_ptr<IWindow> &window);
+    void draw(std::shared_ptr<IWindow> window);
 
     /**
      * @brief Set the Position object

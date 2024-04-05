@@ -13,7 +13,7 @@ Texture::Texture(std::shared_ptr<ITexture> texture, Vector2f binTileSize, Vector
 
 Texture::~Texture() {}
 
-void Texture::draw(std::shared_ptr<IWindow> &window)
+void Texture::draw(std::shared_ptr<IWindow> window)
 {
     TextureProps textureProps = {
         .texture = this->_texture,

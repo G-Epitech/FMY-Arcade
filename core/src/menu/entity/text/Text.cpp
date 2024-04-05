@@ -15,7 +15,7 @@ Text::Text(std::shared_ptr<IFont> font, unsigned int fontSize, std::string conte
 
 Text::~Text() {}
 
-void Text::draw(std::shared_ptr<IWindow> &window)
+void Text::draw(std::shared_ptr<IWindow> window)
 {
     TextProps textProps = {
         .font = this->_font,

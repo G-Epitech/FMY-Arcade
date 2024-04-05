@@ -14,25 +14,21 @@
 #include "shared/types/Libraries.hpp"
 #include "shared/graphics/events/IKeyEvent.hpp"
 
-using namespace shared::graphics;
-
 class CheckBox {
 public:
 
-    CheckBox(const std::string &name, std::shared_ptr<IGraphicsProvider> graphicsProvider,
-        Vector2i position, unsigned int fontSize = 10, Vector2u size = {20, 1});
+    /**
+     * @brief Construct a new CheckBox object
+     * 
+     * @param texture 
+     * @param text 
+     */
+    CheckBox(std::shared_ptr<Texture> texture, std::shared_ptr<Text> text);
 
     /**
      * @brief Destructor for CheckBox object
      */
     ~CheckBox();
-
-    /**
-     * @brief Draw the checkbox
-     * 
-     * @param window Window to draw on
-     */
-    void draw(std::shared_ptr<IWindow> &window);
 
     /**
      * @brief Check the checkbox
@@ -75,8 +71,8 @@ public:
     bool isHovered() const;
 
 private:
-    std::shared_ptr<Text> _name;
-    std::shared_ptr<Texture> _checkbox;
     bool _checked;
     bool _hovered;
+    std::shared_ptr<Text> _text;
+    std::shared_ptr<Texture> _texture;
 };

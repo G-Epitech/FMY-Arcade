@@ -44,10 +44,9 @@ class Menu {
         std::shared_ptr<IGameProvider> &_gameProvider;
         std::shared_ptr<IGraphicsProvider> &_graphicsProvider;
         std::vector<std::shared_ptr<CheckBox>> _gamesCheckBoxes;
-        std::vector<std::shared_ptr<CheckBox>> _graphicsCheckBoxes;
-        std::shared_ptr<CheckBox> _startGameCheckBox;
         std::vector<std::shared_ptr<Text>> _texts;
         std::vector<std::shared_ptr<Texture>> _textures;
+        std::map<std::shared_ptr<CheckBox>, std::vector<std::shared_ptr<Text>>> _hiddenTexts;
 
         /**
          * @brief Initialize the window
@@ -115,4 +114,24 @@ class Menu {
          * 
          */
         void _initTextures();
+
+        /**
+         * @brief Initialize hidden textures
+         * 
+         * @param gameManifest GameManifest
+         * @param checkBox CheckBox
+         */
+        void _initHiddenTextures(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+
+        /**
+         * @brief Initialize texts
+         * 
+         */
+        void _initTexts();
+
+        /**
+         * @brief Define the previous selected game
+         * 
+         */
+        void _previousSelectedGame();
 };
