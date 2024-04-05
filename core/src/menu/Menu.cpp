@@ -108,19 +108,27 @@ void Menu::_initTextures()
     this->_textures.push_back(std::make_shared<Texture>(backgroundTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{50, 25}, Vector2f{0, 0}));
     auto titleTexture = this->_graphicsProvider->createTexture("assets/menu/img/title.png", "assets/menu/img/title.ascii");
     this->_textures.push_back(std::make_shared<Texture>(titleTexture, Vector2f{17, 17}, Vector2u{0, 0}, Vector2u{31, 5}, Vector2f{10, 1}));
-    auto middleTexture = this->_graphicsProvider->createTexture("assets/menu/img/middle.png", "assets/menu/img/middle.ascii");
-    this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 17}, Vector2f{24, 7}));
+
+    if (!this->_gameProviders.empty()) {
+        auto middleTexture = this->_graphicsProvider->createTexture("assets/menu/img/middle.png", "assets/menu/img/middle.ascii");
+        this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 17}, Vector2f{24, 7}));
+    }
 }
 
 void Menu::_initTexts()
 {
     auto font = this->_graphicsProvider->createFont("assets/menu/fonts/arcade.ttf");
 
-    auto score = std::make_shared<Text>(font, 10, "HI-SCORE", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 12});
-    this->_texts.push_back(score);
+    if (!this->_gameProviders.empty()) {
+        auto score = std::make_shared<Text>(font, 10, "HI-SCORE", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 12});
+        this->_texts.push_back(score);
 
-    auto authors = std::make_shared<Text>(font, 8, "Authors:", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 14});
-    this->_texts.push_back(authors);
+        auto authors = std::make_shared<Text>(font, 8, "Authors:", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 14});
+        this->_texts.push_back(authors);
+    } else {
+        auto noGames = std::make_shared<Text>(font, 12, "NO GAMES FOUND !", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{15, 1}, Vector2f{17, 12});
+        this->_texts.push_back(noGames);
+    }
 }
 
 void Menu::_initWindow()
@@ -324,10 +332,12 @@ void Menu::_previousSelectedGame()
             return;
         }
     }
-    if (this->_gamesCheckBoxes.empty())
-        throw ArcadeError("No games found");
-    this->_gamesCheckBoxes.at(0)->check();
-    this->_gamesCheckBoxes.at(0)->hover();
+    if (!this->_gamesCheckBoxes.empty()) {
+        this->_gamesCheckBoxes.at(0)->check();
+        this->_gamesCheckBoxes.at(0)->hover();
+    } else {
+        std::cout << "Can't select a previous game, no games found" << std::endl;
+    }
 }
 
 void Menu::run()

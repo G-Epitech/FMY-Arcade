@@ -8,18 +8,28 @@
 #include "Core.hpp"
 #include "loader/Loader.hpp"
 
-int main(void)
+int main(int ac, char **av)
 {
   Loader loader;
 
+  if (ac != 2) {
+    std::cerr << "Usage: ./arcade path_to_lib" << std::endl;
+    return 84;
+  }
   try {
     loader.loadLibraries("./lib");
-    std::cout << "Games libraries:" << loader.getGamesLibraries().size() << std::endl;
-    std::cout << "Graphics libraries:" << loader.getGraphicsLibraries().size() << std::endl;
-    Core core(loader.getGamesLibraries(), loader.getGraphicsLibraries());
+    auto &games = loader.getGamesLibraries();
+    auto &graphics = loader.getGraphicsLibraries();
+    auto it = graphics.find(av[1]);
+    if (it == graphics.end()) {
+      std::cerr << "Game library not found" << std::endl;
+      return 84;
+    }
+    Core core(games, graphics);
     core.run();
   } catch (const std::exception &e) {
     std::cerr << e.what() << std::endl;
+    return 84;
   }
   return 0;
 }
