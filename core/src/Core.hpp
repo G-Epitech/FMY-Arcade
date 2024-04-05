@@ -261,6 +261,27 @@ class Core {
         void _handleKeyRelease(std::shared_ptr<events::IKeyEvent> &event);
 
         /**
+         * @brief Handle the function keys
+         * 
+         * @param event The key event
+         */
+        void _handleFunctionKeys(std::shared_ptr<events::IKeyEvent> &event);
+
+        /**
+         * @brief Change the graphic provider
+         * 
+         * @param index The index of the graphic provider
+         */
+        void _changeGraphicProvider(const unsigned char &index);
+
+        /**
+         * @brief Change the game provider
+         * 
+         * @param index The index of the game provider
+         */
+        void _changeGameProvider(const unsigned char &index);
+
+        /**
          * @brief Convert the key press data
          * 
          * @param type The type of the key

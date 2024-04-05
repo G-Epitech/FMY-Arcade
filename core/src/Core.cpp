@@ -25,12 +25,20 @@ Core::~Core() {}
 
 void Core::_initGame()
 {
+    if (!this->_gameProvider) {
+        if (this->_gameProviders.empty())
+            throw ArcadeError("No game provider available");
+        this->_gameProvider = this->_gameProviders.at(0);
+        std::cout << "No game provider selected, using default provider" << std::endl;
+    }
     this->_game = this->_gameProvider->createInstance();
     this->_sceneStage = RESUME;
 }
 
 void Core::_initWindow()
 {
+    if (!this->_game)
+        this->_initGame();
     auto gameManifest = this->_game->getManifest();
     IWindow::WindowInitProps windowInitProps {
         this->_game->getSize(),
@@ -40,6 +48,13 @@ void Core::_initWindow()
         gameManifest.iconPath
     };
 
+    this->_handleWindowClose();
+    if (!this->_graphicsProvider) {
+        if (this->_graphicsProviders.empty())
+            throw ArcadeError("No graphic provider available");
+        this->_graphicsProvider = this->_graphicsProviders.at(0);
+        std::cout << "No graphic provider selected, using default provider" << std::endl;
+    }
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
     this->_sceneStage = PLAY;
 }
@@ -204,12 +219,55 @@ void Core::_preventWindowEvents(std::vector<events::EventPtr> events)
     }
 }
 
+void Core::_changeGraphicProvider(const unsigned char &index)
+{
+    if (index > this->_graphicsProviders.size() - 1) {
+        std::cout << "Invalid graphic provider index" << std::endl;
+        return;
+    }
+    auto newProvider = this->_graphicsProviders[index];
+    if (newProvider == this->_graphicsProvider)
+        return;
+    this->_graphicsProvider = newProvider;
+    this->_initWindow();
+}
+
+void Core::_changeGameProvider(const unsigned char &index)
+{
+    if (index > this->_gameProviders.size() - 1) {
+        std::cout << "Invalid game provider index" << std::endl;
+        return;
+    }
+    auto newProvider = this->_gameProviders[index];
+    if (newProvider == this->_gameProvider)
+        return;
+    this->_gameProvider = newProvider;
+    this->_initGame();
+    this->_initWindow();
+}
+
+void Core::_handleFunctionKeys(std::shared_ptr<events::IKeyEvent> &keyEvent)
+{
+    auto keyCode = keyEvent->getKeyCode();
+    auto keyType = keyEvent->getKeyType();
+
+    if (keyType == events::IKeyEvent::FUNC) {
+        if (keyCode.func <= 6)
+            this->_changeGameProvider(keyCode.func - 1);
+        else if (keyCode.func >= 7 && keyCode.func <= 12)
+            this->_changeGraphicProvider(keyCode.func - 7);
+        else
+            std::cout << "Invalid function key" << std::endl;
+    }
+}
+
 void Core::_handleKeyPress(std::shared_ptr<events::IKeyEvent> &keyEvent, std::shared_ptr<components::IKeyboardComponent> &keyboard)
 {
     auto keyCode = keyEvent->getKeyCode();
     auto keyType = keyEvent->getKeyType();
     auto keyCodeData = this->_convertKeyPressData(keyType, keyCode);
 
+    this->_handleFunctionKeys(keyEvent);
     keyboard->onKeyPress(this->_game, keyCodeData);
 }
 
@@ -259,7 +317,8 @@ void Core::_handleMouseMove(std::shared_ptr<events::IMouseEvent> &event, std::sh
 
 void Core::_handleWindowClose()
 {
-    this->_window->close();
+    if (this->_window && this->_window->isOpen())
+        this->_window->close();
 }
 
 void Core::_handleWindowResize()
