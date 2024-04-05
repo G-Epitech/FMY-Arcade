@@ -9,6 +9,8 @@
 
 #include "common/game/AGame.hpp"
 
+#define MAP_PATH "assets/pacman/map.ascii"
+
 namespace arcade::games::pacman {
     class PacmanGame;
 }

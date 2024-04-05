@@ -6,6 +6,7 @@
 */
 
 #include "PacmanGame.hpp"
+#include "entities/map/MapEntity.hpp"
 
 using namespace arcade::games;
 
@@ -23,7 +24,7 @@ const shared::games::GameManifest pacman::PacmanGame::manifest = {
 };
 
 pacman::PacmanGame::PacmanGame(): common::AGame(Vector2u(27, 30), 60) {
-
+    this->_registerEntity(std::make_unique<MapEntity>(MAP_PATH));
 }
 
 const shared::games::GameManifest &pacman::PacmanGame::getManifest() const noexcept {

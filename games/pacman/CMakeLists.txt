@@ -5,6 +5,10 @@ add_library(${PROJECT_NAME} SHARED
         src/PacmanGame.hpp
         src/PacmanGameProvider.cpp
         src/PacmanGameProvider.hpp
+        src/entities/map/MapEntity.cpp
+        src/entities/map/MapEntity.hpp
+        src/entities/player/PlayerEntity.cpp
+        src/entities/player/PlayerEntity.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)
