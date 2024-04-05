@@ -118,7 +118,7 @@ void Menu::_initHiddenScore(const GameManifest &gameManifest, std::shared_ptr<Ch
 void Menu::_initCheckBoxesGames()
 {
     auto texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
-    auto font = this->_graphicsProvider->createFont("assets/menu/fonts/arcade.ttf");
+    auto font = this->_font;
     float index = 9.0;
     int count = 0;
 
@@ -137,6 +137,10 @@ void Menu::_initCheckBoxesGames()
         this->_initHiddenAuthors(gameProvider.second->getManifest(), checkBox, font);
         index += 1;
         count += 1;
+    }
+    if (this->_gamesCheckBoxes.empty()) {
+        auto noGames = std::make_shared<Text>(font, 35, "No games found", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{22, 1}, Vector2f{2, 11});
+        this->_texts.push_back(noGames);
     }
 }
 
@@ -166,7 +170,7 @@ void Menu::_initHiddenGraphics(const GraphicsManifest &graphicsManifest, std::sh
 void Menu::_initCheckBoxesGraphics()
 {
     auto texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
-    auto font = this->_graphicsProvider->createFont("assets/menu/fonts/arcade.ttf");
+    auto font = this->_font;
     float index = 17.0;
     int count = 0;
 
@@ -193,11 +197,8 @@ void Menu::_initTextures()
     this->_textures.push_back(std::make_shared<Texture>(backgroundTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{50, 25}, Vector2f{0, 0}));
     auto titleTexture = this->_graphicsProvider->createTexture("assets/menu/img/title.png", "assets/menu/img/title.ascii");
     this->_textures.push_back(std::make_shared<Texture>(titleTexture, Vector2f{17, 17}, Vector2u{0, 0}, Vector2u{31, 5}, Vector2f{10, 1}));
-
-    if (!this->_gameProviders.empty()) {
-        auto middleTexture = this->_graphicsProvider->createTexture("assets/menu/img/middle.png", "assets/menu/img/middle.ascii");
-        this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 15}, Vector2f{24, 7}));
-    }
+    auto middleTexture = this->_graphicsProvider->createTexture("assets/menu/img/middle.png", "assets/menu/img/middle.ascii");
+    this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 15}, Vector2f{24, 7}));
 }
 
 void Menu::_initTexts()
@@ -205,15 +206,10 @@ void Menu::_initTexts()
     auto font = this->_graphicsProvider->createFont("assets/menu/fonts/arcade.ttf");
 
     this->_font = font;
-    if (this->_gameProviders.empty()) {
-        auto noGames = std::make_shared<Text>(font, 30, "NO GAMES FOUND !", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{15, 1}, Vector2f{17, 12});
-        this->_texts.push_back(noGames);
-    } else {
-        auto games = std::make_shared<Text>(font, 40, "Games", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{24, 1}, Vector2f{1, 7});
-        this->_texts.push_back(games);
-        auto graphics = std::make_shared<Text>(font, 40, "Graphics", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{24, 1}, Vector2f{1, 15});
-        this->_texts.push_back(graphics);
-    }
+    auto games = std::make_shared<Text>(font, 40, "Games", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{24, 1}, Vector2f{1, 7});
+    this->_texts.push_back(games);
+    auto graphics = std::make_shared<Text>(font, 40, "Graphics", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{24, 1}, Vector2f{1, 15});
+    this->_texts.push_back(graphics);
 }
 
 void Menu::_initWindow()
@@ -263,8 +259,12 @@ void Menu::_handleSelectUpperCheckBox()
             checkBox->unhover();
             auto index = std::distance(this->_graphicsCheckBoxes.begin(), std::find(this->_graphicsCheckBoxes.begin(), this->_graphicsCheckBoxes.end(), checkBox));
             if (index == 0) {
-                this->_gamesCheckBoxes.at(this->_gamesCheckBoxes.size() - 1)->hover();
-                this->_checkBoxType = GAME_CHECKBOX;
+                if (!this->_gamesCheckBoxes.empty()) {
+                    this->_gamesCheckBoxes.at(this->_gamesCheckBoxes.size() - 1)->hover();
+                    this->_checkBoxType = GAME_CHECKBOX;
+                } else {
+                    checkBox->hover();
+                }
             } else {
                 this->_graphicsCheckBoxes.at(index - 1)->hover();
             }
@@ -541,11 +541,19 @@ void Menu::_previousSelectedGraphics()
             auto index = std::distance(this->_graphicsProviders.begin(), std::find(this->_graphicsProviders.begin(), this->_graphicsProviders.end(), graphicsProvider));
             auto checkBox = this->_graphicsCheckBoxes.at(index);
             checkBox->check();
+            if (this->_gamesCheckBoxes.empty()) {
+                checkBox->hover();
+                this->_checkBoxType = GRAPHICS_CHECKBOX;
+            }
             return;
         }
     }
     if (!this->_graphicsCheckBoxes.empty()) {
         this->_graphicsCheckBoxes.at(0)->check();
+        if (this->_gamesCheckBoxes.empty()) {
+            _graphicsCheckBoxes.at(0)->hover();
+            this->_checkBoxType = GRAPHICS_CHECKBOX;
+        }
     } else {
         std::cout << "Can't select a previous graphics, no graphics found" << std::endl;
     }
