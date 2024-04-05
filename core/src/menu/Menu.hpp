@@ -53,6 +53,12 @@ class Menu {
             int score;
         } Score;
 
+        typedef enum {
+            GAME,
+            AUTHOR,
+        } TextType;
+
+        TextType _textType;
         Score _score;
         std::vector<Score> _scores;
         SceneStage &_sceneStage;
@@ -65,6 +71,7 @@ class Menu {
         std::vector<std::shared_ptr<Text>> _texts;
         std::vector<std::shared_ptr<Texture>> _textures;
         std::map<std::shared_ptr<CheckBox>, std::vector<std::shared_ptr<Text>>> _hiddenTexts;
+        std::map<std::shared_ptr<CheckBox>, std::vector<std::shared_ptr<Text>>> _hiddenAuthors;
 
         /**
          * @brief Initialize the window
@@ -153,7 +160,15 @@ class Menu {
          * @param gameManifest GameManifest
          * @param checkBox CheckBox
          */
-        void _initHiddenTextures(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenAuthors(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+
+        /**
+         * @brief Initialize hidden texts
+         * 
+         * @param gameManifest GameManifest
+         * @param checkBox CheckBox
+         */
+        void _initHiddenScore(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
 
         /**
          * @brief Initialize texts
