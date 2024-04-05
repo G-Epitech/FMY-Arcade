@@ -56,10 +56,15 @@ class Menu {
         typedef enum {
             GAME,
             AUTHOR,
-            GRAPHICS
         } TextType;
 
+        typedef enum {
+            GAME_CHECKBOX,
+            GRAPHICS_CHECKBOX
+        } CheckBoxType;
+
         TextType _textType;
+        CheckBoxType _checkBoxType;
         Score _score;
         std::vector<Score> _scores;
         SceneStage &_sceneStage;

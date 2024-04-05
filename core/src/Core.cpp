@@ -383,6 +383,7 @@ void Core::_handleWindowClose()
 {
     if (this->_window && this->_window->isOpen())
         this->_window->close();
+    this->_menu.updateScore(this->_game);
 }
 
 void Core::_handleWindowResize()
@@ -538,7 +539,6 @@ void Core::run()
         previousTime = currentTime;
 
         if (this->_sceneStage == MENU) {
-            this->_menu.updateScore(this->_game);
             this->_handleWindowClose();
             this->_menu.run();
             previousTime = std::chrono::high_resolution_clock::now();

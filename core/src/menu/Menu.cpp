@@ -58,15 +58,15 @@ std::string Menu::_truncString(const std::string &str, int size)
 
 void Menu::_initHiddenAuthors(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font)
 {
-    auto authorNames = std::make_shared<Text>(font, 8, "Authors:", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 8});
+    auto authorNames = std::make_shared<Text>(font, 35, "Authors:", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 8});
     this->_hiddenAuthors[checkBox].push_back(authorNames);
 
     auto authors = gameManifest.authors;
     float index = 10.0;
     for (auto author : authors) {
-        auto authorNameText = std::make_shared<Text>(font, 7, this->_truncString(author.name, 22) , TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{22, 1}, Vector2f{27, index});
-        auto authorMailText = std::make_shared<Text>(font, 7, this->_truncString(author.email, 22), TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{22, 1}, Vector2f{27, index + 1});
-        auto authorSiteText = std::make_shared<Text>(font, 7, this->_truncString(author.website, 22), TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{22, 1}, Vector2f{27, index + 2});
+        auto authorNameText = std::make_shared<Text>(font, 30, this->_truncString(author.name, 22) , TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{22, 1}, Vector2f{27, index});
+        auto authorMailText = std::make_shared<Text>(font, 30, this->_truncString(author.email, 22), TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{22, 1}, Vector2f{27, index + 1});
+        auto authorSiteText = std::make_shared<Text>(font, 30, this->_truncString(author.website, 22), TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{22, 1}, Vector2f{27, index + 2});
         this->_hiddenAuthors[checkBox].push_back(authorNameText);
         this->_hiddenAuthors[checkBox].push_back(authorMailText);
         this->_hiddenAuthors[checkBox].push_back(authorSiteText);
@@ -77,14 +77,14 @@ void Menu::_initHiddenAuthors(const GameManifest &gameManifest, std::shared_ptr<
 void Menu::_initHiddenScore(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font)
 {
     auto truncatName = this->_truncString(gameManifest.name, 23);
-    auto nameText = std::make_shared<Text>(font, 11, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 8});
+    auto nameText = std::make_shared<Text>(font, 35, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 8});
     this->_hiddenTexts[checkBox].push_back(nameText);
 
     std::string truncatDesc = this->_truncString(gameManifest.description, 23);
-    auto descriptionText = std::make_shared<Text>(font, 9, truncatDesc, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 10});
+    auto descriptionText = std::make_shared<Text>(font, 30, truncatDesc, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 10});
     this->_hiddenTexts[checkBox].push_back(descriptionText);
 
-    auto scoreHI = std::make_shared<Text>(font, 10, "HI-SCORE", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 12});
+    auto scoreHI = std::make_shared<Text>(font, 30, "HI-SCORE", TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{26, 12});
     this->_hiddenTexts[checkBox].push_back(scoreHI);
 
     auto score = 0;
@@ -95,18 +95,19 @@ void Menu::_initHiddenScore(const GameManifest &gameManifest, std::shared_ptr<Ch
     auto scoreString = std::to_string(score).substr(0, 5);
     while (scoreString.length() < 5)
         scoreString = "0" + scoreString;
-    auto scoreText = std::make_shared<Text>(font, 10, scoreString, TextAlign::RIGHT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{14, 1}, Vector2f{34, 12});
+    auto scoreText = std::make_shared<Text>(font, 30, scoreString, TextAlign::RIGHT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{14, 1}, Vector2f{34, 12});
     this->_hiddenTexts[checkBox].push_back(scoreText);
 
     float index = 14;
     for (auto &scoreElem : this->_scores) {
         if (scoreElem.game == gameManifest.name) {
-            auto truncatPlayer = this->_truncString(scoreElem.player, 17);
-            auto playerText = std::make_shared<Text>(font, 8, truncatPlayer, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{17, 1}, Vector2f{26, index});
+            auto playerName = scoreElem.player.empty() ? "Guest" : scoreElem.player;
+            auto truncatPlayer = this->_truncString(playerName, 17);
+            auto playerText = std::make_shared<Text>(font, 25, truncatPlayer, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{17, 1}, Vector2f{26, index});
             auto scoreString = std::to_string(scoreElem.score).substr(0, 5);
             while (scoreString.length() < 5)
                 scoreString = "0" + scoreString;
-            auto scoreText = std::make_shared<Text>(font, 8, scoreString, TextAlign::RIGHT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{5, 1}, Vector2f{43, index});
+            auto scoreText = std::make_shared<Text>(font, 25, scoreString, TextAlign::RIGHT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{5, 1}, Vector2f{43, index});
             this->_hiddenTexts[checkBox].push_back(playerText);
             this->_hiddenTexts[checkBox].push_back(scoreText);
             index += 1;
@@ -124,23 +125,16 @@ void Menu::_initCheckBoxesGames()
     for (auto gameProvider : this->_gameProviders) {
         if (count > 5)
             break;
-        auto marginRight = 23 - static_cast<float>(gameProvider.second->getManifest().name.size());
         std::string truncatedName = gameProvider.second->getManifest().name.substr(0, 20);
-        if (marginRight < 0) {
-            truncatedName += "...";
-            marginRight = 0;
-        } else {
-            truncatedName = gameProvider.second->getManifest().name;
-            marginRight -= 3;
-        }
-        auto textCheckBox = std::make_shared<Text>(font, 10, truncatedName, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{20 - static_cast<unsigned int >(marginRight) - 1, 1}, Vector2f{3 + marginRight, index});
-        auto textureCheckBox = std::make_shared<Texture>(texture, Vector2f{360, 360}, Vector2u{0, 0}, Vector2u{1, 1}, Vector2f{1 + marginRight, index});
+        auto pos = 11 - (static_cast<float>(truncatedName.size()) / 2);
+        auto textCheckBox = std::make_shared<Text>(font, 35, truncatedName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{static_cast<unsigned int>(truncatedName.size()), 1}, Vector2f{pos + 2, index});
+        auto textureCheckBox = std::make_shared<Texture>(texture, Vector2f{360, 360}, Vector2u{0, 0}, Vector2u{1, 1}, Vector2f{pos, index});
         auto checkBox = std::make_shared<CheckBox>(textureCheckBox, textCheckBox);
         this->_texts.push_back(textCheckBox);
         this->_textures.push_back(textureCheckBox);
         this->_gamesCheckBoxes.push_back(checkBox);
-        this->_initHiddenAuthors(gameProvider.second->getManifest(), checkBox, font);
         this->_initHiddenScore(gameProvider.second->getManifest(), checkBox, font);
+        this->_initHiddenAuthors(gameProvider.second->getManifest(), checkBox, font);
         index += 1;
         count += 1;
     }
@@ -149,19 +143,19 @@ void Menu::_initCheckBoxesGames()
 void Menu::_initHiddenGraphics(const GraphicsManifest &graphicsManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font)
 {
     auto truncatName = this->_truncString(graphicsManifest.name, 23);
-    auto nameText = std::make_shared<Text>(font, 11, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 8});
+    auto nameText = std::make_shared<Text>(font, 35, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 8});
     this->_hiddenTexts[checkBox].push_back(nameText);
 
     auto truncatDesc = this->_truncString(graphicsManifest.description, 23);
-    auto descriptionText = std::make_shared<Text>(font, 9, truncatDesc, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 10});
+    auto descriptionText = std::make_shared<Text>(font, 30, truncatDesc, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, 10});
     this->_hiddenTexts[checkBox].push_back(descriptionText);
 
     auto authors = graphicsManifest.authors;
     float index = 12.0;
     for (auto author : authors) {
-        auto authorNameText = std::make_shared<Text>(font, 7, this->_truncString(author.name, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index});
-        auto authorMailText = std::make_shared<Text>(font, 7, this->_truncString(author.email, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index + 1});
-        auto authorSiteText = std::make_shared<Text>(font, 7, this->_truncString(author.website, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index + 2});
+        auto authorNameText = std::make_shared<Text>(font, 25, this->_truncString(author.name, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index});
+        auto authorMailText = std::make_shared<Text>(font, 25, this->_truncString(author.email, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index + 1});
+        auto authorSiteText = std::make_shared<Text>(font, 25, this->_truncString(author.website, 23), TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{23, 1}, Vector2f{25, index + 2});
         this->_hiddenTexts[checkBox].push_back(authorNameText);
         this->_hiddenTexts[checkBox].push_back(authorMailText);
         this->_hiddenTexts[checkBox].push_back(authorSiteText);
@@ -179,17 +173,10 @@ void Menu::_initCheckBoxesGraphics()
     for (auto graphicsProvider : this->_graphicsProviders) {
         if (count > 5)
             break;
-        auto marginRight = 23 - static_cast<float>(graphicsProvider.second->getManifest().name.size());
         std::string truncatedName = graphicsProvider.second->getManifest().name.substr(0, 20);
-        if (marginRight < 0) {
-            truncatedName += "...";
-            marginRight = 0;
-        } else {
-            truncatedName = graphicsProvider.second->getManifest().name;
-            marginRight -= 3;
-        }
-        auto textCheckBox = std::make_shared<Text>(font, 10, truncatedName, TextAlign::LEFT, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{20 - static_cast<unsigned int >(marginRight) - 1, 1}, Vector2f{3 + marginRight, index});
-        auto textureCheckBox = std::make_shared<Texture>(texture, Vector2f{360, 360}, Vector2u{0, 0}, Vector2u{1, 1}, Vector2f{1 + marginRight, index});
+        auto pos = 11 - (static_cast<float>(truncatedName.size()) / 2);
+        auto textCheckBox = std::make_shared<Text>(font, 35, truncatedName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{static_cast<unsigned int>(truncatedName.size()), 1}, Vector2f{pos + 2, index});
+        auto textureCheckBox = std::make_shared<Texture>(texture, Vector2f{360, 360}, Vector2u{0, 0}, Vector2u{1, 1}, Vector2f{pos, index});
         auto checkBox = std::make_shared<CheckBox>(textureCheckBox, textCheckBox);
         this->_texts.push_back(textCheckBox);
         this->_textures.push_back(textureCheckBox);
@@ -219,12 +206,12 @@ void Menu::_initTexts()
 
     this->_font = font;
     if (this->_gameProviders.empty()) {
-        auto noGames = std::make_shared<Text>(font, 12, "NO GAMES FOUND !", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{15, 1}, Vector2f{17, 12});
+        auto noGames = std::make_shared<Text>(font, 30, "NO GAMES FOUND !", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{15, 1}, Vector2f{17, 12});
         this->_texts.push_back(noGames);
     } else {
-        auto games = std::make_shared<Text>(font, 12, "Games", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{5, 1}, Vector2f{8, 7});
+        auto games = std::make_shared<Text>(font, 40, "Games", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{24, 1}, Vector2f{1, 7});
         this->_texts.push_back(games);
-        auto graphics = std::make_shared<Text>(font, 12, "Graphics", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{8, 1}, Vector2f{7, 15});
+        auto graphics = std::make_shared<Text>(font, 40, "Graphics", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{24, 1}, Vector2f{1, 15});
         this->_texts.push_back(graphics);
     }
 }
@@ -277,7 +264,7 @@ void Menu::_handleSelectUpperCheckBox()
             auto index = std::distance(this->_graphicsCheckBoxes.begin(), std::find(this->_graphicsCheckBoxes.begin(), this->_graphicsCheckBoxes.end(), checkBox));
             if (index == 0) {
                 this->_gamesCheckBoxes.at(this->_gamesCheckBoxes.size() - 1)->hover();
-                this->_textType = GAME;
+                this->_checkBoxType = GAME_CHECKBOX;
             } else {
                 this->_graphicsCheckBoxes.at(index - 1)->hover();
             }
@@ -305,7 +292,7 @@ void Menu::_handleSelectLowerCheckBox()
             auto index = std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox));
             if (index == this->_gamesCheckBoxes.size() - 1) {
                 this->_graphicsCheckBoxes.at(0)->hover();
-                this->_textType = GRAPHICS;
+                this->_checkBoxType = GRAPHICS_CHECKBOX;
             } else {
                 this->_gamesCheckBoxes.at(index + 1)->hover();
             } 
@@ -345,7 +332,7 @@ void Menu::_handleKeyboardEvents(std::shared_ptr<events::IKeyEvent> key)
 
 void Menu::_selectGame()
 {
-    if (this->_textType == GAME || this->_textType == AUTHOR) {
+    if (this->_checkBoxType == GAME_CHECKBOX) {
         for (auto checkBox : this->_gamesCheckBoxes) {
             if (checkBox->isHovered() && checkBox->isChecked())
                 this->_exitWithNewGame();
@@ -421,6 +408,7 @@ void Menu::_handleMouseMouveEvents(std::shared_ptr<events::IMouseEvent> mouse)
             checkBox->unhover();
         if (checkBox->isHovered(position)) {
             checkBox->hover();
+            this->_checkBoxType = GAME_CHECKBOX;
             hoveredAtLeastOne = true;
         }
     }
@@ -429,6 +417,7 @@ void Menu::_handleMouseMouveEvents(std::shared_ptr<events::IMouseEvent> mouse)
             checkBox->unhover();
         if (checkBox->isHovered(position)) {
             checkBox->hover();
+            this->_checkBoxType = GRAPHICS_CHECKBOX;
             hoveredAtLeastOne = true;
         }
     }
@@ -442,12 +431,15 @@ void Menu::_handleMouseButtonEvents(std::shared_ptr<events::IMouseButtonEvent> m
         return;
     auto position = mouse->getPosition();
     auto button = mouse->getButton();
+    auto move = std::dynamic_pointer_cast<events::IMouseEvent>(mouse);
 
     if (button != events::IMouseButtonEvent::MouseButton::LEFT)
         return;
+    this->_handleMouseMouveEvents(move);
     for (auto checkBox : this->_gamesCheckBoxes) {
-        if (checkBox->isHovered(position))
+        if (checkBox->isHovered(position)) {
             this->_selectGame();
+        }
     }
 }
 
@@ -479,11 +471,11 @@ void Menu::_handleEvents()
 void Menu::_renderField()
 {
     if (this->_score.player.empty()) {
-        auto placeholder = std::make_shared<Text>(this->_font, 6, "Guest", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
+        auto placeholder = std::make_shared<Text>(this->_font, 30, "Guest", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
         this->_nameField = placeholder;
     } else {
         auto truncatName = this->_truncString(this->_score.player, 17);
-        auto name = std::make_shared<Text>(this->_font, 8, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
+        auto name = std::make_shared<Text>(this->_font, 35, truncatName, TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
         this->_nameField = name;
     }
     if (this->_nameField)
@@ -602,8 +594,9 @@ void Menu::_writeScore()
     }
 
     scoreFile << "Game\tPlayer\tScore" << std::endl;
+    auto player = this->_score.player.empty() ? "Guest" : this->_score.player;
     for (auto score : this->_scores) {
-        scoreFile << score.game << "\t" << score.player << "\t" << score.score << std::endl;
+        scoreFile << score.game << "\t" << player << "\t" << score.score << std::endl;
     }
     scoreFile.close();
 }

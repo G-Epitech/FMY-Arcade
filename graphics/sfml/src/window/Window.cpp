@@ -13,7 +13,7 @@
 using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::common::exceptions;
 
-const Vector2u Window::tileSize = { 12, 12 };
+const Vector2u Window::tileSize = { 35, 35 };
 
 #include <iostream>
 Window::Window(const IWindow::WindowInitProps &props):
