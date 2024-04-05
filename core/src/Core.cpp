@@ -534,6 +534,7 @@ void Core::run()
         previousTime = currentTime;
 
         if (this->_sceneStage == MENU) {
+            this->_menu.updateScore(this->_game);
             this->_handleWindowClose();
             this->_menu.run();
             previousTime = std::chrono::high_resolution_clock::now();

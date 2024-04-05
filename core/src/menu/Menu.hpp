@@ -38,9 +38,25 @@ class Menu {
          */
         void run();
 
+        /**
+         * @brief Update the score
+         * 
+         * @param game Game
+         */
+        void updateScore(std::shared_ptr<IGame> game);
+
     private:
-        std::shared_ptr<IWindow> _window;
+
+        typedef struct {
+            std::string game;
+            std::string player;
+            int score;
+        } Score;
+
+        Score _score;
+        std::vector<Score> _scores;
         SceneStage &_sceneStage;
+        std::shared_ptr<IWindow> _window;
         GameProviders &_gameProviders;
         GraphicsProviders &_graphicsProviders;
         std::shared_ptr<IGameProvider> &_gameProvider;
@@ -175,4 +191,16 @@ class Menu {
          * @return std::shared_ptr<IGraphicsProvider> 
          */
         std::shared_ptr<IGraphicsProvider>& _getGraphicsProvider(const unsigned char &index);
+
+        /**
+         * @brief Read the scores
+         * 
+         */
+        void _readScores();
+
+        /**
+         * @brief Write the scores
+         * 
+         */
+        void _writeScore();
 };

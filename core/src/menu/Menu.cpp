@@ -5,15 +5,25 @@
 ** Menu
 */
 
+#include <fstream>
+#include <sstream>
 #include <iostream>
 #include "Menu.hpp"
 
 Menu::Menu(GameProviders &gameProviders, GraphicsProviders &graphicsProviders,
     std::shared_ptr<IGameProvider> &gameProvider, std::shared_ptr<IGraphicsProvider> &graphicsProvider, arcade::core::SceneStage &sceneStage) :
     _gameProviders(gameProviders), _graphicsProviders(graphicsProviders),
-    _gameProvider(gameProvider), _graphicsProvider(graphicsProvider), _sceneStage(sceneStage) {}
+    _gameProvider(gameProvider), _graphicsProvider(graphicsProvider), _sceneStage(sceneStage)
+{
+    this->_score.player = "Player";
+    this->_score.score = 0;
+    this->_readScores();
+}
 
-Menu::~Menu() {}
+Menu::~Menu()
+{
+    this->_writeScore();
+}
 
 std::shared_ptr<IGameProvider> &Menu::_getGameProvider(const unsigned char &index)
 {
@@ -345,10 +355,65 @@ void Menu::_previousSelectedGame()
 void Menu::run()
 {
     this->_sceneStage = MENU;
+    this->_score.player = "Player";
     this->_initWindow();
     this->_previousSelectedGame();
     while (this->_window->isOpen()) {
         this->_handleEvents();
         this->_render();
     }
+}
+
+void Menu::_readScores()
+{
+    std::ifstream scoreFile("./scores.txt");
+
+    if (!scoreFile.is_open()) {
+        std::cout << "Can't open scores file" << std::endl;
+        return;
+    }
+
+    std::string line;
+    std::getline(scoreFile, line);
+
+    while (std::getline(scoreFile, line)) {
+        std::stringstream ss(line);
+        Score score;
+        ss >> score.game >> score.player >> score.score;
+        this->_scores.push_back(score);
+    }
+    scoreFile.close();
+}
+
+void Menu::_writeScore()
+{
+    std::ofstream scoreFile("./scores.txt");
+
+    if (!scoreFile.is_open()) {
+        std::cout << "Can't open scores file" << std::endl;
+        return;
+    }
+
+    scoreFile << "Game\tPlayer\tScore" << std::endl;
+    for (auto score : this->_scores) {
+        scoreFile << score.game << "\t" << score.player << "\t" << score.score << std::endl;
+    }
+    scoreFile.close();
+}
+
+void Menu::updateScore(std::shared_ptr<IGame> game)
+{
+    this->_score.game = game->getManifest().name;
+    this->_score.score = game->getScore();
+
+    std::cout << "Score: " << this->_score.score << std::endl;
+    for (auto &score : this->_scores) {
+        if (score.game == this->_score.game && score.player == this->_score.player) {
+            if (score.score < this->_score.score)
+                score.score = this->_score.score;
+            std::cout << "Score updated: " << score.score << std::endl;
+            return;
+        }
+    }
+    this->_scores.push_back(this->_score);
 }

@@ -101,4 +101,5 @@ void snake::SnakeGame::addNewPoint() {
     this->_registerEntity(newTail);
     this->_apple->generateApple();
     this->speedTime -= 2;
+    this->_score += 10;
 }

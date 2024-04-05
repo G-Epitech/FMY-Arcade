@@ -44,8 +44,6 @@ class Core {
             components::SoundState previousGameState;
         } SoundProps;
 
-        int _playerScore;
-        std::string _playerName;
         std::shared_ptr<IGame> _game;
         std::shared_ptr<IWindow> _window;
         std::shared_ptr<IGameProvider> _gameProvider;
@@ -77,12 +75,6 @@ class Core {
          * 
          */
         void _renderEntities();
-
-        /**
-         * @brief Save score
-         * 
-         */
-        void _saveScore();
 
         /**
          * @brief Load the failed texture
