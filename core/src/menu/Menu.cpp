@@ -361,12 +361,11 @@ void Menu::_handleSelectLowerCheckBox()
             break;
         }
     }
-    std::cout << "games size: " << this->_graphicsCheckBoxes.size() << std::endl;
     for (auto checkBox : this->_gamesCheckBoxes) {
         if (checkBox->isHovered()) {
             checkBox->unhover();
             auto index = std::distance(this->_gamesCheckBoxes.begin(), std::find(this->_gamesCheckBoxes.begin(), this->_gamesCheckBoxes.end(), checkBox));
-            if (index == this->_gamesCheckBoxes.size() - 1 && !this->_graphicsCheckBoxes.empty()) {
+            if (index == this->_gamesCheckBoxes.size() - 1) {
                 this->_graphicsCheckBoxes.at(0)->hover();
                 this->_checkBoxType = GRAPHICS_CHECKBOX;
             } else {
