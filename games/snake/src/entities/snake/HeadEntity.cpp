@@ -23,7 +23,11 @@ arcade::games::snake::HeadEntity::HeadEntity() : _textureProps(
                                                                                    this->_textureProps);
     std::shared_ptr<components::HeadKeyboardComponent> keyboard = std::make_shared<components::HeadKeyboardComponent>(
             *this);
+    auto keyboardSounds = keyboard->sounds;
 
+    for (auto &sound: keyboardSounds) {
+        this->_components.push_back(sound.second);
+    }
     this->_components.push_back(collide);
     this->_components.push_back(texture);
     this->_components.push_back(keyboard);
@@ -72,6 +76,7 @@ void arcade::games::snake::HeadEntity::_onCollide(std::shared_ptr<shared::games:
     if (!game)
         return;
     if (dynamic_cast<const WallEntity *>(&target->getEntity()) || dynamic_cast<const TailEntity *>(&target->getEntity())) {
+        game->changeStateSound("death", SoundState::PLAY);
         game->setLooseGame(true);
     }
 }

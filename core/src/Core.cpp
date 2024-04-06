@@ -478,11 +478,13 @@ void Core::_handleSoundComponent(std::shared_ptr<components::ISoundComponent> &g
             gameSound->onStateChange(this->_game, components::PAUSE);
         if (graphicSoundState == ISound::SoundState::STOP)
             gameSound->onStateChange(this->_game, components::STOP);
+        sound.previousGraphicState = graphicSoundState;
     }
     if (gameSoundVolume != graphicSoundVolume)
         sound.sound->setVolume(gameSoundVolume);
     if (gameSoundLoop != graphicSoundLoop)
         sound.sound->setLoopState(gameSoundLoop);
+    this->_sounds[gameSoundPath] = sound;
 }
 
 void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IComponent> &component)

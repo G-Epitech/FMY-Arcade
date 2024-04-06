@@ -13,5 +13,7 @@ target_sources(${PROJECT_NAME} PUBLIC
         components/CollidableComponent.cpp
         components/TextureComponent.hpp
         components/TextureComponent.cpp
+        components/SoundComponent.hpp
+        components/SoundComponent.cpp
 )
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/../..)
