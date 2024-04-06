@@ -692,10 +692,11 @@ void Menu::_writeScore()
 
 void Menu::updateScore(std::shared_ptr<IGame> game)
 {
+    if (!game)
+        return;
     this->_score.game = game->getManifest().name;
     this->_score.score = game->getScore();
 
-    std::cout << "Player Score: " << this->_score.score << std::endl;
     for (auto &score : this->_scores) {
         auto playerName = this->_score.player.empty() ? "Guest" : this->_score.player;
         auto scoreName = score.player.empty() ? "Guest" : score.player;

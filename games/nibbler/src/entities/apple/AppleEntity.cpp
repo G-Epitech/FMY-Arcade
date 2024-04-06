@@ -20,8 +20,6 @@ arcade::games::nibbler::AppleEntity::AppleEntity(shared::types::Vector2u size): 
     this->_create(Vector2i(size.x, size.y));
 }
 
-void AppleEntity::generateApple() {}
-
 void AppleEntity::_create(Vector2i position) {
     shared::games::components::TextureProps textureProps = {
             .sources = {

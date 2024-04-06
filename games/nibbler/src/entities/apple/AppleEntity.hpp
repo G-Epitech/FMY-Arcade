@@ -26,12 +26,6 @@ public:
     explicit AppleEntity(shared::types::Vector2u
     size);
 
-    /**
-     * @brief Update the position of the apple on the map
-     * (As a new apple reward for the player)
-     */
-    void generateApple();
-
     shared::types::Vector2u postion;
 
 protected:
