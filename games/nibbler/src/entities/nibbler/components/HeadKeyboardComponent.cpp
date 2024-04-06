@@ -28,13 +28,11 @@ HeadKeyboardComponent::HeadKeyboardComponent(HeadEntity &entity) : AComponent(KE
     this->sounds["death"] = death;
 }
 
-#include <iostream>
 void HeadKeyboardComponent::onKeyPress(std::shared_ptr<shared::games::IGame> ctx,
                                    shared::games::components::IKeyboardComponent::KeyData keyData)
 {
     auto game = std::dynamic_pointer_cast<NibblerGame>(ctx);
 
-    std::cout << "Key pressed" << std::endl;
     if (!game)
         return;
     if (!game->moved && keyData.type == ARROW) {

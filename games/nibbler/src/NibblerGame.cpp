@@ -149,29 +149,17 @@ bool nibbler::NibblerGame::isValidDirection(Vector2i direction) {
     auto headPosition = this->_nibbler->head->position;
 
     if (direction.x == 0 && direction.y == -1) {
-        std::cout << "Trying to go UP" << std::endl;
-        if (this->_map[headPosition.x][headPosition.y - 1] == WALL) {
-            std::cout << "UP is wall" << std::endl;
+        if (this->_map[headPosition.x][headPosition.y - 1] == WALL)
             return false;
-        }
     } else if (direction.x == 0 && direction.y == 1) {
-        std::cout << "Trying to go DOWN" << std::endl;
-        if (this->_map[headPosition.x][headPosition.y + 1] == WALL) {
-            std::cout << "DOWN is wall" << std::endl;
+        if (this->_map[headPosition.x][headPosition.y + 1] == WALL)
             return false;
-        }
     } else if (direction.x == -1 && direction.y == 0) {
-        std::cout << "Trying to go LEFT" << std::endl;
-        if (this->_map[headPosition.x - 1][headPosition.y] == WALL) {
-            std::cout << "LEFT is wall" << std::endl;
+        if (this->_map[headPosition.x - 1][headPosition.y] == WALL)
             return false;
-        }
     } else if (direction.x == 1 && direction.y == 0) {
-        std::cout << "Trying to go RIGHT" << std::endl;
-        if (this->_map[headPosition.x + 1][headPosition.y] == WALL) {
-            std::cout << "RIGHT is wall" << std::endl;
+        if (this->_map[headPosition.x + 1][headPosition.y] == WALL)
             return false;
-        }
     }
     return true;
 }
@@ -181,87 +169,59 @@ void nibbler::NibblerGame::_preventWallCollision() {
     auto headPosition = this->_nibbler->head->position;
 
     if (headDirection.x == 0 && headDirection.y == -1) {
-        std::cout << "Is UP" << std::endl;
         if (this->_map[headPosition.x][headPosition.y - 1] == WALL) {
-            std::cout << "UP is wall, we have to do a choice" << std::endl;
             if (this->_map[headPosition.x - 1][headPosition.y] == SPACE && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
-                std::cout << "LEFT and RIGHT are space, we have to do a choice" << std::endl;
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x - 1][headPosition.y] == WALL && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
-                std::cout << "LEFT is wall, we have to go RIGHT" << std::endl;
                 this->_nibbler->head->direction = Vector2i(1, 0);
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x + 1][headPosition.y] == WALL && this->_map[headPosition.x - 1][headPosition.y] == SPACE) {
-                std::cout << "RIGHT is wall, we have to go LEFT" << std::endl;
                 this->_nibbler->head->direction = Vector2i(-1, 0);
                 this->canMakeChoice = true;
                 this->moved = true;
-            } else {
-                std::cerr << "Error: cannot prevent wall collision, snake gonna die soon" << std::endl;
             }
         }
     } else if (headDirection.x == 0 && headDirection.y == 1) {
-        std::cout << "Is DOWN" << std::endl;
         if (this->_map[headPosition.x][headPosition.y + 1] == WALL) {
-            std::cout << "DOWN is wall, we have to do a choice" << std::endl;
             if (this->_map[headPosition.x - 1][headPosition.y] == SPACE && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
-                std::cout << "LEFT and RIGHT are space, we have to do a choice" << std::endl;
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x - 1][headPosition.y] == WALL && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
-                std::cout << "LEFT is wall, we have to go RIGHT" << std::endl;
                 this->_nibbler->head->direction = Vector2i(1, 0);
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x + 1][headPosition.y] == WALL && this->_map[headPosition.x - 1][headPosition.y] == SPACE) {
-                std::cout << "RIGHT is wall, we have to go LEFT" << std::endl;
                 this->_nibbler->head->direction = Vector2i(-1, 0);
                 this->canMakeChoice = true;
                 this->moved = true;
-            } else {
-                std::cerr << "Error: cannot prevent wall collision, snake gonna die soon" << std::endl;
             }
         }
     } else if (headDirection.x == -1 && headDirection.y == 0) {
-        std::cout << "Is LEFT" << std::endl;
         if (this->_map[headPosition.x - 1][headPosition.y] == WALL) {
-            std::cout << "LEFT is wall, we have to do a choice" << std::endl;
             if (this->_map[headPosition.x][headPosition.y - 1] == SPACE && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
-                std::cout << "UP and DOWN are space, we have to do a choice" << std::endl;
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x][headPosition.y - 1] == WALL && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
-                std::cout << "UP is wall, we have to go DOWN" << std::endl;
                 this->_nibbler->head->direction = Vector2i(0, 1);
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x][headPosition.y + 1] == WALL && this->_map[headPosition.x][headPosition.y - 1] == SPACE) {
-                std::cout << "DOWN is wall, we have to go UP" << std::endl;
                 this->_nibbler->head->direction = Vector2i(0, -1);
                 this->canMakeChoice = true;
                 this->moved = true;
-            } else {
-                std::cerr << "Error: cannot prevent wall collision, snake gonna die soon" << std::endl;
             }
         }
     } else if (headDirection.x == 1 && headDirection.y == 0) {
-        std::cout << "Is RIGHT" << std::endl;
         if (this->_map[headPosition.x + 1][headPosition.y] == WALL) {
-            std::cout << "RIGHT is wall, we have to do a choice" << std::endl;
             if (this->_map[headPosition.x][headPosition.y - 1] == SPACE && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
-                std::cout << "UP and DOWN are space, we have to do a choice" << std::endl;
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x][headPosition.y - 1] == WALL && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
-                std::cout << "UP is wall, we have to go DOWN" << std::endl;
                 this->_nibbler->head->direction = Vector2i(0, 1);
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x][headPosition.y + 1] == WALL && this->_map[headPosition.x][headPosition.y - 1] == SPACE) {
-                std::cout << "DOWN is wall, we have to go UP" << std::endl;
                 this->_nibbler->head->direction = Vector2i(0, -1);
                 this->canMakeChoice = true;
                 this->moved = true;
-            } else {
-                std::cerr << "Error: cannot prevent wall collision, snake gonna die soon" << std::endl;
             }
         }
     }
