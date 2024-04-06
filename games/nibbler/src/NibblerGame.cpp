@@ -12,7 +12,7 @@
 #include "entities/background/BackgroundEntity.hpp"
 #include "entities/apple/AppleEntity.hpp"
 #include "common/components/TextureComponent.hpp"
-#include "entities/nibbler/components/HeadKeyboardComponent.hpp"
+#include "entities/nibbler/HeadEntity.hpp"
 
 using namespace arcade::games;
 
@@ -135,13 +135,7 @@ void nibbler::NibblerGame::changeStateSound(const std::string &soundName, shared
         auto head = std::dynamic_pointer_cast<nibbler::HeadEntity>(entity);
         if (head == nullptr)
             continue;
-        auto components = head->getComponents();
-        for (auto &component: components) {
-            auto sound = std::dynamic_pointer_cast<arcade::games::nibbler::components::HeadKeyboardComponent>(component);
-            if (sound == nullptr)
-                continue;
-            sound->sounds[soundName]->setState(state);
-        }
+        head->sounds[soundName]->setState(state);
     }
 }
 
@@ -173,11 +167,11 @@ void nibbler::NibblerGame::_preventWallCollision() {
             if (this->_map[headPosition.x - 1][headPosition.y] == SPACE && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x - 1][headPosition.y] == WALL && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(1, 0);
+                this->_nibbler->head->setDirection(Vector2i(1, 0));
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x + 1][headPosition.y] == WALL && this->_map[headPosition.x - 1][headPosition.y] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(-1, 0);
+                this->_nibbler->head->setDirection(Vector2i(-1, 0));
                 this->canMakeChoice = true;
                 this->moved = true;
             }
@@ -187,11 +181,11 @@ void nibbler::NibblerGame::_preventWallCollision() {
             if (this->_map[headPosition.x - 1][headPosition.y] == SPACE && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x - 1][headPosition.y] == WALL && this->_map[headPosition.x + 1][headPosition.y] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(1, 0);
+                this->_nibbler->head->setDirection(Vector2i(1, 0));
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x + 1][headPosition.y] == WALL && this->_map[headPosition.x - 1][headPosition.y] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(-1, 0);
+                this->_nibbler->head->setDirection(Vector2i(-1, 0));
                 this->canMakeChoice = true;
                 this->moved = true;
             }
@@ -201,11 +195,11 @@ void nibbler::NibblerGame::_preventWallCollision() {
             if (this->_map[headPosition.x][headPosition.y - 1] == SPACE && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x][headPosition.y - 1] == WALL && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(0, 1);
+                this->_nibbler->head->setDirection(Vector2i(0, 1));
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x][headPosition.y + 1] == WALL && this->_map[headPosition.x][headPosition.y - 1] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(0, -1);
+                this->_nibbler->head->setDirection(Vector2i(0, -1));
                 this->canMakeChoice = true;
                 this->moved = true;
             }
@@ -215,11 +209,11 @@ void nibbler::NibblerGame::_preventWallCollision() {
             if (this->_map[headPosition.x][headPosition.y - 1] == SPACE && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
                 this->canMakeChoice = false;
             } else if (this->_map[headPosition.x][headPosition.y - 1] == WALL && this->_map[headPosition.x][headPosition.y + 1] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(0, 1);
+                this->_nibbler->head->setDirection(Vector2i(0, 1));
                 this->canMakeChoice = true;
                 this->moved = true;
             } else if (this->_map[headPosition.x][headPosition.y + 1] == WALL && this->_map[headPosition.x][headPosition.y - 1] == SPACE) {
-                this->_nibbler->head->direction = Vector2i(0, -1);
+                this->_nibbler->head->setDirection(Vector2i(0, -1));
                 this->canMakeChoice = true;
                 this->moved = true;
             }
@@ -238,12 +232,9 @@ void nibbler::NibblerGame::changeToLevel(int level) {
     std::size_t x = 0;
     std::size_t y = 0;
 
-    this->_entities.erase(std::remove_if(this->_entities.begin(), this->_entities.end(), [](const shared::games::entity::EntityPtr& entity) {
-        auto tail = std::dynamic_pointer_cast<TailEntity>(entity);
-        return !(tail == nullptr);
-    }), this->_entities.end());
-
+    this->_entities.clear();
     this->_nibbler->reset();
+    this->_registerEntity(this->_nibbler->head);
     for (auto &tail: this->_nibbler->getTails()) {
         this->_registerEntity(tail);
     }

@@ -7,9 +7,11 @@
 
 #pragma once
 
+#include <map>
 #include "common/entity/AEntity.hpp"
 #include "common/components/CollidableComponent.hpp"
 #include "common/components/TextureComponent.hpp"
+#include "common/components/SoundComponent.hpp"
 
 namespace arcade::games::nibbler {
     class NibblerGame;
@@ -37,6 +39,12 @@ public:
     Vector2i direction;
 
     /**
+     * @brief Set the direction of the nibbler head
+     * @param dir Direction
+     */
+    void setDirection(Vector2i dir);
+
+    /**
      * @brief Position of the nibbler head
      */
     Vector2i position;
@@ -45,6 +53,9 @@ public:
      * @brief Set the head at default position
      */
     void reset();
+
+    /// @brief Map of sounds
+    std::map<std::string, std::shared_ptr<arcade::games::common::components::SoundComponent>> sounds;
 
 protected:
     /**
@@ -62,5 +73,54 @@ protected:
     static void _onCollide(std::shared_ptr<shared::games::IGame> ctx,
                            std::shared_ptr<shared::games::components::ICollidableComponent> target);
 
+    Vector2i _previousDirection;
     shared::games::components::TextureProps _textureProps;
+
+    /**
+     * @brief On sound state change event UP
+     * 
+     * @param ctx Game context
+     * @param state new state of the sound
+     */
+    static void _onSoundStateChangeUp(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state);
+
+    /**
+     * @brief On sound state change event DOWN
+     * 
+     * @param ctx Game context
+     * @param state new state of the sound
+     */
+    static void _onSoundStateChangeDown(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state);
+
+    /**
+     * @brief On sound state change event LEFT
+     * 
+     * @param ctx Game context
+     * @param state new state of the sound
+     */
+    static void _onSoundStateChangeLeft(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state);
+
+    /**
+     * @brief On sound state change event RIGHT
+     * 
+     * @param ctx Game context
+     * @param state new state of the sound
+     */
+    static void _onSoundStateChangeRight(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state);
+
+    /**
+     * @brief On sound state change event EAT
+     * 
+     * @param ctx Game context
+     * @param state new state of the sound
+     */
+    static void _onSoundStateChangeEat(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state);
+
+    /**
+     * @brief On sound state change event DEATH
+     * 
+     * @param ctx Game context
+     * @param state new state of the sound
+     */
+    static void _onSoundStateChangeDeath(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state);
 };
