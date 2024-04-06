@@ -19,6 +19,7 @@ Menu::Menu(GameProviders &gameProviders, GraphicsProviders &graphicsProviders,
     this->_score.score = 0;
     this->_readScores();
     this->_textType = GAME;
+    this->_music = nullptr;
 }
 
 Menu::~Menu()
@@ -148,11 +149,16 @@ void Menu::_initNoGameFound()
 
 void Menu::_initCheckBoxesGames()
 {
-    auto texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
+    std::shared_ptr<shared::graphics::ITexture> texture = nullptr;
     auto font = this->_font;
     float index = 9.0;
     int count = 0;
 
+    try {
+        texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
     for (auto gameProvider : this->_gameProviders) {
         if (count > 5)
             break;
@@ -206,11 +212,16 @@ void Menu::_initHiddenGraphics(const GraphicsManifest &graphicsManifest, std::sh
 
 void Menu::_initCheckBoxesGraphics()
 {
-    auto texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
+    std::shared_ptr<shared::graphics::ITexture> texture = nullptr;
     auto font = this->_font;
     float index = 17.0;
     int count = 0;
 
+    try {
+        texture = this->_graphicsProvider->createTexture("assets/menu/img/space-invader.png", "assets/menu/img/space-invader.ascii");
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
     for (auto graphicsProvider : this->_graphicsProviders) {
         if (count > 5)
             break;
@@ -230,12 +241,16 @@ void Menu::_initCheckBoxesGraphics()
 
 void Menu::_initTextures()
 {
-    auto backgroundTexture = this->_graphicsProvider->createTexture("assets/menu/img/background.png", "assets/menu/img/background.ascii");
-    this->_textures.push_back(std::make_shared<Texture>(backgroundTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{50, 25}, Vector2f{0, 0}));
-    auto titleTexture = this->_graphicsProvider->createTexture("assets/menu/img/title.png", "assets/menu/img/title.ascii");
-    this->_textures.push_back(std::make_shared<Texture>(titleTexture, Vector2f{17, 17}, Vector2u{0, 0}, Vector2u{31, 5}, Vector2f{10, 1}));
-    auto middleTexture = this->_graphicsProvider->createTexture("assets/menu/img/middle.png", "assets/menu/img/middle.ascii");
-    this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 15}, Vector2f{24, 7}));
+    try {
+        auto backgroundTexture = this->_graphicsProvider->createTexture("assets/menu/img/background.png", "assets/menu/img/background.ascii");
+        this->_textures.push_back(std::make_shared<Texture>(backgroundTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{50, 25}, Vector2f{0, 0}));
+        auto titleTexture = this->_graphicsProvider->createTexture("assets/menu/img/title.png", "assets/menu/img/title.ascii");
+        this->_textures.push_back(std::make_shared<Texture>(titleTexture, Vector2f{17, 17}, Vector2u{0, 0}, Vector2u{31, 5}, Vector2f{10, 1}));
+        auto middleTexture = this->_graphicsProvider->createTexture("assets/menu/img/middle.png", "assets/menu/img/middle.ascii");
+        this->_textures.push_back(std::make_shared<Texture>(middleTexture, Vector2f{12, 12}, Vector2u{0, 0}, Vector2u{1, 15}, Vector2f{24, 7}));
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void Menu::_initTexts()
@@ -269,6 +284,14 @@ void Menu::_preventGraphicsProvider()
     std::cout << "No graphics provider found, using default provider" << std::endl;
 }
 
+void Menu::_initMusic()
+{
+    this->_music = this->_graphicsProvider->createSound("assets/menu/sounds/music.wav");
+    this->_music->setVolume(50);
+    this->_music->setLoopState(true);
+    this->_music->setState(ISound::SoundState::PLAY);
+}
+
 void Menu::_initWindow()
 {
     IWindow::WindowInitProps windowInitProps {
@@ -279,13 +302,18 @@ void Menu::_initWindow()
         .icon = "assets/menu/img/icon.png"
     };
 
-    this->_clearLists();
-    this->_preventGraphicsProvider();
-    this->_initTexts();
-    this->_initTextures();
-    this->_initCheckBoxesGames();
-    this->_initCheckBoxesGraphics();
-    this->_window = this->_graphicsProvider->createWindow(windowInitProps);
+    try {
+        this->_window = this->_graphicsProvider->createWindow(windowInitProps);
+        this->_clearLists();
+        this->_preventGraphicsProvider();
+        this->_initTexts();
+        this->_initTextures();
+        this->_initCheckBoxesGames();
+        this->_initCheckBoxesGraphics();
+        this->_initMusic();
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void Menu::_handleSelectUpperCheckBox()
@@ -342,7 +370,7 @@ void Menu::_handleSelectLowerCheckBox()
                 this->_checkBoxType = GRAPHICS_CHECKBOX;
             } else {
                 this->_gamesCheckBoxes.at(index + 1)->hover();
-            } 
+            }
             break;
         }
     }
@@ -512,6 +540,8 @@ void Menu::_handleEvents()
 
 void Menu::_renderField()
 {
+    if (!this->_font)
+        return;
     if (this->_score.player.empty()) {
         auto placeholder = std::make_shared<Text>(this->_font, 30, "Guest", TextAlign::CENTER, TextVerticalAlign::MIDDLE, Color{255, 255, 255, 255}, Vector2u{16, 1}, Vector2f{17, 23});
         this->_nameField = placeholder;
@@ -560,6 +590,8 @@ void Menu::_render()
 void Menu::_previousSelectedGame()
 {
     this->_checkBoxType = GAME_CHECKBOX;
+    if (this->_gamesCheckBoxes.empty())
+        return;
     for (auto gameProvider : this->_gameProviders) {
         if (this->_gameProvider == gameProvider.second) {
             auto index = std::distance(this->_gameProviders.begin(), std::find(this->_gameProviders.begin(), this->_gameProviders.end(), gameProvider));
@@ -579,6 +611,8 @@ void Menu::_previousSelectedGame()
 
 void Menu::_previousSelectedGraphics()
 {
+    if (this->_graphicsCheckBoxes.empty())
+        return;
     for (auto graphicsProvider : this->_graphicsProviders) {
         if (this->_graphicsProvider == graphicsProvider.second) {
             auto index = std::distance(this->_graphicsProviders.begin(), std::find(this->_graphicsProviders.begin(), this->_graphicsProviders.end(), graphicsProvider));
@@ -608,10 +642,14 @@ void Menu::run()
     this->_initWindow();
     this->_previousSelectedGame();
     this->_previousSelectedGraphics();
+    if (!this->_window)
+        throw ArcadeError("Can't create window");
     while (this->_window->isOpen()) {
         this->_handleEvents();
         this->_render();
     }
+    if (this->_music)
+        this->_music->setState(ISound::SoundState::STOP);
 }
 
 void Menu::_readScores()

@@ -10,6 +10,7 @@
 #include "common/game/AGame.hpp"
 #include "games/snake/src/entities/snake/Snake.hpp"
 #include "entities/apple/AppleEntity.hpp"
+#include "common/components/SoundComponent.hpp"
 
 namespace arcade::games::snake {
     class SnakeGame;
@@ -53,9 +54,19 @@ public:
      */
     void addNewPoint();
 
+    /**
+     * @brief Change the state of a sound
+     * 
+     * @param soundName Name of the sound
+     * @param state State of the sound
+     */
+    void changeStateSound(const std::string &soundName, shared::games::components::SoundState state);
+
     unsigned int speedTime;
 
     unsigned int speedBoost;
+
+    bool moved;
 
 protected:
     /**
@@ -67,4 +78,5 @@ protected:
     std::shared_ptr<AppleEntity> _apple;
     shared::games::DeltaTime _clock;
     bool _looseGame;
+    int _currentScore;
 };

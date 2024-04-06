@@ -81,6 +81,7 @@ class Menu {
         std::map<std::shared_ptr<CheckBox>, std::vector<std::shared_ptr<Text>>> _hiddenAuthors;
         std::shared_ptr<IFont> _font;
         std::shared_ptr<Text> _nameField;
+        std::shared_ptr<ISound> _music;
 
         /**
          * @brief Initialize the window
@@ -192,6 +193,12 @@ class Menu {
          * 
          */
         void _initTextures();
+
+        /**
+         * @brief Initialize Background Music
+         * 
+         */
+        void _initMusic();
 
         /**
          * @brief Initialize hidden textures

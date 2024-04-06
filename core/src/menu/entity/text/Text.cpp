@@ -28,7 +28,11 @@ void Text::draw(std::shared_ptr<IWindow> window)
         .position = this->_position
     };
 
-    window->render(textProps);
+    try {
+        window->render(textProps);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void Text::setColor(Color color)

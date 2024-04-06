@@ -15,7 +15,6 @@ using namespace arcade::graphics::common::exceptions;
 
 const Vector2u Window::tileSize = { 35, 35 };
 
-#include <iostream>
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
     _initialSize(0, 0),

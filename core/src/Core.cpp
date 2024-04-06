@@ -303,6 +303,9 @@ void Core::_changeGameProvider(const unsigned char &index)
     }
     auto newProvider = this->_getGameProvider(index);
     this->_gameProvider = newProvider;
+    this->_textures.clear();
+    this->_fonts.clear();
+    this->_sounds.clear();
     this->_initGame();
     this->_initWindow();
 }
@@ -376,9 +379,18 @@ void Core::_handleMouseMove(std::shared_ptr<events::IMouseEvent> &event, std::sh
         component->onMouseHover(this->_game);
 }
 
+void Core::_stopAllGraphicsSounds()
+{
+    for (auto &sound : this->_sounds) {
+        sound.second.sound->setState(ISound::SoundState::PAUSE);
+        sound.second.previousGameState = components::PAUSE;
+    }
+}
+
 void Core::_handleWindowClose()
 {
     if (this->_window && this->_window->isOpen()) {
+        this->_stopAllGraphicsSounds();
         this->_window->close();
         this->_menu.updateScore(this->_game);
     }
@@ -478,11 +490,13 @@ void Core::_handleSoundComponent(std::shared_ptr<components::ISoundComponent> &g
             gameSound->onStateChange(this->_game, components::PAUSE);
         if (graphicSoundState == ISound::SoundState::STOP)
             gameSound->onStateChange(this->_game, components::STOP);
+        sound.previousGraphicState = graphicSoundState;
     }
     if (gameSoundVolume != graphicSoundVolume)
         sound.sound->setVolume(gameSoundVolume);
     if (gameSoundLoop != graphicSoundLoop)
         sound.sound->setLoopState(gameSoundLoop);
+    this->_sounds[gameSoundPath] = sound;
 }
 
 void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IComponent> &component)
