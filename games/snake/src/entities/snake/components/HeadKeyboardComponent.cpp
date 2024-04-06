@@ -93,47 +93,59 @@ void HeadKeyboardComponent::_playSound(const std::string &soundName)
 void HeadKeyboardComponent::_onSoundStateChangeUp(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state)
 {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
-    if (state == shared::games::components::SoundState::STOP) {
+
+    if (!game)
+        return;
+    if (state == shared::games::components::SoundState::STOP)
         game->changeStateSound("up", shared::games::components::SoundState::STOP);
-    }
 }
 
 void HeadKeyboardComponent::_onSoundStateChangeDown(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state)
 {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
-    if (state == shared::games::components::SoundState::STOP) {
+
+    if (!game)
+        return;
+    if (state == shared::games::components::SoundState::STOP)
         game->changeStateSound("down", shared::games::components::SoundState::STOP);
-    }
 }
 
 void HeadKeyboardComponent::_onSoundStateChangeLeft(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state)
 {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
-    if (state == shared::games::components::SoundState::STOP) {
+
+    if (!game)
+        return;
+    if (state == shared::games::components::SoundState::STOP)
         game->changeStateSound("left", shared::games::components::SoundState::STOP);
-    }
 }
 
 void HeadKeyboardComponent::_onSoundStateChangeRight(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state)
 {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
-    if (state == shared::games::components::SoundState::STOP) {
+
+    if (!game)
+        return;
+    if (state == shared::games::components::SoundState::STOP)
         game->changeStateSound("right", shared::games::components::SoundState::STOP);
-    }
 }
 
 void HeadKeyboardComponent::_onSoundStateChangeEat(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state)
 {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
-    if (state == shared::games::components::SoundState::STOP) {
+
+    if (!game)
+        return;
+    if (state == shared::games::components::SoundState::STOP)
         game->changeStateSound("eat", shared::games::components::SoundState::STOP);
-    }
 }
 
 void HeadKeyboardComponent::_onSoundStateChangeDeath(std::shared_ptr<shared::games::IGame> ctx, shared::games::components::SoundState state)
 {
     auto game = std::dynamic_pointer_cast<SnakeGame>(ctx);
-    if (state == shared::games::components::SoundState::STOP) {
+
+    if (!game)
+        return;
+    if (state == shared::games::components::SoundState::STOP)
         game->changeStateSound("death", shared::games::components::SoundState::STOP);
-    }
 }
