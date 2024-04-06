@@ -23,7 +23,11 @@ void Texture::draw(std::shared_ptr<IWindow> window)
         .position = this->_position
     };
 
-    window->render(textureProps);
+    try {
+        window->render(textureProps);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 void Texture::setOrigin(Vector2u origin)

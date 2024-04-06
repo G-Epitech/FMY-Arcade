@@ -303,6 +303,9 @@ void Core::_changeGameProvider(const unsigned char &index)
     }
     auto newProvider = this->_getGameProvider(index);
     this->_gameProvider = newProvider;
+    this->_textures.clear();
+    this->_fonts.clear();
+    this->_sounds.clear();
     this->_initGame();
     this->_initWindow();
 }
@@ -376,9 +379,18 @@ void Core::_handleMouseMove(std::shared_ptr<events::IMouseEvent> &event, std::sh
         component->onMouseHover(this->_game);
 }
 
+void Core::_stopAllGraphicsSounds()
+{
+    for (auto &sound : this->_sounds) {
+        sound.second.sound->setState(ISound::SoundState::PAUSE);
+        sound.second.previousGameState = components::PAUSE;
+    }
+}
+
 void Core::_handleWindowClose()
 {
     if (this->_window && this->_window->isOpen()) {
+        this->_stopAllGraphicsSounds();
         this->_window->close();
         this->_menu.updateScore(this->_game);
     }

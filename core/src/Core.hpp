@@ -248,6 +248,12 @@ class Core {
         void _handleWindowClose();
 
         /**
+         * @brief Stop all sounds
+         * 
+         */
+        void _stopAllGraphicsSounds();
+
+        /**
          * @brief Handle the window resize event
          * 
          */
