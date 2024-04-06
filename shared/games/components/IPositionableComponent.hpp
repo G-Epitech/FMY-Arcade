@@ -23,7 +23,7 @@ class shared::games::components::IPositionableComponent: public virtual ICompone
      * @brief Get position of the entity (tiles)
      *
      */
-    virtual types::Vector2i &getPosition() noexcept = 0;
+    virtual types::Vector2f &getPosition() noexcept = 0;
 
     /**
      * @brief Get size of the entity (tiles)

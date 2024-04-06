@@ -7,7 +7,8 @@
 
 #pragma once
 
+#include <map>
 #include "shared/types/Libraries.hpp"
 
-typedef std::vector<std::shared_ptr<shared::games::IGameProvider>> GameProviders;
-typedef std::vector<std::shared_ptr<shared::graphics::IGraphicsProvider>> GraphicsProviders;
+typedef std::map<std::string, std::shared_ptr<shared::games::IGameProvider>> GameProviders;
+typedef std::map<std::string, std::shared_ptr<shared::graphics::IGraphicsProvider>> GraphicsProviders;

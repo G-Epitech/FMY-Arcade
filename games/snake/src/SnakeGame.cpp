@@ -89,6 +89,7 @@ void snake::SnakeGame::_loose() {
     }
 
     this->_looseGame = false;
+    this->_score = 0;
 }
 
 void snake::SnakeGame::setLooseGame(bool state) {
@@ -101,4 +102,5 @@ void snake::SnakeGame::addNewPoint() {
     this->_registerEntity(newTail);
     this->_apple->generateApple();
     this->speedTime -= 2;
+    this->_score += 10;
 }
