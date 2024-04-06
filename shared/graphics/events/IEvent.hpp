@@ -9,27 +9,37 @@
 
 #include <memory>
 
-namespace shared::graphics::events
-{
-  class IEvent;
+namespace shared::graphics::events {
+    class IEvent;
 
-  typedef enum
-  {
-    KEY_PRESS,          // Key pressed
-    KEY_RELEASE,        // Key released
-    MOUSE_BTN_PRESS,    // Mouse button pressed
-    MOUSE_BTN_RELEASE,  // Mouse button released
-    MOUSE_MOVE,         // Mouse moved
-    WINDOW_CLOSE,       // Window closed
-    WINDOW_RESIZE,      // Window resized
-  } EventType;
+    /// @brief Event type
+    typedef enum {
+        /// @brief Key pressed
+        KEY_PRESS,
+        /// @brief Key released
+        KEY_RELEASE,
+        /// @brief Mouse button pressed
+        MOUSE_BTN_PRESS,
+        /// @brief Mouse button released
+        MOUSE_BTN_RELEASE,
+        /// @brief Mouse moved
+        MOUSE_MOVE,
+        /// @brief Window closed
+        WINDOW_CLOSE,
+        /// @brief Window resized
+        WINDOW_RESIZE,
+    } EventType;
 
-  typedef std::shared_ptr<IEvent> EventPtr;
+    /// @brief Event pointer
+    typedef std::shared_ptr<IEvent> EventPtr;
 }
 
-class shared::graphics::events::IEvent
-{
-  public:
+/**
+ * @brief Interface for the event object
+ * 
+ */
+class shared::graphics::events::IEvent {
+public:
     virtual ~IEvent() = default;
 
     /**

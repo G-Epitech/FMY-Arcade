@@ -15,11 +15,15 @@
 #include "types/GraphicsManifest.hpp"
 
 namespace shared::graphics {
-  class IGraphicsProvider;
+    class IGraphicsProvider;
 }
 
+/**
+ * @brief Interface for the graphics provider
+ * 
+ */
 class shared::graphics::IGraphicsProvider {
-  public:
+public:
     virtual ~IGraphicsProvider() = default;
 
     /**

@@ -15,6 +15,10 @@ namespace shared::games::components {
     class IDisplayableComponent;
 }
 
+/**
+ * @brief Interface of a displayable component
+ * 
+ */
 class shared::games::components::IDisplayableComponent : public virtual IPositionableComponent {
 public:
     virtual ~IDisplayableComponent() = default;
@@ -22,6 +26,7 @@ public:
     /**
      * @brief Get Z index that is usefull for display prioroty
      *
+     * @return Z index of the entity
      */
     virtual unsigned int &getZIndex() noexcept = 0;
 

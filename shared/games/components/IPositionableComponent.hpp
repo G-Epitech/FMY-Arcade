@@ -11,12 +11,15 @@
 #include "../../types/Vector.hpp"
 
 namespace shared::games::components {
-  class IPositionableComponent;
+    class IPositionableComponent;
 }
 
-class shared::games::components::IPositionableComponent: public virtual IComponent
-{
-  public:
+/**
+ * @brief Interface of a positionable component
+ * 
+ */
+class shared::games::components::IPositionableComponent: public virtual IComponent {
+public:
     virtual ~IPositionableComponent() = default;
 
     /**

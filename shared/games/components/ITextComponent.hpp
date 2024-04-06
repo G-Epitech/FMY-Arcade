@@ -15,31 +15,53 @@ namespace shared::games::components {
     class ITextComponent;
 }
 
+/**
+ * @brief Interface of a text component
+ * 
+ */
 class shared::games::components::ITextComponent : public virtual IDisplayableComponent {
 public:
+
+    /// @brief Horizontal text alignment
     typedef enum {
+        /// @brief Align text to the left
         LEFT,
+        /// @brief Align text to the center
         CENTER,
+        /// @brief Align text to the right
         RIGHT
     } TextAlign;
 
+    /// @brief Vertical text alignment
     typedef enum {
+        /// @brief Align text to the bottom
         BOTTOM,
+        /// @brief Align text to the middle
         MIDDLE,
+        /// @brief Align text to the top
         TOP
     } TextVerticalAlign;
 
+    /// @brief Font properties
     typedef struct {
-        std::string path;       // Path of the font
-        unsigned int size;      // Font size
+        /// @brief Path of the font
+        std::string path;
+        /// @brief Size of the font
+        unsigned int size;
     } TextFontProps;
 
+    /// @brief Text properties
     typedef struct {
-        std::string content;                // Content of the text
-        TextAlign align;                    // Alignment of the text
-        TextVerticalAlign verticalAlign;    // Vertical alignment of the text
-        TextFontProps font;                 // Font of the text
-        types::Color color;                 // Color of the text
+        /// @brief Content of the text
+        std::string content;
+        /// @brief Horizontal alignment of the text
+        TextAlign align;
+        /// @brief Vertical alignment of the text
+        TextVerticalAlign verticalAlign;
+        /// @brief Font of the text
+        TextFontProps font;
+        /// @brief Color of the text
+        types::Color color;
     } TextProps;
 
     virtual ~ITextComponent() = default;

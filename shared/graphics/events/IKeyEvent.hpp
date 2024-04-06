@@ -13,36 +13,60 @@ namespace shared::graphics::events {
     class IKeyEvent;
 }
 
+/**
+ * @brief Interface for the key event object
+ * 
+ */
 class shared::graphics::events::IKeyEvent : public virtual IEvent {
 public:
     virtual ~IKeyEvent() = default;
 
+    /// @brief Key type
     typedef enum {
-        CONTROL, // Control key (`Ctrl`, `Shift`, `Alt`)
-        ARROW,   // Arrow key (`Up`, `Down`, `Left`, `Right`)
-        FUNC,    // Function key (`F1`, `F2`, `F3`, etc.)
-        CHAR,    // Character key (`a`, `1`, `&`, etc.)
-        UNKNOWN  // Unknown key
+        /// @brief Control key (`Ctrl`, `Shift`, `Alt`)
+        CONTROL,
+        /// @brief Arrow key (`Up`, `Down`, `Left`, `Right`)
+        ARROW,
+        /// @brief Function key (`F1`, `F2`, `F3`, etc.)
+        FUNC,
+        /// @brief ASCII character key
+        CHAR,
+        /// @brief Unknown key
+        UNKNOWN
     } KeyType;
 
+    /// @brief Control key code
     typedef enum {
-        CTRL,  // `Ctrl` key
-        SHIFT, // `Shift` key
-        ALT    // `Alt` key
+        /// @brief CTRL key
+        CTRL,
+        /// @brief SHIFT key
+        SHIFT,
+        /// @brief ALT key
+        ALT
     } ControlCode;
 
+    /// @brief Arrow key code
     typedef enum {
-        UP,     // `Up` arrow key
-        DOWN,   // `Down` arrow key
-        LEFT,   // `Left` arrow key
-        RIGHT   // `Right` arrow key
+        /// @brief UP arrow key
+        UP,
+        /// @brief DOWN arrow key
+        DOWN,
+        /// @brief LEFT arrow key
+        LEFT,
+        /// @brief RIGHT arrow key
+        RIGHT
     } ArrowCode;
 
+    /// @brief Key code
     typedef union {
-        ControlCode control;        // Control key
-        ArrowCode arrow;            // Arrow key
-        char character;             // ASCII character value
-        unsigned char func;         // Function key number
+        /// @brief Control key
+        ControlCode control;
+        /// @brief Arrow key
+        ArrowCode arrow;
+        /// @brief ASCII character value
+        char character;
+        /// @brief Function key number
+        unsigned char func;
     } KeyCode;
 
     /**
