@@ -8,7 +8,6 @@
 #include <iostream>
 
 #include <chrono>
-#include <memory.h>
 #include "Core.hpp"
 #include "shared/games/components/IComponent.hpp"
 
@@ -25,7 +24,7 @@ Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders, c
     }
 }
 
-Core::~Core() {}
+Core::~Core() = default;
 
 std::shared_ptr<IGameProvider> Core::_getGameProvider(const unsigned char &index)
 {
@@ -112,10 +111,11 @@ void Core::_initWindow()
     this->_fonts.clear();
     this->_sounds.clear();
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
+    this->_textures.clear();
     this->_sceneStage = PLAY;
 }
 
-std::shared_ptr<ITexture> Core::_getTexture(std::string bin, std::string ascii)
+std::shared_ptr<ITexture> Core::_getTexture(const std::string& bin, const std::string& ascii)
 {
     for (auto &failedTexture : this->_failedTextures) {
         if (failedTexture == bin + ascii)
@@ -126,7 +126,7 @@ std::shared_ptr<ITexture> Core::_getTexture(std::string bin, std::string ascii)
     return this->_textures[bin + ascii];
 }
 
-std::shared_ptr<IFont> Core::_getFont(std::string path)
+std::shared_ptr<IFont> Core::_getFont(const std::string& path)
 {
     for (auto &failedTexture : this->_failedTextures) {
         if (failedTexture == path)
@@ -137,7 +137,7 @@ std::shared_ptr<IFont> Core::_getFont(std::string path)
     return this->_fonts[path];
 }
 
-Core::SoundProps Core::_getSound(std::string path)
+Core::SoundProps Core::_getSound(const std::string& path)
 {
     if (this->_sounds.find(path) == this->_sounds.end()) {
         SoundProps soundProps {
@@ -151,7 +151,7 @@ Core::SoundProps Core::_getSound(std::string path)
     return this->_sounds[path];
 }
 
-void Core::_loadFailed(std::shared_ptr<components::ITextureComponent> texture)
+void Core::_loadFailed(const std::shared_ptr<components::ITextureComponent>& texture)
 {
     if (!texture)
         return;
@@ -159,7 +159,7 @@ void Core::_loadFailed(std::shared_ptr<components::ITextureComponent> texture)
     this->_failedTextures.push_back(textureProps.sources.bin + textureProps.sources.ascii);
 }
 
-void Core::_loadFailed(std::shared_ptr<components::ITextComponent> text)
+void Core::_loadFailed(const std::shared_ptr<components::ITextComponent>& text)
 {
     if (!text)
         return;
@@ -167,7 +167,7 @@ void Core::_loadFailed(std::shared_ptr<components::ITextComponent> text)
     this->_failedTextures.push_back(textProps.font.path);
 }
 
-TextureProps Core::_getTextureEntity(std::shared_ptr<components::ITextureComponent> texture)
+TextureProps Core::_getTextureEntity(const std::shared_ptr<components::ITextureComponent>& texture)
 {
     auto textureProps = texture->getTextureProps();
     TextureProps entityTextureProps {
@@ -181,7 +181,7 @@ TextureProps Core::_getTextureEntity(std::shared_ptr<components::ITextureCompone
     return entityTextureProps;
 }
 
-TextProps Core::_getTextEntity(std::shared_ptr<components::ITextComponent> text)
+TextProps Core::_getTextEntity(const std::shared_ptr<components::ITextComponent>& text)
 {
     auto textProps = text->getTextProps();
     TextProps entityTextProps {
@@ -296,7 +296,7 @@ components::IKeyboardComponent::KeyData Core::_convertKeyPressData(events::IKeyE
     return keyCodeData;
 }
 
-void Core::_preventWindowEvents(std::vector<events::EventPtr> events)
+void Core::_preventWindowEvents(const std::vector<events::EventPtr>& events)
 {
     for (auto &event : events) {
         auto type = event->getType();
@@ -359,7 +359,7 @@ void Core::_handleKeyPress(std::shared_ptr<events::IKeyEvent> &keyEvent, std::sh
 {
     auto keyCode = keyEvent->getKeyCode();
     auto keyType = keyEvent->getKeyType();
-    auto keyCodeData = this->_convertKeyPressData(keyType, keyCode);
+    auto keyCodeData = Core::_convertKeyPressData(keyType, keyCode);
 
     this->_handleFunctionKeys(keyEvent);
     keyboard->onKeyPress(this->_game, keyCodeData);
@@ -369,32 +369,30 @@ void Core::_handleKeyRelease(std::shared_ptr<events::IKeyEvent> &keyEvent, std::
 {
     auto keyCode = keyEvent->getKeyCode();
     auto keyType = keyEvent->getKeyType();
-    auto keyCodeData = this->_convertKeyPressData(keyType, keyCode);
+    auto keyCodeData = Core::_convertKeyPressData(keyType, keyCode);
 
     keyboard->onKeyRelease(this->_game, keyCodeData);
 }
 
 void Core::_handleMouseButtonPress(std::shared_ptr<events::IMouseButtonEvent> &event, std::shared_ptr<components::IDisplayableComponent> &component)
 {
-    auto button = event->getButton();
     auto mousePosition = event->getPosition();
     auto entityPosition = component->getPosition();
     auto entitySize = component->getSize();
 
-    if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + entitySize.x &&
-        mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + entitySize.y)
+    if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + static_cast<float>(entitySize.x) &&
+        mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + static_cast<float>(entitySize.y))
         component->onMousePress(this->_game);
 }
 
 void Core::_handleMouseButtonRelease(std::shared_ptr<events::IMouseButtonEvent> &event, std::shared_ptr<components::IDisplayableComponent> &component)
 {
-    auto button = event->getButton();
     auto mousePosition = event->getPosition();
     auto entityPosition = component->getPosition();
     auto entitySize = component->getSize();
 
-    if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + entitySize.x &&
-        mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + entitySize.y)
+    if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + static_cast<float>(entitySize.x) &&
+        mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + static_cast<float>(entitySize.y))
         component->onMouseRelease(this->_game);
 }
 
@@ -404,8 +402,8 @@ void Core::_handleMouseMove(std::shared_ptr<events::IMouseEvent> &event, std::sh
     auto entityPosition = component->getPosition();
     auto entitySize = component->getSize();
 
-    if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + entitySize.x &&
-        mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + entitySize.y)
+    if (mousePosition.x >= entityPosition.x && mousePosition.x <= entityPosition.x + static_cast<float>(entitySize.x) &&
+        mousePosition.y >= entityPosition.y && mousePosition.y <= entityPosition.y + static_cast<float>(entitySize.y))
         component->onMouseHover(this->_game);
 }
 
@@ -421,15 +419,14 @@ void Core::_handleWindowClose()
 {
     if (this->_window && this->_window->isOpen()) {
         this->_stopAllGraphicsSounds();
+        this->_textures.clear();
+        this->_fonts.clear();
         this->_window->close();
+        this->_sounds.clear();
         this->_menu.updateScore(this->_game);
         this->_sceneStage = MENU;
+        this->_window.reset();
     }
-}
-
-void Core::_handleWindowResize()
-{
-    std::cout << "Window resized" << std::endl;
 }
 
 void Core::_handleKeyboardEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IKeyboardComponent> &component)
@@ -473,10 +470,10 @@ void Core::_handleCollisions(std::shared_ptr<components::ICollidableComponent> &
     auto targetPosition = target->getPosition();
     auto targetSize = target->getSize();
 
-    if (componentPosition.x < targetPosition.x + targetSize.x &&
-        componentPosition.x + componentSize.x > targetPosition.x &&
-        componentPosition.y < targetPosition.y + targetSize.y &&
-        componentPosition.y + componentSize.y > targetPosition.y)
+    if (componentPosition.x < targetPosition.x + static_cast<float>(targetSize.x) &&
+        componentPosition.x + static_cast<float>(componentSize.x) > targetPosition.x &&
+        componentPosition.y < targetPosition.y + static_cast<float>(targetSize.y) &&
+        componentPosition.y + static_cast<float>(componentSize.y) > targetPosition.y)
         component->onCollide(this->_game, target);
 }
 
@@ -592,13 +589,16 @@ void Core::run()
         }
         if (this->_sceneStage == NEWGAME)
             this->_initGame();
-        if (this->_sceneStage == RESUME)
+        if (this->_sceneStage == RESUME) {
             this->_initWindow();
+        }
         if (this->_sceneStage == PLAY) {
             this->_game->compute(deltaTime);
             this->_gameEntities = this->_game->getEntities();
             this->_handleEvents();
-            this->_renderEntities();
+            if (this->_window && this->_window->isOpen()) {
+                this->_renderEntities();
+            }
         }
     }
 }
