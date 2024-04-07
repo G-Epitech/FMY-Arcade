@@ -31,6 +31,14 @@ std::vector<EventPtr> EventsHandler::handleEvents()
             if (eventPtr)
                 events.push_back(eventPtr);
         }
+        MEVENT mouseEvent;
+        if (getmouse(&mouseEvent) == OK) {
+            if (mouseEvent.bstate & BUTTON1_CLICKED) {
+                float delta = 0.1;
+                auto pos = Vector2f{delta + static_cast<float>(mouseEvent.x), delta + static_cast<float>(mouseEvent.y)};
+                events.push_back(std::make_shared<MouseButtonPressEvent>(pos, arcade::graphics::common::events::MouseButtonPressEvent::MouseButton::LEFT));
+            }
+        }
     }
     return events;
 }

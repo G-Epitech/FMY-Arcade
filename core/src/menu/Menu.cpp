@@ -521,6 +521,11 @@ void Menu::_handleMouseButtonEvents(std::shared_ptr<events::IMouseButtonEvent> m
             this->_selectGame();
         }
     }
+    std::ofstream file("test.txt", std::ios::app);
+    if (file.is_open()) {
+        file << "Hello World!" << move->getPosition().x << move->getPosition().x << std::endl;
+        file.close();
+    }
 }
 
 void Menu::_handleEvents()

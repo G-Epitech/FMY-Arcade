@@ -31,9 +31,9 @@ Window::Window(const IWindow::WindowInitProps &props):
     noecho();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
+    mousemask(ALL_MOUSE_EVENTS, NULL);
     curs_set(0);
     _window = std::unique_ptr<WINDOW, decltype(&delwin)>(newwin(_size.y, _size.x, 0, 0), &delwin);
-    box(_window.get(), 0, 0);
 }
 
 Window::~Window()
