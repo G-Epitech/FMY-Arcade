@@ -43,6 +43,8 @@ EventPtr EventsHandler::_handleKeyPressEvent(int code)
         return _handleArrowKey(code);
     if (code == 263)
         return std::make_shared<KeyPressEvent>(IKeyEvent::KeyType::CHAR, IKeyEvent::KeyCode{.character = '\b'});
+    if (code & KEY_EXIT == code)
+        return std::make_shared<WindowCloseEvent>();
     return _handleCharKey(code);
 }
 
