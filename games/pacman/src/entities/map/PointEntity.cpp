@@ -13,7 +13,8 @@ using namespace arcade::games::pacman;
 using namespace arcade::games::common::components;
 using namespace shared::types;
 
-arcade::games::pacman::PointEntity::PointEntity(shared::types::Vector2i position): position(0, 0) {
+arcade::games::pacman::PointEntity::PointEntity(shared::types::Vector2i position, bool ghostBonus): position(0, 0) {
+    this->_ghostBonus = ghostBonus;
     this->_spawn(position);
 }
 
@@ -24,7 +25,7 @@ void PointEntity::_spawn(shared::types::Vector2i position) {
                     .bin = "assets/pacman/point.png",
                     .binTileSize = Vector2f(100, 100)
             },
-            .origin = Vector2u(0, 0)
+            .origin = Vector2u(this->_ghostBonus ? 1 : 0, 0)
     };
     std::shared_ptr<CollidableComponent> collision = std::make_shared<CollidableComponent>(*this, nullptr);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 11,

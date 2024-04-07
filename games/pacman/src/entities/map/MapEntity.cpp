@@ -36,7 +36,10 @@ std::vector<std::shared_ptr<PointEntity>> MapEntity::generateWalls(std::string m
         if (part == '#')
             this->_createWall(position);
         if (part == ' ') {
-            list.push_back(std::make_shared<PointEntity>(position));
+            list.push_back(std::make_shared<PointEntity>(position, false));
+        }
+        if (part == '?') {
+            list.push_back(std::make_shared<PointEntity>(position, true));
         }
         position.x++;
     }

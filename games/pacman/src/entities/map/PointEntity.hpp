@@ -21,8 +21,9 @@ public:
     /**
      * @brief Create a point
      * @param position Position
+     * @param ghostBonus If the point is a bonus that let the player eat ghost
      */
-    explicit PointEntity(shared::types::Vector2i position);
+    explicit PointEntity(shared::types::Vector2i position, bool ghostBonus);
 
     shared::types::Vector2i position;
 
@@ -32,4 +33,6 @@ protected:
      * @param position
      */
     void _spawn(shared::types::Vector2i position);
+
+    bool _ghostBonus;
 };
