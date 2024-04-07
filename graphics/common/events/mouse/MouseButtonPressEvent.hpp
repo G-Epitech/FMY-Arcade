@@ -19,6 +19,6 @@ namespace arcade::graphics::common::events {
 class arcade::graphics::common::events::MouseButtonPressEvent :
     public AMouseButtonEvent<EventType::MOUSE_BTN_PRESS> {
 public:
-    MouseButtonPressEvent(Vector2i pos, MouseButton button) : AMouseButtonEvent(pos, button){};
+    MouseButtonPressEvent(Vector2f pos, MouseButton button) : AMouseButtonEvent(pos, button){};
     ~MouseButtonPressEvent() override = default;
 };

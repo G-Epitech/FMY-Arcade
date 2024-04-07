@@ -11,17 +11,28 @@
 #include <vector>
 
 namespace shared::games {
+
+    /// @brief Author of the game
     typedef struct {
-        std::string name;    // Name of the author
-        std::string email;   // Public contact email
-        std::string website; // Website of the author (`github`, `gitlab`, etc.)
+        /// @brief Name of the author
+        std::string name;
+        /// @brief Public contact email
+        std::string email;
+        /// @brief Website of the author (`github`, `gitlab`, etc.)
+        std::string website;
     } Author;
 
+    /// @brief Game manifest
     typedef struct {
-        const std::string name;             // Name of the game
-        const std::string description;      // Description of the game
-        const std::string version;          // Version of the game
-        const std::vector <Author> authors; // Authors
-        const std::string iconPath;         // Path of the icon game
+        /// @brief Name of the game
+        const std::string name;
+        /// @brief Description of the game
+        const std::string description;
+        /// @brief Version of the game
+        const std::string version;
+        /// @brief List of authors of the game
+        const std::vector <Author> authors;
+        /// @brief Path of the icon game
+        const std::string iconPath;
     } GameManifest;
 }

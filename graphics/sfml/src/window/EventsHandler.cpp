@@ -28,7 +28,7 @@ EventsHandler::EventHandler EventsHandler::_getHandler(sf::Event::EventType type
     return handler != handlers.end() ? handler->second : nullptr;
 }
 
-EventsHandler::EventsHandler(Window &window): _window(window) {}
+EventsHandler::EventsHandler(Window &window) : _window(window) {}
 
 std::vector<EventPtr> EventsHandler::handleEvents() {
     std::vector<EventPtr> events;
@@ -46,7 +46,7 @@ std::vector<EventPtr> EventsHandler::handleEvents() {
 
 bool EventsHandler::_handleControlKey(
     sf::Event::KeyEvent event,
-    IKeyEvent::KeyCode &code
+    unused IKeyEvent::KeyCode &code
 ) {
     switch (event.code) {
         case sf::Keyboard::LControl:
@@ -94,8 +94,7 @@ bool EventsHandler::_handleArrowKey(
 bool EventsHandler::_handleFunctionKey(
     sf::Event::KeyEvent event,
     IKeyEvent::KeyCode &code
-)
-{
+) {
     if (event.code >= sf::Keyboard::F1 && event.code <= sf::Keyboard::F12) {
         code.func = event.code - sf::Keyboard::F1 + 1;
         return true;
@@ -109,26 +108,26 @@ bool EventsHandler::_handleCharKey(
     IKeyEvent::KeyCode &code
 ) {
     static const std::map<sf::Keyboard::Key, char> specials = {
-        {sf::Keyboard::Space, ' '},
-        {sf::Keyboard::LBracket, '['},
-        {sf::Keyboard::RBracket, ']'},
+        {sf::Keyboard::Space,     ' '},
+        {sf::Keyboard::LBracket,  '['},
+        {sf::Keyboard::RBracket,  ']'},
         {sf::Keyboard::Semicolon, ';'},
-        {sf::Keyboard::Comma, ','},
-        {sf::Keyboard::Period, '.'},
-        {sf::Keyboard::Quote, '\''},
-        {sf::Keyboard::Slash, '/'},
+        {sf::Keyboard::Comma,     ','},
+        {sf::Keyboard::Period,    '.'},
+        {sf::Keyboard::Quote,     '\''},
+        {sf::Keyboard::Slash,     '/'},
         {sf::Keyboard::Backslash, '\\'},
-        {sf::Keyboard::Tilde, '~'},
-        {sf::Keyboard::Equal, '='},
-        {sf::Keyboard::Hyphen, '-'},
-        {sf::Keyboard::Enter, '\n'},
+        {sf::Keyboard::Tilde,     '~'},
+        {sf::Keyboard::Equal,     '='},
+        {sf::Keyboard::Hyphen,    '-'},
+        {sf::Keyboard::Enter,     '\n'},
         {sf::Keyboard::Backspace, '\b'},
-        {sf::Keyboard::Tab, '\t'},
-        {sf::Keyboard::Escape, 0x1B},
-        {sf::Keyboard::Add, '+'},
-        {sf::Keyboard::Subtract, '-'},
-        {sf::Keyboard::Multiply, '*'},
-        {sf::Keyboard::Divide, '/'}
+        {sf::Keyboard::Tab,       '\t'},
+        {sf::Keyboard::Escape,    0x1B},
+        {sf::Keyboard::Add,       '+'},
+        {sf::Keyboard::Subtract,  '-'},
+        {sf::Keyboard::Multiply,  '*'},
+        {sf::Keyboard::Divide,    '/'}
     };
 
     if (event.code >= sf::Keyboard::A && event.code <= sf::Keyboard::Z) {
@@ -193,6 +192,7 @@ EventPtr EventsHandler::_handleWindowResizeEvent(
     unused sf::Event &event,
     Window &window
 ) {
+    window.onResize();
     return std::make_shared<WindowResizeEvent>();
 }
 
@@ -200,35 +200,48 @@ EventPtr EventsHandler::_handleMouseMoveEvent(
     sf::Event &event,
     Window &window
 ) {
-    return std::make_shared<MouseMoveEvent>(
-        window.pixelsToTiles(Vector2i(event.mouseMove.x, event.mouseMove.y))
-    );
+    auto pos = window.mapPositionToTile({
+         event.mouseMove.x,
+         event.mouseMove.y
+    });
+
+    return pos.x >= 0 && pos.y >= 0
+            ? std::make_shared<MouseMoveEvent>(pos)
+            : nullptr;
 }
 
 EventPtr EventsHandler::_handleMouseButtonPressEvent(
     sf::Event &event,
     Window &window
 ) {
-    Vector2i pos = window.pixelsToTiles(Vector2i(event.mouseButton.x, event.mouseButton.y));
+    auto pos = window.mapPositionToTile({
+        event.mouseButton.x,
+        event.mouseButton.y
+    });
 
+    if (pos.x < 0 || pos.y < 0)
+        return nullptr;
     if (event.mouseButton.button == sf::Mouse::Button::Left)
         return std::make_shared<MouseButtonPressEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
     else if (event.mouseButton.button == sf::Mouse::Button::Right)
         return std::make_shared<MouseButtonPressEvent>(pos, IMouseButtonEvent::MouseButton::RIGHT);
-    else
-        return nullptr;
+    return nullptr;
 }
 
 EventPtr EventsHandler::_handleMouseBtnReleaseEvent(
     sf::Event &event,
     unused Window &window
 ) {
-    Vector2i pos = window.pixelsToTiles(Vector2i(event.mouseButton.x, event.mouseButton.y));
+    auto pos = window.mapPositionToTile({
+        event.mouseMove.x,
+        event.mouseMove.y
+    });
 
+    if (pos.x < 0 || pos.y < 0)
+        return nullptr;
     if (event.mouseButton.button == sf::Mouse::Button::Left)
         return std::make_shared<MouseButtonReleaseEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
     else if (event.mouseButton.button == sf::Mouse::Button::Right)
         return std::make_shared<MouseButtonReleaseEvent>(pos, IMouseButtonEvent::MouseButton::RIGHT);
-    else
-        return nullptr;
+    return nullptr;
 }

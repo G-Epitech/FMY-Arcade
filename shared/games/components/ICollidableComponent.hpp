@@ -12,18 +12,21 @@
 #include "../../types/Vector.hpp"
 
 namespace shared::games::components {
-  class ICollidableComponent;
+    class ICollidableComponent;
 }
 
-class shared::games::components::ICollidableComponent: public virtual IPositionableComponent
-{
+/**
+ * @brief Interface of a collidable component
+ * 
+ */
+class shared::games::components::ICollidableComponent: public virtual IPositionableComponent {
 public:
-  virtual ~ICollidableComponent() = default;
+    virtual ~ICollidableComponent() = default;
 
-  /**
-   * @brief On collide event handler for the component
-   * @param ctx Context of the game
-   * @param target Target entity
-   */
-  virtual void onCollide(std::shared_ptr<IGame> &ctx, std::shared_ptr<ICollidableComponent> target) = 0;
+    /**
+     * @brief On collide event handler for the component
+     * @param ctx Context of the game
+     * @param target Target entity
+     */
+    virtual void onCollide(std::shared_ptr<IGame> ctx, std::shared_ptr<ICollidableComponent> target) = 0;
 };

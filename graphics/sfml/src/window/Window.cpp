@@ -13,14 +13,15 @@
 using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::common::exceptions;
 
-const Vector2u Window::tileSize = { 12, 12 };
+const Vector2u Window::tileSize = { 35, 35 };
 
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
+    _initialSize(0, 0),
     _renderer(*this),
     _eventsHandler(*this)
 {
-    auto size = _getPixelSizeFromTiles(props.size);
+    auto size = getPixelSizeFromTiles(props.size);
 
     _mode = props.mode;
     _fps = props.fps;
@@ -29,6 +30,12 @@ Window::Window(const IWindow::WindowInitProps &props):
         props.title
     );
     Window::setIcon(props.icon);
+    _view.setSize(static_cast<float>(size.x), static_cast<float>(size.y));
+    _view.setCenter(static_cast<float>(size.x) / 2, static_cast<float>(size.y) / 2);
+    _initialSize = {
+        static_cast<unsigned int>(_window.getSize().x),
+        static_cast<unsigned int>(_window.getSize().y)
+    };
 }
 
 Window::~Window()
@@ -45,7 +52,7 @@ void Window::setTitle(const std::string &title) {
 }
 
 void Window::setSize(shared::types::Vector2u size) {
-    auto real = _getPixelSizeFromTiles(size);
+    auto real = getPixelSizeFromTiles(size);
 
     _size = size;
     _window.setSize(sf::Vector2u(real.x, real.y));
@@ -131,7 +138,7 @@ std::vector<EventPtr> Window::getEvents() {
     return _eventsHandler.handleEvents();
 }
 
-Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) {
+Vector2u Window::getPixelSizeFromTiles(const Vector2u &size) {
     auto mode = sf::VideoMode::getDesktopMode();
     Vector2u real(mode.width, mode.height);
 
@@ -142,30 +149,39 @@ Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) {
     return real;
 }
 
-Vector2i Window::pixelsToTiles(const shared::types::Vector2i &position) const {
-    auto realSize = _window.getSize();
+Vector2f Window::mapPositionToTile(const Vector2i &position) const {
+    auto pixelsPosition = _window.mapPixelToCoords({
+        position.x,
+        position.y
+    });
+    Vector2f size = { static_cast<float>(_size.x), static_cast<float>(_size.y) };
+    Vector2f initialSize = { static_cast<float>(_initialSize.x), static_cast<float>(_initialSize.y) };
 
-    return {
-        static_cast<int>(position.x * _size.x / realSize.x),
-        static_cast<int>(position.y * _size.y / realSize.y)
+    Vector2f tilesPosition = {
+        pixelsPosition.x * size.x / initialSize.x,
+        pixelsPosition.y * size.y / initialSize.y
     };
+
+    if (tilesPosition.x >= size.x || tilesPosition.y >= size.y || pixelsPosition.x < 0)
+        return {-1, -1};
+    return tilesPosition;
 }
 
-Vector2i Window::tilesToPixels(const Vector2i &position) const {
-    auto realSize = _window.getSize();
+void Window::onResize()
+{
+    Vector2u originalPixels = getPixelSizeFromTiles(_size);
+    auto size = _window.getSize();
+    auto width = static_cast<float>(size.x);
+    auto height = static_cast<float>(size.y);
 
-    return {
-        static_cast<int>(position.x * realSize.x / _size.x),
-        static_cast<int>(position.y * realSize.y / _size.y)
-    };
+    _view.setSize(width, height);
+    _view.setCenter( static_cast<float>(originalPixels.x) / 2,
+                     static_cast<float>(originalPixels.y) / 2
+    );
+    if ((static_cast<float>(originalPixels.x) / width) > static_cast<float>(originalPixels.y) / height) {
+        _view.zoom(static_cast<float>(originalPixels.x) / width);
+    } else {
+        _view.zoom(static_cast<float>(originalPixels.y) / height);
+    }
+    _window.setView(_view);
 }
-
-Vector2i Window::tilesToPixels(const Vector2u &position) const {
-    auto realSize = _window.getSize();
-
-    return {
-        static_cast<int>(position.x * realSize.x / _size.x),
-        static_cast<int>(position.y * realSize.y / _size.y)
-    };
-}
-

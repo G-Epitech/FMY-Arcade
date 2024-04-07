@@ -14,6 +14,10 @@ namespace shared::graphics::events {
     class IMouseEvent;
 }
 
+/**
+ * @brief Interface for the mouse event object
+ * 
+ */
 class shared::graphics::events::IMouseEvent : public virtual IEvent {
 public:
     virtual ~IMouseEvent() = default;
@@ -23,5 +27,5 @@ public:
      *
      * @return Position of the mouse
      */
-    virtual const shared::types::Vector2i getPosition(void) const noexcept = 0;
+    virtual const shared::types::Vector2f getPosition(void) const noexcept = 0;
 };

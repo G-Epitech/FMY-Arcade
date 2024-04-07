@@ -21,8 +21,8 @@ Renderer::Renderer(Window &window) : _window(window), _layer(_window.getInnerWin
 
 void Renderer::render(const shared::graphics::TextProps &props) {
     auto font = _castOrThrow<shared::graphics::IFont, font::Font>(props.font);
-    auto entityPosition = _entityPixelsPosition(props.position);
-    auto entitySize = _window.tilesToPixels(props.size);
+    auto entityPosition = _entityPixels(props.position);
+    auto entitySize = _entityPixels(props.size);
 
     _reset(_text);
     _text.setFont(font->getInnerFont());
@@ -78,7 +78,7 @@ void Renderer::_textAdjustPosition() {
 
 void Renderer::render(const shared::graphics::TextureProps &props) {
     auto texture = _castOrThrow<shared::graphics::ITexture, texture::Texture>(props.texture);
-    auto entityPosition = _entityPixelsPosition(props.position);
+    auto entityPosition = _entityPixels(props.position);
 
     _reset(_sprite);
     _sprite.setTexture(texture->getInnerTexture());
@@ -88,7 +88,7 @@ void Renderer::render(const shared::graphics::TextureProps &props) {
 }
 
 void Renderer::_setTextureRectAndScale(const shared::graphics::TextureProps &props) {
-    auto size = _window.tilesToPixels(props.size);
+    auto size = _entityPixels(props.size);
     float width = static_cast<float>(props.size.x) * props.binTileSize.x;
     float height = static_cast<float>(props.size.y) * props.binTileSize.y;
     float left = static_cast<float>(props.origin.x) * props.binTileSize.x;
@@ -125,11 +125,22 @@ void Renderer::_reset(sf::Sprite &sprite) {
     sprite.setOrigin(0, 0);
 }
 
-Vector2f Renderer::_entityPixelsPosition(const Vector2i &position) {
-    auto pixels = _window.tilesToPixels(position);
+Vector2f Renderer::_entityPixels(const Vector2f &position) {
+    auto realSize = this->_window.getSize();
+    Vector2u originalPixels = this->_window.getPixelSizeFromTiles(realSize);
 
     return {
-        static_cast<float>(pixels.x),
-        static_cast<float>(pixels.y)
+        static_cast<float>(position.x * originalPixels.x / realSize.x),
+        static_cast<float>(position.y * originalPixels.y / realSize.y)
+    };
+}
+
+Vector2i Renderer::_entityPixels(const Vector2u &position) {
+    auto realSize = this->_window.getSize();
+    Vector2u originalPixels = this->_window.getPixelSizeFromTiles(realSize);
+
+    return {
+        static_cast<int>(position.x * originalPixels.x / realSize.x),
+        static_cast<int>(position.y * originalPixels.y / realSize.y)
     };
 }

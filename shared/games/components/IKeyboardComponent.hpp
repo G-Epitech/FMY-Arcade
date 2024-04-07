@@ -11,63 +11,85 @@
 #include "IComponent.hpp"
 
 namespace shared::games::components {
-  class IKeyboardComponent;
+    class IKeyboardComponent;
 }
 
-class shared::games::components::IKeyboardComponent: public virtual IComponent
-{
+/**
+ * @brief Interface of a keyboard component
+ * 
+ */
+class shared::games::components::IKeyboardComponent: public virtual IComponent {
 public:
-  typedef enum
-  {
-    CONTROL, // Control key (`Ctrl`, `Shift`, `Alt`)
-    ARROW,   // Arrow key (`Up`, `Down`, `Left`, `Right`)
-    FUNC,    // Function key (`F1`, `F2`, `F3`, etc.)
-    CHAR,    // Character key (`a`, `1`, `&`, etc.)
-    UNKNOWN  // Unknown key
-  } KeyType;
 
-  typedef enum
-  {
-    CTRL,  // `Ctrl` key
-    SHIFT, // `Shift` key
-    ALT    // `Alt` key
-  } ControlCode;
+    /// @brief Type of the key
+    typedef enum {
+        /// @brief Control key (`Ctrl`, `Shift`, `Alt`)
+        CONTROL,
+        /// @brief Arrow key (`Up`, `Down`, `Left`, `Right`)
+        ARROW,
+        /// @brief Function key (`F1`, `F2`, `F3`, etc.)
+        FUNC,
+        /// @brief Character key (`a`, `1`, `&`, etc.)
+        CHAR,
+        /// @brief Unknown key
+        UNKNOWN
+    } KeyType;
 
-  typedef enum
-  {
-    UP,   // `Up` arrow key
-    DOWN, // `Down` arrow key
-    LEFT, // `Left` arrow key
-    RIGHT // `Right` arrow key
-  } ArrowCode;
+    /// @brief Control key code
+    typedef enum {
+        /// @brief `Ctrl` key
+        CTRL,
+        /// @brief `Shift` key
+        SHIFT,
+        /// @brief `Alt` key
+        ALT
+    } ControlCode;
 
-  typedef union
-  {
-    ControlCode control;     // Control key
-    ArrowCode arrow;         // Arrow key
-    char character;          // ASCII character value
-    unsigned char func;      // Function key number
-  } KeyCode;
+    /// @brief Arrow key code
+    typedef enum {
+        /// @brief `Up` arrow key
+        UP,
+        /// @brief `Down` arrow key
+        DOWN,
+        /// @brief `Left` arrow key
+        LEFT,
+        /// @brief `Right` arrow key
+        RIGHT
+    } ArrowCode;
 
-  typedef struct
-  {
-    KeyCode code; // Key code. Interpretation depends on the type
-    KeyType type; // Type of the key
-  } KeyData;
+    /// @brief Function key code union
+    typedef union {
+        /// @brief Function key number
+        ControlCode control;
+        /// @brief Control key code
+        ArrowCode arrow;
+        /// @brief Arrow key code
+        char character;
+        /// @brief Character key code
+        unsigned char func;
+    } KeyCode;
 
-  virtual ~IKeyboardComponent() = default;
+    /// @brief Key data
+    typedef struct {
+        /// @brief Key code. Interpretation depends on the type
+        KeyCode code;
+        /// @brief Type of the key
+        KeyType type;
+    } KeyData;
 
-  /**
-   * @brief On key pressed event handler for the entity
-   * @param ctx Context of the game
-   * @param keyData Key data of key pressed
-   */
-  virtual void onKeyPress(std::shared_ptr<IGame> &ctx, KeyData keyData) = 0;
+    virtual ~IKeyboardComponent() = default;
 
-  /**
-   * @brief On key release event handler for the entity
-   * @param ctx Context of the game
-   * @param keyData Key data of key released
-   */
-  virtual void onKeyRelease(std::shared_ptr<IGame> &ctx, KeyData keyData) = 0;
+    /**
+     * @brief On key pressed event handler for the entity
+     * @param ctx Context of the game
+     * @param keyData Key data of key pressed
+     */
+    virtual void onKeyPress(std::shared_ptr<IGame> ctx, KeyData keyData) = 0;
+
+    /**
+     * @brief On key release event handler for the entity
+     * @param ctx Context of the game
+     * @param keyData Key data of key released
+     */
+    virtual void onKeyRelease(std::shared_ptr<IGame> ctx, KeyData keyData) = 0;
 };

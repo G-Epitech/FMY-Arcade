@@ -13,6 +13,10 @@ namespace shared::graphics::exceptions {
     class IFontException;
 }
 
+/**
+ * @brief Interface for the font exception object
+ * 
+ */
 class shared::graphics::exceptions::IFontException : public virtual IGraphicsException {
 public:
     virtual ~IFontException() = default;
