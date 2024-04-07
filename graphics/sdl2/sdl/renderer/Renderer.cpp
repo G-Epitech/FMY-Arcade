@@ -15,7 +15,7 @@
 
 using namespace sdl;
 
-Renderer::Renderer(const Window &window) : _window(window) {
+Renderer::Renderer(const Window &window, unsigned int fps) : _window(window), _fps(fps) {
     _renderer = nullptr;
 }
 
@@ -42,6 +42,7 @@ void Renderer::clear() {
 
 void Renderer::present() {
     SDL_RenderPresent(_safeRenderer());
+    SDL_Delay(1000 / _fps);
 }
 
 Renderer::~Renderer() {
@@ -83,4 +84,12 @@ void Renderer::_copy(const Texture &texture, SDL_Rect *srcRect, SDL_FRect *destR
 
     if (copy < 0)
         throw SDLException("Failed to copy texture");
+}
+
+void Renderer::setFramerateLimit(unsigned int fps) {
+    _fps = fps;
+}
+
+unsigned int Renderer::getFramerateLimit() const {
+    return _fps;
 }

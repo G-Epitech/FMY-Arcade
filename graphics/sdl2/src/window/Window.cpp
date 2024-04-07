@@ -5,7 +5,6 @@
 ** Window class
 */
 
-#include <iostream>
 #include "Window.hpp"
 #include "EventsHandler.hpp"
 #include "graphics/sdl2/sdl/exception/Exception.hpp"
@@ -55,6 +54,7 @@ shared::types::Vector2u Window::getSize() const {
 
 void Window::setFramerateLimit(unsigned int fps) {
     _fps = fps;
+    _window.getRenderer().setFramerateLimit(_fps);
 }
 
 unsigned int Window::getFramerateLimit() const {
@@ -108,7 +108,6 @@ void Window::clear() {
 
 void Window::display() {
     _window.getRenderer().present();
-    SDL_Delay(1000);
 }
 
 void Window::close() {

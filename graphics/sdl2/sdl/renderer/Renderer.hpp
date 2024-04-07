@@ -22,7 +22,7 @@ namespace sdl {
 
 class sdl::Renderer {
 public:
-    explicit Renderer(const Window &window);
+    explicit Renderer(const Window &window, unsigned int fps = 60);
     ~Renderer();
 
     /**
@@ -67,6 +67,18 @@ public:
      */
     void present();
 
+    /**
+     * @brief Set the framerate Limit of the window
+     * @param fps Framerate limit
+     */
+    void setFramerateLimit(unsigned int fps);
+
+    /**
+     * @brief Get the framerate Limit of the window
+     * @return Framerate limit
+     */
+    unsigned int getFramerateLimit() const;
+
 private:
     /**
      * @brief Get the renderer safely or throw an exception if it's null
@@ -83,5 +95,6 @@ private:
     void _copy(const Texture &texture, SDL_Rect *srcRect, SDL_FRect *destRect);
 
     SDL_Renderer *_renderer;
+    unsigned int _fps;
     const Window &_window;
 };
