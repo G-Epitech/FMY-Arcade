@@ -9,6 +9,7 @@
 #include "entities/wall/WallEntity.hpp"
 #include "entities/background/BackgroundEntity.hpp"
 #include "entities/apple/AppleEntity.hpp"
+#include "entities/snake/components/HeadKeyboardComponent.hpp"
 
 using namespace arcade::games;
 
