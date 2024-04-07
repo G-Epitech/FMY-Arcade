@@ -95,3 +95,9 @@ void PlayerEntity::_onCollide(std::shared_ptr<shared::games::IGame> ctx,
 shared::types::Vector2i PlayerEntity::getPosition() {
     return this->_position;
 }
+
+void PlayerEntity::reset(shared::types::Vector2i defaultPosition) {
+    this->_position = defaultPosition;
+    this->forward();
+    this->lastMove = std::chrono::milliseconds(900);
+}

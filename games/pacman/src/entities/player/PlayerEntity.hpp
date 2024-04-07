@@ -37,6 +37,11 @@ public:
      */
     shared::types::Vector2i getPosition();
 
+    /**
+     * @brief Reset player
+     */
+    void reset(shared::types::Vector2i defaultPosition);
+
     shared::games::DeltaTime lastMove;
     shared::types::Vector2i direction;
 protected:

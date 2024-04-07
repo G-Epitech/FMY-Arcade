@@ -31,6 +31,11 @@ public:
      */
     void forward();
 
+    /**
+     * @brief Reset ghost position
+     */
+    void reset(unsigned int index);
+
     shared::games::DeltaTime lastMove;
     shared::types::Vector2i direction;
     shared::types::Vector2i position;

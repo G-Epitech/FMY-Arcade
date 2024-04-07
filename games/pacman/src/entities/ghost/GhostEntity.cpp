@@ -5,6 +5,7 @@
 ** GhostEntity class
 */
 
+#include "../../PacmanGame.hpp"
 #include "GhostEntity.hpp"
 #include "common/components/TextureComponent.hpp"
 #include "common/components/CollidableComponent.hpp"
@@ -27,7 +28,7 @@ void GhostEntity::_spawnGhost(unsigned int asset) {
             },
             .origin = Vector2u(0, asset)
     };
-    std::shared_ptr<CollidableComponent> collision = std::make_shared<CollidableComponent>(*this, nullptr);
+    std::shared_ptr<CollidableComponent> collision = std::make_shared<CollidableComponent>(*this, this->_onCollide);
     std::shared_ptr<TextureComponent> texture = std::make_shared<TextureComponent>(*this, Vector2u(1, 1), 15,
                                                                                    textureProps);
 
@@ -59,4 +60,23 @@ void GhostEntity::forward() {
         posCmp->getPosition().x = this->position.x;
         posCmp->getPosition().y = this->position.y;
     }
+}
+
+void GhostEntity::_onCollide(std::shared_ptr<shared::games::IGame> ctx,
+                             std::shared_ptr<shared::games::components::ICollidableComponent> target) {
+    auto game = std::dynamic_pointer_cast<PacmanGame>(ctx);
+    auto entity = dynamic_cast<const PlayerEntity *>(&target->getEntity());
+
+    if (!game)
+        return;
+    if (entity) {
+        game->eatPlayer();
+    }
+}
+
+void GhostEntity::reset(unsigned int index) {
+    this->lastMove = std::chrono::seconds(10 + index * 2);
+    this->position = Vector2i(11 + index , 14);
+    this->direction = Vector2i(0, 0);
+    this->forward();
 }

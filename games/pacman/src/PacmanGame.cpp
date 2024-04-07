@@ -40,6 +40,7 @@ pacman::PacmanGame::PacmanGame() : common::AGame(Vector2u(27, 30), 60),
 
     this->_registerEntity(this->_map);
     this->_registerEntity(this->_player);
+    this->_clock = std::chrono::milliseconds(0);
 }
 
 const shared::games::GameManifest &pacman::PacmanGame::getManifest() const noexcept {
@@ -109,4 +110,15 @@ void pacman::PacmanGame::_redirectGhost(std::shared_ptr<GhostEntity> ghost) {
     std::uniform_int_distribution<int> dis(0, pos.size() - 1);
 
     ghost->direction = pos[dis(gen)];
+}
+
+void pacman::PacmanGame::eatPlayer() {
+    this->_clock = std::chrono::milliseconds(0);
+    this->_player->reset(Vector2i(13, 23));
+
+    unsigned int index = 0;
+    for (auto ghost : this->_ghosts) {
+        ghost->reset(index);
+        index++;
+    }
 }

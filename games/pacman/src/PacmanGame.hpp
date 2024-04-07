@@ -49,6 +49,11 @@ public:
      */
     void addNewPoint(Vector2i position);
 
+    /**
+     * @brief When a ghost eat a player
+     */
+    void eatPlayer();
+
 protected:
     shared::games::DeltaTime _clock;
     std::shared_ptr<PlayerEntity> _player;
