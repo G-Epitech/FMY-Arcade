@@ -107,6 +107,9 @@ void Core::_initWindow()
         this->_graphicsProvider = this->_getGraphicsProvider(0);
         std::cerr << "No graphic provider selected, using default provider" << std::endl;
     }
+    this->_textures.clear();
+    this->_fonts.clear();
+    this->_sounds.clear();
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
     this->_textures.clear();
     this->_sceneStage = PLAY;
