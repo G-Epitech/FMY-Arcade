@@ -31,7 +31,7 @@ Window::Window(const IWindow::WindowInitProps &props):
     noecho();
     keypad(stdscr, TRUE);
     nodelay(stdscr, TRUE);
-    mousemask(ALL_MOUSE_EVENTS, NULL);
+    mousemask(ALL_MOUSE_EVENTS, nullptr);
     curs_set(0);
     _window = std::unique_ptr<WINDOW, decltype(&delwin)>(newwin(_size.y, _size.x, 0, 0), &delwin);
 }
@@ -39,7 +39,7 @@ Window::Window(const IWindow::WindowInitProps &props):
 Window::~Window()
 {
     wclear(stdscr);
-    close();
+    Window::close();
     endwin();
 }
 
@@ -89,7 +89,7 @@ void Window::render(const shared::graphics::TextProps &props) {
 }
 
 void Window::clear() {
-    wclear(_window.get());
+    werase(_window.get());
 }
 
 void Window::display() {

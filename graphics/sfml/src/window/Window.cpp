@@ -5,6 +5,7 @@
 ** Window class
 */
 
+#include <SFML/Window/Context.hpp>
 #include "Window.hpp"
 #include "EventsHandler.hpp"
 #include "common/events/mouse/mouse.hpp"

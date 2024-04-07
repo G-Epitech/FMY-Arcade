@@ -7,15 +7,17 @@
 
 #include "Text.hpp"
 
+#include <utility>
+
 Text::Text(std::shared_ptr<IFont> font, unsigned int fontSize, std::string content,
         TextAlign align, TextVerticalAlign verticalAlign, Color color, Vector2u size,
         Vector2f position) :
-    _font(font), _fontSize(fontSize), _content(content), _align(align), _verticalAlign(verticalAlign),
+    _font(std::move(font)), _fontSize(fontSize), _content(std::move(content)), _align(align), _verticalAlign(verticalAlign),
     _color(color), _size(size), _position(position) {}
 
-Text::~Text() {}
+Text::~Text() = default;
 
-void Text::draw(std::shared_ptr<IWindow> window)
+void Text::draw(std::unique_ptr<IWindow> &window)
 {
     TextProps textProps = {
         .font = this->_font,

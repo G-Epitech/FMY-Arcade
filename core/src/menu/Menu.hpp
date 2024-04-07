@@ -43,7 +43,7 @@ class Menu {
          * 
          * @param game Game
          */
-        void updateScore(std::shared_ptr<IGame> game);
+        void updateScore(const std::shared_ptr<IGame>& game);
 
     private:
 
@@ -68,7 +68,7 @@ class Menu {
         Score _score;
         std::vector<Score> _scores;
         SceneStage &_sceneStage;
-        std::shared_ptr<IWindow> _window;
+        std::unique_ptr<IWindow> _window;
         GameProviders &_gameProviders;
         GraphicsProviders &_graphicsProviders;
         std::shared_ptr<IGameProvider> &_gameProvider;
@@ -120,25 +120,25 @@ class Menu {
         void _handleEvents();
 
         /**
-         * @brief Handle mouse mouve events
+         * @brief Handle mouse move events
          * 
          * @param mouse Mouse event
          */
-        void _handleMouseMouveEvents(std::shared_ptr<events::IMouseEvent> mouse);
+        void _handleMouseMoveEvents(const std::shared_ptr<events::IMouseEvent>& mouse);
 
         /**
          * @brief Handle mouse button events
          * 
          * @param mouse Mouse event
          */
-        void _handleMouseButtonEvents(std::shared_ptr<events::IMouseButtonEvent> mouse);
+        void _handleMouseButtonEvents(const std::shared_ptr<events::IMouseButtonEvent>& mouse);
 
         /**
          * @brief Handle checkbox events
          * 
          * @param key Key event
          */
-        void _handleKeyboardEvents(std::shared_ptr<events::IKeyEvent> key);
+        void _handleKeyboardEvents(const std::shared_ptr<events::IKeyEvent>& key);
 
         /**
          * @brief Handle select upper checkbox
@@ -174,7 +174,7 @@ class Menu {
          * @brief Change the text type
          * 
          */
-        void _changeGraphics(std::shared_ptr<CheckBox> checkBox);
+        void _changeGraphics(const std::shared_ptr<CheckBox>& checkBox);
 
         /**
          * @brief Initialize checkboxes for games
@@ -206,7 +206,7 @@ class Menu {
          * @param gameManifest GameManifest
          * @param checkBox CheckBox
          */
-        void _initHiddenAuthors(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenAuthors(const GameManifest &gameManifest, const std::shared_ptr<CheckBox>& checkBox, std::shared_ptr<IFont> font);
 
         /**
          * @brief Initialize hidden texts
@@ -215,7 +215,7 @@ class Menu {
          * @param checkBox CheckBox
          * @param font IFont
          */
-        void _initHiddenScore(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenScore(const GameManifest &gameManifest, const std::shared_ptr<CheckBox>& checkBox, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Initialize hidden score header
@@ -224,7 +224,7 @@ class Menu {
          * @param checkBox CheckBox
          * @param font IFont
          */
-        void _initHiddenScoreHeader(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenScoreHeader(const GameManifest &gameManifest, const std::shared_ptr<CheckBox>& checkBox, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Initialize hidden score board
@@ -233,7 +233,7 @@ class Menu {
          * @param checkBox CheckBox
          * @param font IFont
          */
-        void _initHiddenScoreBoard(const GameManifest &gameManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenScoreBoard(const GameManifest &gameManifest, const std::shared_ptr<CheckBox>& checkBox, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Initialize When No game found
@@ -247,7 +247,7 @@ class Menu {
          * @param graphicsManifest GraphicsManifest
          * @param checkBox CheckBox
          */
-        void _initHiddenGraphics(const GraphicsManifest &graphicsManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenGraphics(const GraphicsManifest &graphicsManifest, const std::shared_ptr<CheckBox>& checkBox, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Initialize hidden graphics header
@@ -255,7 +255,7 @@ class Menu {
          * @param graphicsManifest GraphicsManifest
          * @param checkBox CheckBox
          */
-        void _initHiddenGraphicsHeader(const GraphicsManifest &graphicsManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenGraphicsHeader(const GraphicsManifest &graphicsManifest, const std::shared_ptr<CheckBox>& checkBox, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Initialize hidden graphics board
@@ -263,7 +263,7 @@ class Menu {
          * @param graphicsManifest GraphicsManifest
          * @param checkBox CheckBox
          */
-        void _initHiddenGraphicsBoard(const GraphicsManifest &graphicsManifest, std::shared_ptr<CheckBox> checkBox, std::shared_ptr<IFont> font);
+        void _initHiddenGraphicsBoard(const GraphicsManifest &graphicsManifest, const std::shared_ptr<CheckBox>& checkBox, const std::shared_ptr<IFont>& font);
 
         /**
          * @brief Initialize texts
@@ -290,7 +290,7 @@ class Menu {
          * @param size 
          * @return std::string 
          */
-        std::string _truncString(const std::string &str, int size);
+        static std::string _truncString(const std::string &str, int size);
 
         /**
          * @brief Sort the scores
