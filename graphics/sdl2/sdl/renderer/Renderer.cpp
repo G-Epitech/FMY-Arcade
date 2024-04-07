@@ -25,10 +25,18 @@ SDL_Renderer *Renderer::operator()() const {
 }
 
 Renderer &Renderer::create() {
+    reset();
     _renderer = SDL_CreateRenderer(_window(), -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
     if (!_renderer)
         throw SDLException("Failed to create renderer");
     return *this;
+}
+
+void Renderer::reset() {
+    if (_renderer) {
+        SDL_DestroyRenderer(_renderer);
+        _renderer = nullptr;
+    }
 }
 
 void Renderer::drawColor(Color color) {

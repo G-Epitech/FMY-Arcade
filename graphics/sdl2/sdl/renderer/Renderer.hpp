@@ -33,6 +33,12 @@ public:
     Renderer& create();
 
     /**
+     * @brief Reset the internal renderer
+     *
+     */
+    void reset();
+
+    /**
      * @brief Get the renderer
      * @return SDL_Renderer
      */

@@ -307,7 +307,6 @@ void Menu::_initWindow()
     };
 
     try {
-        this->_window.reset();
         this->_window = this->_graphicsProvider->createWindow(windowInitProps);
         this->_clearLists();
         this->_preventGraphicsProvider();
