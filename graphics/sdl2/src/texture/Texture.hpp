@@ -8,7 +8,6 @@
 #pragma once
 
 #include <string>
-#include <SFML/Graphics.hpp>
 #include "shared/graphics/ITexture.hpp"
 #include "sdl/texture/Texture.hpp"
 
@@ -22,11 +21,20 @@ public:
     ~Texture() override = default;
 
     /**
-     * @brief Get the inner SDL2 surface
-     * @return Reference to the inner SDL2 surface
+     * @brief Get the inner SDL2 texture
+     * @param renderer Renderer to create the texture
+     * @return Rendered texture
      */
-    sdl::Surface &getInnerSurface();
+    const sdl::Texture &getInnerTexture(sdl::Renderer &renderer);
+
+    /**
+     * @brief Get the size of the texture
+     * @return Texture size
+     */
+    shared::types::Vector2i getSize() const;
 
 private:
     sdl::Surface _surface;
+    sdl::Texture _texture;
+    bool _textured;
 };

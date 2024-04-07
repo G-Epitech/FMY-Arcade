@@ -13,8 +13,7 @@
 #include "common/exceptions/WindowException.hpp"
 #include "types/renderer.hpp"
 #include "sdl/text/Text.hpp"
-
-
+#include "sdl/sprite/Sprite.hpp"
 
 namespace arcade::graphics::sdl2::window {
     using namespace arcade::graphics::sdl2::types;
@@ -45,7 +44,7 @@ private:
     Window &_window;
     sdl::Renderer &_renderer;
     sdl::Text _text;
-/*    sf::Sprite _sprite;*/
+    sdl::Sprite _sprite;
 
 
     /**
@@ -54,11 +53,11 @@ private:
      */
     static void _reset(sdl::Text &text);
 
- /*   *//**
+    /**
      * @brief Reset the sprite properties
      * @param sprite Sprite to reset
-     *//*
-    static void _reset(sf::Sprite &sprite);*/
+     */
+    static void _reset(sdl::Sprite &sprite);
 
     /**
      * @brief Convert a tile position to pixel position
@@ -86,15 +85,10 @@ private:
     void _textAlign(const shared::graphics::TextAlign &align, const shared::types::Vector2i &entitySize);
 
     /**
-     * @brief Adjust the text position
-     */
-    void _textAdjustPosition();
-
-    /**
      * @brief Set texture rect depending on the texture properties
      * @param props Texture properties
      */
-    void _setTextureRectAndScale(const shared::graphics::TextureProps &props);
+    void _setTextureRect(const shared::graphics::TextureProps &props);
 
     /**
      * @brief Cast a shared pointer from a type to another

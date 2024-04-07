@@ -38,7 +38,7 @@ namespace sdl {
          * @param rect The Rect to convert
          * @return The converted SDL_Rect
          */
-        static SDL_Rect toSDLRect(Rect &rect) {
+        static SDL_Rect toSDLRect(const Rect &rect) {
             return { rect.x, rect.y, rect.w, rect.h };
         }
     } Rect;
@@ -70,7 +70,7 @@ namespace sdl {
          * @param rect The Rect to convert
          * @return The converted SDL_Rect
          */
-        static SDL_FRect toSDLRect(FRect &rect) {
+        static SDL_FRect toSDLRect(const FRect &rect) {
             return { rect.x, rect.y, rect.w, rect.h };
         }
     } FRect;

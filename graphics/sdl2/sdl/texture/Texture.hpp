@@ -46,13 +46,6 @@ public:
     SDL_Texture *operator()() const;
 
     /**
-     * @brief Move the texture to another texture
-     * @param texture Texture to move to
-     * @return Current texture
-     */
-    void reset(Texture &texture);
-
-    /**
      * @brief Get the size of the texture
      * @return Texture size
      */

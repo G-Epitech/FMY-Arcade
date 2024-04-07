@@ -12,6 +12,7 @@
 #include "sdl/types/Color.hpp"
 #include "sdl/types/Rect.hpp"
 #include "sdl/text/Text.hpp"
+#include "sdl/sprite/Sprite.hpp"
 
 namespace sdl {
     class Renderer;
@@ -44,12 +45,17 @@ public:
     void drawColor(Color color);
 
     /**
-     * @brief Copy a texture to the screen
-     * @param texture Texture to copy
-     * @param srcRect Source rectangle
-     * @param destRect Source rectangle
+     * @brief Copy a text to the screen
+     * @param text Text to copy
      */
-    void copy(Texture &texture, std::unique_ptr<Rect> srcRect, std::unique_ptr<FRect> destRect);
+    void copy(Text &text);
+
+    /**
+     * @brief Copy a sprite to the screen
+     * @param sprite Sprite to copy
+     * @param texture Texture to use for the sprite
+     */
+    void copy(const Sprite &sprite, const Texture &texture);
 
     /**
      * @brief Clear the screen
@@ -67,6 +73,14 @@ private:
      * @return Get the renderer
      */
     SDL_Renderer *_safeRenderer();
+
+    /**
+     * @brief Copy a texture to the screen
+     * @param texture Texture to copy
+     * @param srcRect Rect to copy from the texture
+     * @param destRect Rect to copy to the screen
+     */
+    void _copy(const Texture &texture, SDL_Rect *srcRect, SDL_FRect *destRect);
 
     SDL_Renderer *_renderer;
     const Window &_window;

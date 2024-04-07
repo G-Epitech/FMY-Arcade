@@ -15,6 +15,8 @@ target_sources(${PROJECT_NAME} PUBLIC
         text/Text.hpp
         texture/Texture.cpp
         texture/Texture.hpp
+        sprite/Sprite.cpp
+        sprite/Sprite.hpp
         initializer/Initializer.cpp
         initializer/Initializer.hpp
 )

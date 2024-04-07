@@ -94,7 +94,7 @@ void Window::setIcon(const std::string &path) {
 }
 
 void Window::render(const shared::graphics::TextureProps &props) {
-    //_renderer.render(props);
+    _renderer.render(props);
 }
 
 void Window::render(const shared::graphics::TextProps &props) {
@@ -108,6 +108,7 @@ void Window::clear() {
 
 void Window::display() {
     _window.getRenderer().present();
+    SDL_Delay(1000);
 }
 
 void Window::close() {

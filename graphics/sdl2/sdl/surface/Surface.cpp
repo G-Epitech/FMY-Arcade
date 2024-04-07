@@ -60,5 +60,6 @@ Texture Surface::toTexture(Renderer &renderer) const {
 
     if (!raw)
         throw SDLException("Failed to create texture from surface");
+    SDL_SetTextureScaleMode(raw, SDL_ScaleMode::SDL_ScaleModeLinear);
     return Texture(raw);
 }

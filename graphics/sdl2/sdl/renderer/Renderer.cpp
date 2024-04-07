@@ -11,6 +11,7 @@
 #include "sdl/window/Window.hpp"
 #include "sdl/texture/Texture.hpp"
 #include "sdl/exception/Exception.hpp"
+#include "sdl/sprite/Sprite.hpp"
 
 using namespace sdl;
 
@@ -54,15 +55,30 @@ SDL_Renderer *Renderer::_safeRenderer() {
     return _renderer;
 }
 
-void Renderer::copy(Texture &texture, std::unique_ptr<Rect> srcRect, std::unique_ptr<FRect> destRect) {
-    SDL_Rect src = srcRect ? Rect::toSDLRect(*srcRect) : SDL_Rect{0, 0, 0, 0};
-    SDL_FRect dest = destRect ? FRect::toSDLRect(*destRect) : SDL_FRect{0, 0, 0, 0};
+void Renderer::copy(Text &text) {
+    SDL_FRect dest = FRect::toSDLRect(text.getGlobalBounds());
 
+    _copy(
+        text.toTexture(*this),
+        nullptr,
+        &dest
+    );
+}
+
+void Renderer::copy(const Sprite &sprite, const Texture &texture) {
+    SDL_Rect src = Rect::toSDLRect(sprite.getTextureRect());
+    SDL_FRect dest = FRect::toSDLRect(sprite.getGlobalBounds());
+
+    _copy(texture, &src, &dest);
+}
+
+void Renderer::_copy(const Texture &texture, SDL_Rect *srcRect, SDL_FRect *destRect)
+{
     auto copy = SDL_RenderCopyF(
         _safeRenderer(),
         texture(),
-        srcRect ? &src : nullptr,
-        destRect ? &dest : nullptr
+        srcRect,
+        destRect
     );
 
     if (copy < 0)

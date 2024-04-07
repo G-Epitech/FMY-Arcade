@@ -5,7 +5,6 @@
 ** Texture.cpp
 */
 
-#include <iostream>
 #include "Texture.hpp"
 #include "sdl/renderer/Renderer.hpp"
 #include "sdl/exception/Exception.hpp"
