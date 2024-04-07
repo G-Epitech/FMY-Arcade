@@ -20,3 +20,4 @@ lib
 *.gcda
 *.o
 scores.txt
+*.zip
