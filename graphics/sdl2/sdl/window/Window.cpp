@@ -40,10 +40,7 @@ SDL_Window *Window::operator()() const {
 }
 
 Window::~Window() {
-    if (_window) {
-        SDL_DestroyWindow(_window);
-        _renderer.reset();
-    }
+    close();
 }
 
 SDL_Window *Window::_safeWindow() const {
@@ -86,9 +83,10 @@ Renderer &Window::getRenderer() {
 
 void Window::close()
 {
-    if (_window)
+    if (_window) {
+        _renderer.reset();
         SDL_DestroyWindow(_window);
-    _renderer.reset();
+    }
     _window = nullptr;
 }
 
