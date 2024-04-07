@@ -115,23 +115,7 @@ private:
      * @param window Window object
      * @return Pointer to created event or null if not handled
      */
-    static EventPtr _handleWindowCloseEvent(sdl::Event &event, Window &window);
-
-    /**
-     * @brief Handle window resize event
-     * @param event Event from SDL2
-     * @param window Window object
-     * @return Pointer to created event or null if not handled
-     */
-    static EventPtr _handleWindowResizeEvent(sdl::Event &event, Window &window);
-
-    /**
-     * @brief Resolve position of the event to convert it in tiles unit
-     * @param position Position to resolve
-     * @param window Window object of which relate the position
-     * @return Resolved position
-     */
-    static Vector2i _resolvePosition(Vector2i position, Window &window);
+    static EventPtr _handleWindowEvents(sdl::Event &event, Window &window);
 
     window::Window &_window;
 };

@@ -307,6 +307,7 @@ void Menu::_initWindow()
     };
 
     try {
+        this->_window.reset();
         this->_window = this->_graphicsProvider->createWindow(windowInitProps);
         this->_clearLists();
         this->_preventGraphicsProvider();
@@ -459,7 +460,8 @@ void Menu::_exitWithNewGame()
         }
     }
     this->_sceneStage = NEWGAME;
-    this->_window->close();
+    if (this->_window)
+        this->_window->close();
 }
 
 void Menu::_handleMouseMoveEvents(const std::shared_ptr<events::IMouseEvent>& mouse)
@@ -656,7 +658,6 @@ void Menu::run()
     }
     if (this->_music)
         this->_music->setState(ISound::SoundState::STOP);
-    this->_window.reset();
 }
 
 void Menu::_readScores()

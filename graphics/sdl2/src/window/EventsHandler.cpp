@@ -20,8 +20,7 @@ EventsHandler::EventHandler EventsHandler::_getHandler(sdl::EventType type) {
         {SDL_MOUSEBUTTONDOWN,  _handleMouseButtonPressEvent},
         {SDL_MOUSEBUTTONUP, _handleMouseBtnReleaseEvent},
         {SDL_MOUSEMOTION,          _handleMouseMoveEvent},
-        {SDL_QUIT,              _handleWindowCloseEvent},
-        {SDL_WINDOWEVENT,      _handleWindowResizeEvent}
+        {SDL_WINDOWEVENT,      _handleWindowEvents}
     };
     auto handler = handlers.find(type);
 
@@ -179,20 +178,16 @@ EventPtr EventsHandler::_handleKeyReleaseEvent(
     return std::make_shared<KeyReleaseEvent>(type, code);
 }
 
-EventPtr EventsHandler::_handleWindowCloseEvent(
-    unused sdl::Event &event,
-    unused Window &window
-) {
-    return std::make_shared<WindowCloseEvent>();
-}
-
-EventPtr EventsHandler::_handleWindowResizeEvent(
+EventPtr EventsHandler::_handleWindowEvents(
     sdl::Event &event,
     unused Window &window
 ) {
+    if (event.window.event == SDL_WINDOWEVENT_CLOSE)
+        return std::make_shared<WindowCloseEvent>();
     if (event.window.event == SDL_WINDOWEVENT_RESIZED)
         return std::make_shared<WindowResizeEvent>();
     return nullptr;
+
 }
 
 EventPtr EventsHandler::_handleMouseMoveEvent(
