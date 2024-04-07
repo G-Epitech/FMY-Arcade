@@ -51,10 +51,17 @@ bool EventsHandler::_handleControlKey(
     switch (event.code) {
         case sf::Keyboard::LControl:
         case sf::Keyboard::RControl:
+            code.control = IKeyEvent::ControlCode::CTRL;
+            return true;
+
         case sf::Keyboard::LShift:
         case sf::Keyboard::RShift:
+            code.control = IKeyEvent::ControlCode::SHIFT;
+            return true;
+
         case sf::Keyboard::LAlt:
         case sf::Keyboard::RAlt:
+            code.control = IKeyEvent::ControlCode::ALT;
             return true;
 
         default:
