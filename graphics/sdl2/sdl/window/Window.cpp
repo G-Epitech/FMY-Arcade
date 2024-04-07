@@ -5,7 +5,6 @@
 ** Window.cpp
 */
 
-#include <iostream>
 #include "Window.hpp"
 #include "sdl/exception/Exception.hpp"
 
@@ -80,4 +79,8 @@ void Window::setIcon(const std::string &path) {
 
 Renderer &Window::getRenderer() {
     return _renderer;
+}
+
+bool Window::pollEvent(Event &event) {
+    return SDL_PollEvent(&event);
 }

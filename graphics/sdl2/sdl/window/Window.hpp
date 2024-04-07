@@ -12,6 +12,7 @@
 #include "shared/types/Vector.hpp"
 #include "sdl/renderer/Renderer.hpp"
 #include "sdl/surface/Surface.hpp"
+#include "sdl/types/Event.hpp"
 
 namespace sdl {
     using namespace shared::types;
@@ -84,6 +85,13 @@ public:
      * @param path Path of icon to set
      */
     void setIcon(const std::string &path);
+
+    /**
+     * @brief Poll an event
+     * @param event Event to fill
+     * @return Event status
+     */
+    static bool pollEvent(Event &event);
 
 private:
     /**
