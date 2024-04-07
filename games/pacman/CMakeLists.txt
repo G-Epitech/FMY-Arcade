@@ -13,6 +13,8 @@ add_library(${PROJECT_NAME} SHARED
         src/entities/player/components/HeadKeyboardComponent.hpp
         src/entities/map/PointEntity.cpp
         src/entities/map/PointEntity.hpp
+        src/entities/ghost/GhostEntity.cpp
+        src/entities/ghost/GhostEntity.hpp
 )
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/../common PRIVATE)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_LIST_DIR}/src)

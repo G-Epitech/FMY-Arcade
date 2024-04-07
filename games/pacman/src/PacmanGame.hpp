@@ -10,6 +10,7 @@
 #include "common/game/AGame.hpp"
 #include "entities/player/PlayerEntity.hpp"
 #include "entities/map/MapEntity.hpp"
+#include "entities/ghost/GhostEntity.hpp"
 
 #define MAP_PATH "assets/pacman/map.ascii"
 
@@ -52,4 +53,11 @@ protected:
     shared::games::DeltaTime _clock;
     std::shared_ptr<PlayerEntity> _player;
     std::shared_ptr<MapEntity> _map;
+    std::vector<std::shared_ptr<GhostEntity>> _ghosts;
+
+    /**
+     * @brief Redirect the ghost when he is blocked
+     * @param ghost
+     */
+    void _redirectGhost(std::shared_ptr<GhostEntity> ghost);
 };
