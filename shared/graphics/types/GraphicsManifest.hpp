@@ -11,18 +11,25 @@
 
 namespace shared::graphics
 {
-  typedef struct
-  {
-    std::string name;    // Name of the author
-    std::string email;   // Public contact email
-    std::string website; // Website of the author (`github`, `gitlab`, etc.)
-  } Author;
+    /// @brief Author of the graphics library
+    typedef struct {
+        /// @brief Name of the author
+        std::string name;
+        /// @brief Public contact email
+        std::string email;
+        /// @brief Website of the author (`github`, `gitlab`, etc.)
+        std::string website;
+    } Author;
 
-  typedef struct
-  {
-    const std::string name;            // Name of the graphics library
-    const std::string description;     // Description of the library
-    const std::string version;         // Version of the library
-    const std::vector<Author> authors; // Authors
-  } GraphicsManifest;
+    /// @brief Graphics library manifest
+    typedef struct {
+        /// @brief Name of the graphics library
+        const std::string name;
+        /// @brief Description of the graphics library
+        const std::string description;
+        /// @brief Version of the graphics library
+        const std::string version;
+        /// @brief List of authors of the graphics library
+        const std::vector<Author> authors;
+    } GraphicsManifest;
 }

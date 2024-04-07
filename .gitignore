@@ -19,3 +19,5 @@ lib
 *.gcno
 *.gcda
 *.o
+scores.txt
+*.zip

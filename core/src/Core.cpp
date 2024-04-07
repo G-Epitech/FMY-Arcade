@@ -12,19 +12,86 @@
 #include "Core.hpp"
 #include "shared/games/components/IComponent.hpp"
 
-Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders) :
+Core::Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders, const std::string &graphicNameProvider) :
     _gameProviders(gameProviders), _graphicsProviders(graphicsProviders),
-    _gameProvider(gameProviders.at(0)), _graphicsProvider(graphicsProviders.at(0)) {}
+    _menu(gameProviders, graphicsProviders, this->_gameProvider, this->_graphicsProvider, this->_sceneStage)
+{
+    this->_sceneStage = MENU;
+    this->_gameProvider = nullptr;
+    this->_graphicsProvider = nullptr;
+    for (auto &graphicsProvider : this->_graphicsProviders) {
+        if (graphicsProvider.first == graphicNameProvider)
+            this->_graphicsProvider = graphicsProvider.second;
+    }
+}
 
 Core::~Core() {}
 
+std::shared_ptr<IGameProvider> Core::_getGameProvider(const unsigned char &index)
+{
+    if (index > this->_gameProviders.size() - 1) {
+        std::cerr << "Invalid game provider index" << std::endl;
+        return nullptr;
+    }
+    auto it = this->_gameProviders.begin();
+    std::advance(it, index);
+    return it->second;
+}
+
+std::shared_ptr<IGraphicsProvider> Core::_getGraphicsProvider(const unsigned char &index)
+{
+    if (index > this->_graphicsProviders.size() - 1) {
+        std::cerr << "Invalid game provider index" << std::endl;
+        return nullptr;
+    }
+    auto it = this->_graphicsProviders.begin();
+    std::advance(it, index);
+    return it->second;
+}
+
 void Core::_initGame()
 {
-    this->_game = this->_gameProvider->createInstance();
+    if (!this->_gameProvider) {
+        if (this->_gameProviders.empty())
+            throw ArcadeError("No game provider available");
+        this->_gameProvider = this->_getGameProvider(0);
+        std::cerr << "No game provider selected, using default provider" << std::endl;
+    }
+    try {
+        this->_game = this->_gameProvider->createInstance();
+        this->_sceneStage = RESUME;
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        this->_sceneStage = MENU;
+    }
+}
+
+void Core::_initSecureWindow()
+{
+    IWindow::WindowInitProps windowInitProps {
+        Vector2u(20, 20),
+        IWindow::WINDOWED,
+        60,
+        "Secured Window",
+        ""
+    };
+
+    this->_handleWindowClose();
+    if (!this->_graphicsProvider) {
+        if (this->_graphicsProviders.empty())
+            throw ArcadeError("No graphic provider available");
+        this->_graphicsProvider = this->_getGraphicsProvider(0);
+        std::cerr << "No graphic provider selected, using default provider" << std::endl;
+    }
+    this->_window = this->_graphicsProvider->createWindow(windowInitProps);
 }
 
 void Core::_initWindow()
 {
+    if (!this->_game)
+        this->_initGame();
+    if (!this->_game)
+        return this->_initSecureWindow();
     auto gameManifest = this->_game->getManifest();
     IWindow::WindowInitProps windowInitProps {
         this->_game->getSize(),
@@ -34,11 +101,26 @@ void Core::_initWindow()
         gameManifest.iconPath
     };
 
+    this->_handleWindowClose();
+    if (!this->_graphicsProvider) {
+        if (this->_graphicsProviders.empty())
+            throw ArcadeError("No graphic provider available");
+        this->_graphicsProvider = this->_getGraphicsProvider(0);
+        std::cerr << "No graphic provider selected, using default provider" << std::endl;
+    }
+    this->_textures.clear();
+    this->_fonts.clear();
+    this->_sounds.clear();
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
+    this->_sceneStage = PLAY;
 }
 
 std::shared_ptr<ITexture> Core::_getTexture(std::string bin, std::string ascii)
 {
+    for (auto &failedTexture : this->_failedTextures) {
+        if (failedTexture == bin + ascii)
+            return nullptr;
+    }
     if (this->_textures.find(bin + ascii) == this->_textures.end())
         this->_textures[bin + ascii] = this->_graphicsProvider->createTexture(bin, ascii);
     return this->_textures[bin + ascii];
@@ -46,6 +128,10 @@ std::shared_ptr<ITexture> Core::_getTexture(std::string bin, std::string ascii)
 
 std::shared_ptr<IFont> Core::_getFont(std::string path)
 {
+    for (auto &failedTexture : this->_failedTextures) {
+        if (failedTexture == path)
+            return nullptr;
+    }
     if (this->_fonts.find(path) == this->_fonts.end())
         this->_fonts[path] = this->_graphicsProvider->createFont(path);
     return this->_fonts[path];
@@ -63,6 +149,22 @@ Core::SoundProps Core::_getSound(std::string path)
         this->_sounds[path] = soundProps;
     }
     return this->_sounds[path];
+}
+
+void Core::_loadFailed(std::shared_ptr<components::ITextureComponent> texture)
+{
+    if (!texture)
+        return;
+    auto textureProps = texture->getTextureProps();
+    this->_failedTextures.push_back(textureProps.sources.bin + textureProps.sources.ascii);
+}
+
+void Core::_loadFailed(std::shared_ptr<components::ITextComponent> text)
+{
+    if (!text)
+        return;
+    auto textProps = text->getTextProps();
+    this->_failedTextures.push_back(textProps.font.path);
 }
 
 TextureProps Core::_getTextureEntity(std::shared_ptr<components::ITextureComponent> texture)
@@ -144,14 +246,28 @@ void Core::_renderEntities()
         auto components = entity->getComponents();
         for (auto &component : components) {
             if (component->getType() == components::TEXTURE) {
-                auto texture = std::dynamic_pointer_cast<components::ITextureComponent>(component);
-                unsigned int index = texture->getZIndex();
-                entitiesTextureProps[index].push_back(this->_getTextureEntity(texture));
+                try {
+                    auto texture = std::dynamic_pointer_cast<components::ITextureComponent>(component);
+                    unsigned int index = texture->getZIndex();
+                    auto entityTextureProps = this->_getTextureEntity(texture);
+                    if (entityTextureProps.texture)
+                        entitiesTextureProps[index].push_back(entityTextureProps);
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                    this->_loadFailed(std::dynamic_pointer_cast<components::ITextureComponent>(component));
+                }
             }
             if (component->getType() == components::TEXT) {
-                auto texture = std::dynamic_pointer_cast<components::ITextComponent>(component);
-                unsigned int index = texture->getZIndex();
-                entitiesTextProps[index].push_back(this->_getTextEntity(texture));
+                try {
+                    auto text = std::dynamic_pointer_cast<components::ITextComponent>(component);
+                    unsigned int index = text->getZIndex();
+                    auto entityTextProps = this->_getTextEntity(text);
+                    if (entityTextProps.font)
+                        entitiesTextProps[index].push_back(entityTextProps);
+                } catch (std::exception &e) {
+                    std::cerr << e.what() << std::endl;
+                    this->_loadFailed(std::dynamic_pointer_cast<components::ITextComponent>(component));
+                }
             }
         }
     }
@@ -180,12 +296,62 @@ components::IKeyboardComponent::KeyData Core::_convertKeyPressData(events::IKeyE
     return keyCodeData;
 }
 
-void Core::_preventWindowClose(std::vector<events::EventPtr> events)
+void Core::_preventWindowEvents(std::vector<events::EventPtr> events)
 {
     for (auto &event : events) {
         auto type = event->getType();
         if (type == events::WINDOW_CLOSE)
             this->_handleWindowClose();
+        if (type == events::KEY_PRESS) {
+            auto keyEvent = std::dynamic_pointer_cast<events::IKeyEvent>(event);
+            auto keyCode = keyEvent->getKeyCode();
+            auto keyType = keyEvent->getKeyType();
+            if (keyType == events::IKeyEvent::CHAR && keyCode.character == 27)
+                this->_sceneStage = MENU;
+        }
+    }
+}
+
+void Core::_changeGraphicProvider(const unsigned char &index)
+{
+    if (index > this->_graphicsProviders.size() - 1) {
+        std::cerr << "Invalid graphic provider index" << std::endl;
+        return;
+    }
+    auto newProvider = this->_getGraphicsProvider(index);
+    if (newProvider == this->_graphicsProvider)
+        return;
+    this->_graphicsProvider = newProvider;
+    this->_initWindow();
+}
+
+void Core::_changeGameProvider(const unsigned char &index)
+{
+    if (index > this->_gameProviders.size() - 1) {
+        std::cerr << "Invalid game provider index" << std::endl;
+        return;
+    }
+    auto newProvider = this->_getGameProvider(index);
+    this->_gameProvider = newProvider;
+    this->_textures.clear();
+    this->_fonts.clear();
+    this->_sounds.clear();
+    this->_initGame();
+    this->_initWindow();
+}
+
+void Core::_handleFunctionKeys(std::shared_ptr<events::IKeyEvent> &keyEvent)
+{
+    auto keyCode = keyEvent->getKeyCode();
+    auto keyType = keyEvent->getKeyType();
+
+    if (keyType == events::IKeyEvent::FUNC) {
+        if (keyCode.func <= 6)
+            this->_changeGameProvider(keyCode.func - 1);
+        else if (keyCode.func >= 7 && keyCode.func <= 12)
+            this->_changeGraphicProvider(keyCode.func - 7);
+        else
+            std::cerr << "Invalid function key" << std::endl;
     }
 }
 
@@ -195,6 +361,7 @@ void Core::_handleKeyPress(std::shared_ptr<events::IKeyEvent> &keyEvent, std::sh
     auto keyType = keyEvent->getKeyType();
     auto keyCodeData = this->_convertKeyPressData(keyType, keyCode);
 
+    this->_handleFunctionKeys(keyEvent);
     keyboard->onKeyPress(this->_game, keyCodeData);
 }
 
@@ -242,9 +409,22 @@ void Core::_handleMouseMove(std::shared_ptr<events::IMouseEvent> &event, std::sh
         component->onMouseHover(this->_game);
 }
 
+void Core::_stopAllGraphicsSounds()
+{
+    for (auto &sound : this->_sounds) {
+        sound.second.sound->setState(ISound::SoundState::PAUSE);
+        sound.second.previousGameState = components::PAUSE;
+    }
+}
+
 void Core::_handleWindowClose()
 {
-    this->_window->close();
+    if (this->_window && this->_window->isOpen()) {
+        this->_stopAllGraphicsSounds();
+        this->_window->close();
+        this->_menu.updateScore(this->_game);
+        this->_sceneStage = MENU;
+    }
 }
 
 void Core::_handleWindowResize()
@@ -341,11 +521,13 @@ void Core::_handleSoundComponent(std::shared_ptr<components::ISoundComponent> &g
             gameSound->onStateChange(this->_game, components::PAUSE);
         if (graphicSoundState == ISound::SoundState::STOP)
             gameSound->onStateChange(this->_game, components::STOP);
+        sound.previousGraphicState = graphicSoundState;
     }
     if (gameSoundVolume != graphicSoundVolume)
         sound.sound->setVolume(gameSoundVolume);
     if (gameSoundLoop != graphicSoundLoop)
         sound.sound->setLoopState(gameSoundLoop);
+    this->_sounds[gameSoundPath] = sound;
 }
 
 void Core::_handleComponentEvents(std::vector<events::EventPtr> &events, std::shared_ptr<components::IComponent> &component)
@@ -374,12 +556,18 @@ void Core::_handleEvents()
 {
     auto gameEvents = this->_window->getEvents();
 
-    this->_preventWindowClose(gameEvents);
-    for (auto &entity : this->_gameEntities) {
-        auto components = entity->getComponents();
-        for (auto &component : components) {
-            this->_handleComponentEvents(gameEvents, component);
+    try {
+        this->_preventWindowEvents(gameEvents);
+        if (this->_sceneStage == MENU)
+            return;
+        for (auto &entity : this->_gameEntities) {
+            auto components = entity->getComponents();
+            for (auto &component : components) {
+                this->_handleComponentEvents(gameEvents, component);
+            }
         }
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
     }
 }
 
@@ -387,16 +575,30 @@ void Core::run()
 {
     auto previousTime = std::chrono::high_resolution_clock::now();
 
+    this->_menu.run();
+    if (this->_sceneStage == EXIT || this->_sceneStage == RESUME)
+        return;
     this->_initGame();
     this->_initWindow();
-    while (this->_window->isOpen()) {
+    while (this->_sceneStage != EXIT) {
         auto currentTime = std::chrono::high_resolution_clock::now();
         auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
-        this->_game->compute(deltaTime);
-        this->_gameEntities = this->_game->getEntities();
-        this->_handleEvents();
-        this->_renderEntities();
+        if (this->_sceneStage == MENU) {
+            this->_handleWindowClose();
+            this->_menu.run();
+            previousTime = std::chrono::high_resolution_clock::now();
+        }
+        if (this->_sceneStage == NEWGAME)
+            this->_initGame();
+        if (this->_sceneStage == RESUME)
+            this->_initWindow();
+        if (this->_sceneStage == PLAY) {
+            this->_game->compute(deltaTime);
+            this->_gameEntities = this->_game->getEntities();
+            this->_handleEvents();
+            this->_renderEntities();
+        }
     }
 }

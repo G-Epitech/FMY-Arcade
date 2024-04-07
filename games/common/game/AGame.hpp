@@ -40,6 +40,13 @@ public:
      */
     const unsigned int getFps() const noexcept override;
 
+    /**
+     * @brief Get the score of the game
+     *
+     * @return The score of the game
+     */
+    const int getScore() const noexcept override;
+
 protected:
     /**
      * @brief Construct a new AGame object
@@ -63,6 +70,11 @@ protected:
      * @brief Game frame per seconds
      */
     unsigned int _fps;
+
+    /**
+     * @brief Game score
+     */
+    int _score;
 
     /**
      * @brief Add an entity to the game

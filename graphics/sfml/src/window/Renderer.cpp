@@ -125,7 +125,7 @@ void Renderer::_reset(sf::Sprite &sprite) {
     sprite.setOrigin(0, 0);
 }
 
-Vector2f Renderer::_entityPixels(const Vector2i &position) {
+Vector2f Renderer::_entityPixels(const Vector2f &position) {
     auto realSize = this->_window.getSize();
     Vector2u originalPixels = this->_window.getPixelSizeFromTiles(realSize);
 

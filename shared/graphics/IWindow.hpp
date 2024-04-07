@@ -18,25 +18,43 @@
 using namespace shared::types;
 
 namespace shared::graphics {
-  class IWindow;
+    class IWindow;
 }
 
+/**
+ * @brief Interface for the window object
+ * 
+ */
 class shared::graphics::IWindow {
   public:
     virtual ~IWindow() = default;
 
-    typedef enum
-    {
-        WINDOWED,
-        FULLSCREEN
+    /**
+     * @brief Window mode
+     * 
+     */
+    typedef enum {
+      /// @brief Windowed mode
+      WINDOWED,
+      /// @brief Fullscreen mode
+      FULLSCREEN
     } WindowMode;
 
+    /**
+     * @brief Window initial properties
+     * 
+     */
     typedef struct {
-        Vector2u size;            //Initial size of the window
-        WindowMode mode;          //Initial mode of the window
-        unsigned int fps;         //Initial framerate of the window
-        const std::string title;  //Initial title of the window
-        const std::string icon;   //Initial icon of the window
+      /// @brief Initial size of the window
+      Vector2u size;
+      /// @brief Initial mode of the window
+      WindowMode mode;
+      /// @brief Initial framerate of the window
+      unsigned int fps;
+      /// @brief Initial title of the window
+      const std::string title;
+      /// @brief Initial icon of the window
+      const std::string icon;
     } WindowInitProps;
 
     /**

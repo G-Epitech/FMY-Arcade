@@ -29,7 +29,7 @@ public:
      * @brief Get position of the entity (tiles)
      *
      */
-    shared::types::Vector2i &getPosition() noexcept override;
+    shared::types::Vector2f &getPosition() noexcept override;
 
     /**
      * @brief Get size of the entity (tiles)
@@ -38,6 +38,6 @@ public:
      shared::types::Vector2u &getSize() noexcept override;
 
 protected:
-    shared::types::Vector2i _position;
+    shared::types::Vector2f _position;
     shared::types::Vector2u _size;
 };

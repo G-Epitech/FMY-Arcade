@@ -26,6 +26,11 @@ const shared::games::GameManifest snake::SnakeGame::manifest = {
                         .name = "Flavien Chenu",
                         .email = "flavienchenu@epitech.eu",
                         .website = "https://github.com/flavien-chenu"
+                },
+                {
+                        .name = "Yann Masson",
+                        .email = "yannmasson@epitech.eu",
+                        .website = "yannmasson.fr"
                 }
         }
 };
@@ -48,6 +53,7 @@ snake::SnakeGame::SnakeGame() : common::AGame(Vector2u(20, 20), 60) {
     this->_looseGame = false;
     this->speedTime = 100;
     this->speedBoost = 0;
+    this->moved = false;
 }
 
 const shared::games::GameManifest &snake::SnakeGame::getManifest() const noexcept {
@@ -67,6 +73,7 @@ void snake::SnakeGame::compute(shared::games::DeltaTime dt) {
     }
     if (this->_clock > std::chrono::milliseconds(speed) + this->_snake->lastMove) {
         this->_snake->lastMove = this->_clock;
+        this->moved = false;
         this->_snake->forward();
     }
 }
@@ -86,16 +93,37 @@ void snake::SnakeGame::_loose() {
     }
 
     this->_looseGame = false;
+    if (this->_score < this->_currentScore)
+        this->_score = this->_currentScore;
+    this->_apple->generateApple();
+    this->speedTime = 100;
 }
 
 void snake::SnakeGame::setLooseGame(bool state) {
     this->_looseGame = state;
 }
 
+void snake::SnakeGame::changeStateSound(const std::string &soundName, shared::games::components::SoundState state) {
+    for (auto &entity: this->_entities) {
+        auto head = std::dynamic_pointer_cast<snake::HeadEntity>(entity);
+        if (head == nullptr)
+            continue;
+        auto components = head->getComponents();
+        for (auto &component: components) {
+            auto sound = std::dynamic_pointer_cast<arcade::games::snake::components::HeadKeyboardComponent>(component);
+            if (sound == nullptr)
+                continue;
+            sound->sounds[soundName]->setState(state);
+        }
+    }
+}
+
 void snake::SnakeGame::addNewPoint() {
     std::shared_ptr<TailEntity> newTail = this->_snake->addTail();
 
+    this->changeStateSound("eat", shared::games::components::SoundState::PLAY);
     this->_registerEntity(newTail);
     this->_apple->generateApple();
     this->speedTime -= 2;
+    this->_currentScore += 10;
 }

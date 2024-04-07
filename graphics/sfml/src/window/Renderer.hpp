@@ -60,7 +60,7 @@ private:
      * @param position Tile position
      * @return Pixel position
      */
-    Vector2f _entityPixels(const Vector2i &position);
+    Vector2f _entityPixels(const Vector2f &position);
 
     /**
      * @brief Convert a tile size to pixel size

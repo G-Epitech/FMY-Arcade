@@ -13,6 +13,10 @@ namespace shared::graphics::exceptions {
     class ISoundException;
 }
 
+/**
+ * @brief Interface for the sound exception object
+ * 
+ */
 class shared::graphics::exceptions::ISoundException : public virtual IGraphicsException {
 public:
     virtual ~ISoundException() = default;

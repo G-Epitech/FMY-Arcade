@@ -11,7 +11,11 @@ namespace shared::graphics {
     class IFont;
 }
 
+/**
+ * @brief Interface of a font
+ * 
+ */
 class shared::graphics::IFont {
-  public:
-    virtual ~IFont() = default;
+    public:
+      virtual ~IFont() = default;
 };

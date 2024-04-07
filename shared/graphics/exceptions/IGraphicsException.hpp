@@ -13,6 +13,10 @@ namespace shared::graphics::exceptions {
     class IGraphicsException;
 }
 
+/**
+ * @brief Interface for the graphics exception object
+ * 
+ */
 class shared::graphics::exceptions::IGraphicsException: public std::exception {
 public:
     /**

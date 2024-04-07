@@ -13,7 +13,7 @@
 using namespace arcade::graphics::sfml::window;
 using namespace arcade::graphics::common::exceptions;
 
-const Vector2u Window::tileSize = { 12, 12 };
+const Vector2u Window::tileSize = { 35, 35 };
 
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
@@ -149,7 +149,7 @@ Vector2u Window::getPixelSizeFromTiles(const Vector2u &size) {
     return real;
 }
 
-Vector2i Window::mapPositionToTile(const Vector2i &position) const {
+Vector2f Window::mapPositionToTile(const Vector2i &position) const {
     auto pixelsPosition = _window.mapPixelToCoords({
         position.x,
         position.y
@@ -164,10 +164,7 @@ Vector2i Window::mapPositionToTile(const Vector2i &position) const {
 
     if (tilesPosition.x >= size.x || tilesPosition.y >= size.y || pixelsPosition.x < 0)
         return {-1, -1};
-    return {
-        static_cast<int>(tilesPosition.x),
-        static_cast<int>(tilesPosition.y)
-    };
+    return tilesPosition;
 }
 
 void Window::onResize()
@@ -181,7 +178,7 @@ void Window::onResize()
     _view.setCenter( static_cast<float>(originalPixels.x) / 2,
                      static_cast<float>(originalPixels.y) / 2
     );
-    if (width < height) {
+    if ((static_cast<float>(originalPixels.x) / width) > static_cast<float>(originalPixels.y) / height) {
         _view.zoom(static_cast<float>(originalPixels.x) / width);
     } else {
         _view.zoom(static_cast<float>(originalPixels.y) / height);

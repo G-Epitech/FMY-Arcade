@@ -137,7 +137,7 @@ public:
      * @brief Convert a position in pixels to a position in tiles
      * @return Converted position
      */
-    Vector2i mapPositionToTile(const Vector2i &pixelsPosition) const;
+    Vector2f mapPositionToTile(const Vector2i &pixelsPosition) const;
 
     /**
      * @brief Get the size of a tile

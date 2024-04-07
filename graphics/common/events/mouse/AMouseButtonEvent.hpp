@@ -32,7 +32,7 @@ public:
      * @param button Targeted button
      */
     explicit AMouseButtonEvent(
-        Vector2i pos,
+        Vector2f pos,
         MouseButton button
     ): AMouseEvent<T>(pos), _button(button) {};
 

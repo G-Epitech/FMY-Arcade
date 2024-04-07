@@ -14,7 +14,7 @@ PositionableComponent::PositionableComponent(shared::games::entity::IEntity &ent
                                                                                        _position(0, 0), _size(1, 1) {
 }
 
-shared::types::Vector2i &PositionableComponent::getPosition() noexcept {
+shared::types::Vector2f &PositionableComponent::getPosition() noexcept {
     return this->_position;
 }
 

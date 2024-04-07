@@ -8,6 +8,8 @@
 #pragma once
 
 #include <map>
+#include "menu/Menu.hpp"
+#include "types/Stages.hpp"
 #include "types/Providers.hpp"
 #include "shared/graphics/ISound.hpp"
 #include "shared/graphics/events/IKeyEvent.hpp"
@@ -25,7 +27,7 @@ using namespace shared::games;
 
 class Core {
     public:
-        Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders);
+        Core(GameProviders &gameProviders, GraphicsProviders &graphicsProviders, const std::string &graphicNameProvider);
         ~Core();
 
         /**
@@ -44,20 +46,29 @@ class Core {
 
         std::shared_ptr<IGame> _game;
         std::shared_ptr<IWindow> _window;
-        std::shared_ptr<IGameProvider> &_gameProvider;
-        std::shared_ptr<IGraphicsProvider> &_graphicsProvider;
+        std::shared_ptr<IGameProvider> _gameProvider;
+        std::shared_ptr<IGraphicsProvider> _graphicsProvider;
         std::map<std::string, std::shared_ptr<IFont>> _fonts;
         std::map<std::string, std::shared_ptr<ITexture>> _textures;
+        std::vector<std::string> _failedTextures;
         std::map<std::string, SoundProps> _sounds;
         GameProviders &_gameProviders;
         GraphicsProviders &_graphicsProviders;
         entity::EntitiesMap _gameEntities;
+        arcade::core::SceneStage _sceneStage;
+        Menu _menu;
 
         /**
          * @brief Initialize the window
          * 
          */
         void _initWindow();
+
+        /**
+         * @brief Initialize the secure window
+         * 
+         */
+        void _initSecureWindow();
 
         /**
          * @brief Initialize the game
@@ -70,6 +81,20 @@ class Core {
          * 
          */
         void _renderEntities();
+
+        /**
+         * @brief Load the failed texture
+         * 
+         * @param texture The texture component
+         */
+        void _loadFailed(std::shared_ptr<components::ITextureComponent> texture);
+
+        /**
+         * @brief Load the failed text
+         * 
+         * @param text The text component
+         */
+        void _loadFailed(std::shared_ptr<components::ITextComponent> text);
 
         /**
          * @brief Get a texture
@@ -229,6 +254,12 @@ class Core {
         void _handleWindowClose();
 
         /**
+         * @brief Stop all sounds
+         * 
+         */
+        void _stopAllGraphicsSounds();
+
+        /**
          * @brief Handle the window resize event
          * 
          */
@@ -239,7 +270,7 @@ class Core {
          * 
          * @param events The events
          */
-        void _preventWindowClose(std::vector<events::EventPtr> events);
+        void _preventWindowEvents(std::vector<events::EventPtr> events);
 
         /**
          * @brief Handle the key press event
@@ -256,6 +287,27 @@ class Core {
         void _handleKeyRelease(std::shared_ptr<events::IKeyEvent> &event);
 
         /**
+         * @brief Handle the function keys
+         * 
+         * @param event The key event
+         */
+        void _handleFunctionKeys(std::shared_ptr<events::IKeyEvent> &event);
+
+        /**
+         * @brief Change the graphic provider
+         * 
+         * @param index The index of the graphic provider
+         */
+        void _changeGraphicProvider(const unsigned char &index);
+
+        /**
+         * @brief Change the game provider
+         * 
+         * @param index The index of the game provider
+         */
+        void _changeGameProvider(const unsigned char &index);
+
+        /**
          * @brief Convert the key press data
          * 
          * @param type The type of the key
@@ -270,4 +322,20 @@ class Core {
          * @param event The mouse button event
          */
         void _handleSoundComponent(std::shared_ptr<components::ISoundComponent> &component);
+
+        /**
+         * @brief Get the game provider
+         * 
+         * @param index The index of the game provider
+         * @return The game provider
+         */
+        std::shared_ptr<IGameProvider> _getGameProvider(const unsigned char &index);
+
+        /**
+         * @brief Get the graphic provider
+         * 
+         * @param index The index of the graphic provider
+         * @return The graphic provider
+         */
+        std::shared_ptr<IGraphicsProvider> _getGraphicsProvider(const unsigned char &index);
 };
