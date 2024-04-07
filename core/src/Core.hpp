@@ -87,14 +87,14 @@ class Core {
          * 
          * @param texture The texture component
          */
-        void _loadFailed(std::shared_ptr<components::ITextureComponent> texture);
+        void _loadFailed(const std::shared_ptr<components::ITextureComponent>& texture);
 
         /**
          * @brief Load the failed text
          * 
          * @param text The text component
          */
-        void _loadFailed(std::shared_ptr<components::ITextComponent> text);
+        void _loadFailed(const std::shared_ptr<components::ITextComponent>& text);
 
         /**
          * @brief Get a texture
@@ -103,7 +103,7 @@ class Core {
          * @param ascii Path to the ascii file
          * @return The correct texture
          */
-        std::shared_ptr<ITexture> _getTexture(std::string bin, std::string ascii);
+        std::shared_ptr<ITexture> _getTexture(const std::string& bin, const std::string& ascii);
 
         /**
          * @brief Get a font
@@ -111,7 +111,7 @@ class Core {
          * @param path Path to the font file
          * @return The correct font
          */
-        std::shared_ptr<IFont> _getFont(std::string path);
+        std::shared_ptr<IFont> _getFont(const std::string& path);
 
         /**
          * @brief Get a sound
@@ -119,7 +119,7 @@ class Core {
          * @param path Path to the sound file
          * @return The correct sound
          */
-        SoundProps _getSound(std::string path);
+        SoundProps _getSound(const std::string& path);
 
         /**
          * @brief Get the texture entity
@@ -127,7 +127,7 @@ class Core {
          * @param texture The texture component
          * @return The texture entity
          */
-        TextureProps _getTextureEntity(std::shared_ptr<components::ITextureComponent> texture);
+        TextureProps _getTextureEntity(const std::shared_ptr<components::ITextureComponent>& texture);
 
         /**
          * @brief Get the text entity
@@ -135,7 +135,7 @@ class Core {
          * @param text The text component
          * @return The text entity
          */
-        TextProps _getTextEntity(std::shared_ptr<components::ITextComponent> text);
+        TextProps _getTextEntity(const std::shared_ptr<components::ITextComponent>& text);
 
         /**
          * @brief Render the props
@@ -260,17 +260,11 @@ class Core {
         void _stopAllGraphicsSounds();
 
         /**
-         * @brief Handle the window resize event
-         * 
-         */
-        void _handleWindowResize();
-
-        /**
          * @brief Prevent the window from closing
          * 
          * @param events The events
          */
-        void _preventWindowEvents(std::vector<events::EventPtr> events);
+        void _preventWindowEvents(const std::vector<events::EventPtr>& events);
 
         /**
          * @brief Handle the key press event
@@ -314,7 +308,7 @@ class Core {
          * @param code The code of the key
          * @return The converted key press data
          */
-        components::IKeyboardComponent::KeyData _convertKeyPressData(events::IKeyEvent::KeyType type, events::IKeyEvent::KeyCode code);
+        static components::IKeyboardComponent::KeyData _convertKeyPressData(events::IKeyEvent::KeyType type, events::IKeyEvent::KeyCode code);
 
         /**
          * @brief Handle the mouse button press event

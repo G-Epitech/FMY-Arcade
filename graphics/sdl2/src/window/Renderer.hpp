@@ -64,7 +64,7 @@ private:
      * @param position Tile position
      * @return Pixel position
      */
-    Vector2f _entityPixelsPosition(const Vector2i &position);
+    Vector2f _entityPixelsPosition(const Vector2f &position);
 
     /**
      * @brief Align vertically the text

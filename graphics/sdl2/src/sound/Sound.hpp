@@ -29,6 +29,6 @@ public:
     bool getLoopState() const override;
 
 private:
-    sf::SoundBuffer _buffer;
-    sf::Sound       _sound;
+/*    sf::SoundBuffer _buffer;
+    sf::Sound       _sound;*/
 };

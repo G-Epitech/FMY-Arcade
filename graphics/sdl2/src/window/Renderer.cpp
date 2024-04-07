@@ -108,7 +108,7 @@ void Renderer::_reset(sdl::Sprite &sprite) {
     sprite.setPosition({0, 0});
 }
 
-Vector2f Renderer::_entityPixelsPosition(const Vector2i &position) {
+Vector2f Renderer::_entityPixelsPosition(const Vector2f &position) {
     auto pixels = _window.tilesToPixels(position);
 
     return {

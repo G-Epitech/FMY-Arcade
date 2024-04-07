@@ -14,7 +14,7 @@
 using namespace arcade::graphics::sdl2::window;
 using namespace arcade::graphics::common::exceptions;
 
-const Vector2u Window::tileSize = { 12, 12 };
+const Vector2u Window::tileSize = { 35, 35 };
 
 Window::Window(const IWindow::WindowInitProps &props):
     _size(props.size),
@@ -126,7 +126,7 @@ void Window::_initInnerWindow(const shared::graphics::IWindow::WindowInitProps &
             props.title,
             { SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED },
             { static_cast<int>(size.x), static_cast<int>(size.y) },
-            0
+            SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE
         );
     } catch (const sdl::SDLException &e) {
         throw WindowException(
@@ -147,21 +147,21 @@ Vector2u Window::_getPixelSizeFromTiles(const Vector2u &size) {
     return real;
 }
 
-Vector2i Window::pixelsToTiles(const shared::types::Vector2i &position) const {
+Vector2f Window::pixelsToTiles(const shared::types::Vector2i &position) const {
     auto realSize = _window.getSize();
 
     return {
-        static_cast<int>(position.x * _size.x / realSize.x),
-        static_cast<int>(position.y * _size.y / realSize.y)
+        static_cast<float>(position.x) * static_cast<float>(_size.x) / static_cast<float>(realSize.x),
+        static_cast<float>(position.y) * static_cast<float>(_size.y) / static_cast<float>(realSize.y)
     };
 }
 
-Vector2i Window::tilesToPixels(const Vector2i &position) const {
+Vector2i Window::tilesToPixels(const Vector2f &position) const {
     auto realSize = _window.getSize();
 
     return {
-        static_cast<int>(position.x * realSize.x / _size.x),
-        static_cast<int>(position.y * realSize.y / _size.y)
+        static_cast<int>(position.x) * realSize.x / static_cast<int>(_size.x),
+        static_cast<int>(position.y) * realSize.y / static_cast<int>(_size.y)
     };
 }
 

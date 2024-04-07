@@ -208,7 +208,7 @@ EventPtr EventsHandler::_handleMouseButtonPressEvent(
     sdl::Event &event,
     Window &window
 ) {
-    Vector2i pos = window.pixelsToTiles(Vector2i(event.button.x, event.button.y));
+    Vector2f pos = window.pixelsToTiles(Vector2i(event.button.x, event.button.y));
 
     if (event.button.button == SDL_BUTTON_LEFT)
         return std::make_shared<MouseButtonPressEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
@@ -223,7 +223,7 @@ EventPtr EventsHandler::_handleMouseBtnReleaseEvent(
     sdl::Event &event,
     unused Window &window
 ) {
-    Vector2i pos = window.pixelsToTiles(Vector2i(event.button.x, event.button.y));
+    Vector2f pos = window.pixelsToTiles(Vector2i(event.button.x, event.button.y));
 
     if (event.button.button == SDL_BUTTON_LEFT)
         return std::make_shared<MouseButtonReleaseEvent>(pos, IMouseButtonEvent::MouseButton::LEFT);
