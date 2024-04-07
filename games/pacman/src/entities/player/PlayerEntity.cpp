@@ -89,10 +89,13 @@ void PlayerEntity::_onCollide(std::shared_ptr<shared::games::IGame> ctx,
         return;
     if (entity) {
         game->addNewPoint(entity->position);
+        if (entity->ghostBonus) {
+            game->canEatGhosts();
+        }
     }
 }
 
-shared::types::Vector2i PlayerEntity::getPosition() {
+shared::types::Vector2i PlayerEntity::getPosition() const {
     return this->_position;
 }
 

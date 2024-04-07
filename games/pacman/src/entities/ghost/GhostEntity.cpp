@@ -14,7 +14,7 @@ using namespace arcade::games::pacman;
 using namespace arcade::games::common::components;
 using namespace shared::types;
 
-GhostEntity::GhostEntity(unsigned int asset): position(11 + asset , 14), direction(0, 0) {
+GhostEntity::GhostEntity(unsigned int asset): position(11 + asset , 14), direction(0, 0), _defaultOrigin(Vector2u(0, asset)) {
     this->lastMove = std::chrono::seconds(10 + asset * 2);
     this->_spawnGhost(asset);
 }
@@ -70,7 +70,7 @@ void GhostEntity::_onCollide(std::shared_ptr<shared::games::IGame> ctx,
     if (!game)
         return;
     if (entity) {
-        game->eatPlayer();
+        game->eatPlayer(entity->getPosition());
     }
 }
 
@@ -79,4 +79,26 @@ void GhostEntity::reset(unsigned int index) {
     this->position = Vector2i(11 + index , 14);
     this->direction = Vector2i(0, 0);
     this->forward();
+}
+
+void GhostEntity::enableCanBeEat() {
+    this->_canBeEat = true;
+
+    for (auto &component: this->_components) {
+        auto txtCmp = std::dynamic_pointer_cast<TextureComponent>(component);
+        if (txtCmp == nullptr) continue;
+
+        txtCmp->getTextureProps().origin = Vector2u(1, 0);
+    }
+}
+
+void GhostEntity::disableCanBeEat() {
+    this->_canBeEat = false;
+
+    for (auto &component: this->_components) {
+        auto txtCmp = std::dynamic_pointer_cast<TextureComponent>(component);
+        if (txtCmp == nullptr) continue;
+
+        txtCmp->getTextureProps().origin = this->_defaultOrigin;
+    }
 }

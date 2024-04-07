@@ -35,7 +35,7 @@ public:
      * @brief Get position of the player
      * @return the player position
      */
-    shared::types::Vector2i getPosition();
+    shared::types::Vector2i getPosition() const;
 
     /**
      * @brief Reset player

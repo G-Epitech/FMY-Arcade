@@ -36,11 +36,24 @@ public:
      */
     void reset(unsigned int index);
 
+    /**
+     * @brief set ghost can be eat
+     */
+    void enableCanBeEat();
+
+    /**
+     * @brief set ghost cant be eat
+     */
+    void disableCanBeEat();
+
     shared::games::DeltaTime lastMove;
     shared::types::Vector2i direction;
     shared::types::Vector2i position;
 
 protected:
+    bool _canBeEat;
+    shared::types::Vector2u _defaultOrigin;
+
     /**
      * @brief Spawn player on the map
      * @param asset Index of the ghost

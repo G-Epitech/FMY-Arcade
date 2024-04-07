@@ -27,12 +27,11 @@ public:
 
     shared::types::Vector2i position;
 
+    bool ghostBonus;
 protected:
     /**
      * @brief Spawn the point on the map
      * @param position
      */
     void _spawn(shared::types::Vector2i position);
-
-    bool _ghostBonus;
 };

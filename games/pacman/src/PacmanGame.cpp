@@ -50,6 +50,13 @@ const shared::games::GameManifest &pacman::PacmanGame::getManifest() const noexc
 void pacman::PacmanGame::compute(shared::games::DeltaTime dt) {
     this->_clock += dt;
 
+    if (this->_canEatGhost && this->_stopEatGhostTime < this->_clock) {
+        this->_canEatGhost = false;
+        for (auto ghost : this->_ghosts) {
+            ghost->disableCanBeEat();
+        }
+    }
+
     if (this->_clock > std::chrono::milliseconds(100) + this->_player->lastMove) {
         this->_player->lastMove = this->_clock;
         if (this->_map->mapData[this->_player->getPosition().y + this->_player->direction.y][
@@ -112,7 +119,19 @@ void pacman::PacmanGame::_redirectGhost(std::shared_ptr<GhostEntity> ghost) {
     ghost->direction = pos[dis(gen)];
 }
 
-void pacman::PacmanGame::eatPlayer() {
+void pacman::PacmanGame::eatPlayer(Vector2i position) {
+    if (this->_canEatGhost) {
+        unsigned int index = 0;
+
+        for (auto ghost : this->_ghosts) {
+            if (ghost->position.x == position.x && ghost->position.y == position.y) {
+                ghost->reset(index);
+                return;
+            }
+            index++;
+        }
+    }
+
     this->_clock = std::chrono::milliseconds(0);
     this->_player->reset(Vector2i(13, 23));
 
@@ -120,5 +139,15 @@ void pacman::PacmanGame::eatPlayer() {
     for (auto ghost : this->_ghosts) {
         ghost->reset(index);
         index++;
+    }
+
+}
+
+void pacman::PacmanGame::canEatGhosts() {
+    this->_canEatGhost = true;
+    this->_stopEatGhostTime = this->_clock + std::chrono::seconds(5);
+
+    for (auto ghost : this->_ghosts) {
+        ghost->enableCanBeEat();
     }
 }
