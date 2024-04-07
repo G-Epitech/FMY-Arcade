@@ -8,6 +8,8 @@
 #pragma once
 
 #include "common/game/AGame.hpp"
+#include "entities/player/PlayerEntity.hpp"
+#include "entities/map/MapEntity.hpp"
 
 #define MAP_PATH "assets/pacman/map.ascii"
 
@@ -41,6 +43,13 @@ public:
      */
     void compute(shared::games::DeltaTime dt) override;
 
+    /**
+     * @brief Add new point to player
+     */
+    void addNewPoint(Vector2i position);
+
 protected:
     shared::games::DeltaTime _clock;
+    std::shared_ptr<PlayerEntity> _player;
+    std::shared_ptr<MapEntity> _map;
 };

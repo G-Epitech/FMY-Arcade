@@ -7,7 +7,6 @@
 
 #include "SnakeGame.hpp"
 #include "HeadEntity.hpp"
-#include "../apple/AppleEntity.hpp"
 #include "../wall/WallEntity.hpp"
 #include "components/HeadKeyboardComponent.hpp"
 
