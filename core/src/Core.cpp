@@ -55,16 +55,43 @@ void Core::_initGame()
         if (this->_gameProviders.empty())
             throw ArcadeError("No game provider available");
         this->_gameProvider = this->_getGameProvider(0);
-        std::cout << "No game provider selected, using default provider" << std::endl;
+        std::cerr << "No game provider selected, using default provider" << std::endl;
     }
-    this->_game = this->_gameProvider->createInstance();
-    this->_sceneStage = RESUME;
+    try {
+        this->_game = this->_gameProvider->createInstance();
+        this->_sceneStage = RESUME;
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        this->_sceneStage = MENU;
+    }
+}
+
+void Core::_initSecureWindow()
+{
+    IWindow::WindowInitProps windowInitProps {
+        Vector2u(20, 20),
+        IWindow::WINDOWED,
+        60,
+        "Secured Window",
+        ""
+    };
+
+    this->_handleWindowClose();
+    if (!this->_graphicsProvider) {
+        if (this->_graphicsProviders.empty())
+            throw ArcadeError("No graphic provider available");
+        this->_graphicsProvider = this->_getGraphicsProvider(0);
+        std::cerr << "No graphic provider selected, using default provider" << std::endl;
+    }
+    this->_window = this->_graphicsProvider->createWindow(windowInitProps);
 }
 
 void Core::_initWindow()
 {
     if (!this->_game)
         this->_initGame();
+    if (!this->_game)
+        return this->_initSecureWindow();
     auto gameManifest = this->_game->getManifest();
     IWindow::WindowInitProps windowInitProps {
         this->_game->getSize(),
@@ -79,7 +106,7 @@ void Core::_initWindow()
         if (this->_graphicsProviders.empty())
             throw ArcadeError("No graphic provider available");
         this->_graphicsProvider = this->_getGraphicsProvider(0);
-        std::cout << "No graphic provider selected, using default provider" << std::endl;
+        std::cerr << "No graphic provider selected, using default provider" << std::endl;
     }
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
     this->_sceneStage = PLAY;
@@ -285,7 +312,7 @@ void Core::_preventWindowEvents(std::vector<events::EventPtr> events)
 void Core::_changeGraphicProvider(const unsigned char &index)
 {
     if (index > this->_graphicsProviders.size() - 1) {
-        std::cout << "Invalid graphic provider index" << std::endl;
+        std::cerr << "Invalid graphic provider index" << std::endl;
         return;
     }
     auto newProvider = this->_getGraphicsProvider(index);
@@ -298,7 +325,7 @@ void Core::_changeGraphicProvider(const unsigned char &index)
 void Core::_changeGameProvider(const unsigned char &index)
 {
     if (index > this->_gameProviders.size() - 1) {
-        std::cout << "Invalid game provider index" << std::endl;
+        std::cerr << "Invalid game provider index" << std::endl;
         return;
     }
     auto newProvider = this->_getGameProvider(index);
@@ -393,6 +420,7 @@ void Core::_handleWindowClose()
         this->_stopAllGraphicsSounds();
         this->_window->close();
         this->_menu.updateScore(this->_game);
+        this->_sceneStage = MENU;
     }
 }
 
@@ -549,7 +577,7 @@ void Core::run()
         return;
     this->_initGame();
     this->_initWindow();
-    while (this->_window->isOpen()) {
+    while (this->_sceneStage != EXIT) {
         auto currentTime = std::chrono::high_resolution_clock::now();
         auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
         previousTime = currentTime;
@@ -559,15 +587,15 @@ void Core::run()
             this->_menu.run();
             previousTime = std::chrono::high_resolution_clock::now();
         }
-        if (this->_sceneStage == EXIT)
-            return;
         if (this->_sceneStage == NEWGAME)
             this->_initGame();
         if (this->_sceneStage == RESUME)
             this->_initWindow();
-        this->_game->compute(deltaTime);
-        this->_gameEntities = this->_game->getEntities();
-        this->_handleEvents();
-        this->_renderEntities();
+        if (this->_sceneStage == PLAY) {
+            this->_game->compute(deltaTime);
+            this->_gameEntities = this->_game->getEntities();
+            this->_handleEvents();
+            this->_renderEntities();
+        }
     }
 }

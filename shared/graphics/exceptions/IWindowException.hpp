@@ -13,6 +13,10 @@ namespace shared::graphics::exceptions {
     class IWindowException;
 }
 
+/**
+ * @brief Interface for the window exception object
+ * 
+ */
 class shared::graphics::exceptions::IWindowException : public virtual IGraphicsException {
 public:
     virtual ~IWindowException() = default;

@@ -10,19 +10,32 @@
 #include "../IEntity.hpp"
 
 namespace shared::games::components {
+
+    /// @brief Enum of component types
     typedef enum {
-      TEXTURE,
-      TEXT,
-      DISPLAYABLE,
-      SOUND,
-      COLLIDABLE,
-      POSITIONABLE,
-      KEYBOARD
+        /// @brief Component type for a texture
+        TEXTURE,
+        /// @brief Component type for a text
+        TEXT,
+        /// @brief Component type for a displayable
+        DISPLAYABLE,
+        /// @brief Component type for a sound
+        SOUND,
+        /// @brief Component type for a collidable
+        COLLIDABLE,
+        /// @brief Component type for a positionable
+        POSITIONABLE,
+        /// @brief Component type for a keyboard
+        KEYBOARD
     } ComponentType;
 
     class IComponent;
 }
 
+/**
+ * @brief Interface of a component
+ * 
+ */
 class shared::games::components::IComponent {
 public:
     virtual ~IComponent() = default;

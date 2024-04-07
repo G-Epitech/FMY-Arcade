@@ -11,7 +11,11 @@ namespace shared::graphics {
     class ITexture;
 }
 
+/**
+ * @brief Interface for the texture object
+ * 
+ */
 class shared::graphics::ITexture {
-  public:
+public:
     virtual ~ITexture() = default;
 };

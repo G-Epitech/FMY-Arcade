@@ -65,6 +65,12 @@ class Core {
         void _initWindow();
 
         /**
+         * @brief Initialize the secure window
+         * 
+         */
+        void _initSecureWindow();
+
+        /**
          * @brief Initialize the game
          * 
          */

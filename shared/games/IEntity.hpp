@@ -10,35 +10,38 @@
 #include <vector>
 #include <memory>
 
-namespace shared::games
-{
-  class IGame;
+namespace shared::games {
+    class IGame;
 
-  namespace entity
-  {
-    class IEntity;
+    namespace entity {
+        class IEntity;
 
-    typedef std::shared_ptr<IEntity> EntityPtr;
-    typedef std::vector<EntityPtr> EntitiesMap;
-  }
+        /// @brief Entity pointer
+        typedef std::shared_ptr<IEntity> EntityPtr;
+        /// @brief Entities map pointers
+        typedef std::vector<EntityPtr> EntitiesMap;
+    }
 
-  namespace components
-  {
-    class IComponent;
+    namespace components {
+        class IComponent;
 
-    typedef std::vector<std::shared_ptr<IComponent>> ComponentsMap;
-  }
+        /// @brief Components map pointers
+        typedef std::vector<std::shared_ptr<IComponent>> ComponentsMap;
+    }
 }
 
-class shared::games::entity::IEntity
-{
+/**
+ * @brief Interface of an entity
+ * 
+ */
+class shared::games::entity::IEntity {
 public:
-  virtual ~IEntity() = default;
+    virtual ~IEntity() = default;
 
-  /**
-   * @brief Get the components of the entity
-   *
-   * @return Components of the entity
-   */
-  virtual const components::ComponentsMap &getComponents(void) const noexcept = 0;
+    /**
+     * @brief Get the components of the entity
+     *
+     * @return Components of the entity
+     */
+    virtual const components::ComponentsMap &getComponents(void) const noexcept = 0;
 };

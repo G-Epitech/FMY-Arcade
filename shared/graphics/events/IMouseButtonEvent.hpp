@@ -13,10 +13,15 @@ namespace shared::graphics::events{
     class IMouseButtonEvent;
 }
 
+/**
+ * @brief Interface for the mouse button event object
+ * 
+ */
 class shared::graphics::events::IMouseButtonEvent : public virtual IMouseEvent {
 public:
     virtual ~IMouseButtonEvent() = default;
 
+    /// @brief Mouse button
     typedef enum {
         LEFT,
         RIGHT
