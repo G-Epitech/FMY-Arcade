@@ -108,6 +108,7 @@ void Core::_initWindow()
         std::cerr << "No graphic provider selected, using default provider" << std::endl;
     }
     this->_window = this->_graphicsProvider->createWindow(windowInitProps);
+    this->_textures.clear();
     this->_sceneStage = PLAY;
 }
 
@@ -581,13 +582,16 @@ void Core::run()
         }
         if (this->_sceneStage == NEWGAME)
             this->_initGame();
-        if (this->_sceneStage == RESUME)
+        if (this->_sceneStage == RESUME) {
             this->_initWindow();
+        }
         if (this->_sceneStage == PLAY) {
             this->_game->compute(deltaTime);
             this->_gameEntities = this->_game->getEntities();
             this->_handleEvents();
-            this->_renderEntities();
+            if (this->_window->isOpen()) {
+                this->_renderEntities();
+            }
         }
     }
 }

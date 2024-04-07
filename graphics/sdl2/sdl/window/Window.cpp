@@ -5,6 +5,7 @@
 ** Window.cpp
 */
 
+#include <iostream>
 #include "Window.hpp"
 #include "sdl/exception/Exception.hpp"
 
@@ -79,6 +80,13 @@ void Window::setIcon(const std::string &path) {
 
 Renderer &Window::getRenderer() {
     return _renderer;
+}
+
+void Window::close()
+{
+    if (_window)
+        SDL_DestroyWindow(_window);
+    _window = nullptr;
 }
 
 bool Window::pollEvent(Event &event) {

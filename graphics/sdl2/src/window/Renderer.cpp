@@ -5,6 +5,7 @@
 ** Renderer.cpp
 */
 
+#include <iostream>
 #include "Window.hpp"
 #include "Renderer.hpp"
 #include "font/Font.hpp"

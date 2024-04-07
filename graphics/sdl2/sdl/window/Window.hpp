@@ -39,6 +39,12 @@ public:
     );
 
     /**
+     * @brief Close the window
+     *
+     */
+    void close();
+
+    /**
      * @brief Get the window
      * @return SDL_Window
      */

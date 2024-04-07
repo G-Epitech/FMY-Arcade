@@ -45,7 +45,7 @@ class Core {
         } SoundProps;
 
         std::shared_ptr<IGame> _game;
-        std::shared_ptr<IWindow> _window;
+        std::unique_ptr<IWindow> _window;
         std::shared_ptr<IGameProvider> _gameProvider;
         std::shared_ptr<IGraphicsProvider> _graphicsProvider;
         std::map<std::string, std::shared_ptr<IFont>> _fonts;
@@ -96,6 +96,12 @@ class Core {
          */
         void _loadFailed(const std::shared_ptr<components::ITextComponent>& text);
 
+        /**
+         * @brief Free current resources
+         *
+         */
+        void _freeResources();
+        
         /**
          * @brief Get a texture
          * 

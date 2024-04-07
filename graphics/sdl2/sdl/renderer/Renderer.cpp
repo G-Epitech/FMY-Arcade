@@ -5,6 +5,7 @@
 ** Renderer.cpp
 */
 
+#include <iostream>
 #include "Renderer.hpp"
 #include "sdl/text/Text.hpp"
 #include "sdl/types/Color.hpp"
@@ -82,8 +83,9 @@ void Renderer::_copy(const Texture &texture, SDL_Rect *srcRect, SDL_FRect *destR
         destRect
     );
 
-    if (copy < 0)
-        throw SDLException("Failed to copy texture");
+    if (copy < 0) {
+        throw SDLException("Failed to copy texture: " + std::string(SDL_GetError()));
+    }
 }
 
 void Renderer::setFramerateLimit(unsigned int fps) {

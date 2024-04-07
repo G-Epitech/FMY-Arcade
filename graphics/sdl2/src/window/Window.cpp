@@ -5,6 +5,7 @@
 ** Window class
 */
 
+#include <iostream>
 #include "Window.hpp"
 #include "EventsHandler.hpp"
 #include "graphics/sdl2/sdl/exception/Exception.hpp"
@@ -112,6 +113,7 @@ void Window::display() {
 
 void Window::close() {
     _isOpen = false;
+    _window.close();
 }
 
 std::vector<EventPtr> Window::getEvents() {
