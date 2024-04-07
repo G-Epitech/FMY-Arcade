@@ -33,6 +33,8 @@ pacman::PacmanGame::PacmanGame() : common::AGame(Vector2u(27, 30), 60),
         this->_registerEntity(entity);
     }
 
+    this->_currentScore = 0;
+
     for (unsigned int i = 0; i < 4; i++) {
         this->_ghosts.push_back(std::make_unique<GhostEntity>(i));
         this->_registerEntity(this->_ghosts[i]);
@@ -94,6 +96,8 @@ void pacman::PacmanGame::addNewPoint(Vector2i position) {
                                              }
                                              return false;
                                          }), this->_entities.end());
+
+                                         this->_currentScore += 5;
 }
 
 void pacman::PacmanGame::_redirectGhost(std::shared_ptr<GhostEntity> ghost) {
@@ -134,6 +138,9 @@ void pacman::PacmanGame::eatPlayer(Vector2i position) {
 
     this->_clock = std::chrono::milliseconds(0);
     this->_player->reset(Vector2i(13, 23));
+    if (this->_currentScore > this->_score)
+        this->_score = this->_currentScore;
+    this->_currentScore = 0;
 
     unsigned int index = 0;
     for (auto ghost : this->_ghosts) {

@@ -73,4 +73,6 @@ protected:
      * @param ghost
      */
     void _redirectGhost(std::shared_ptr<GhostEntity> ghost);
+
+    int _currentScore;
 };
