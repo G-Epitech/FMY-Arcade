@@ -26,13 +26,20 @@ Window::Window(const IWindow::WindowInitProps &props):
     _fps = props.fps;
     _initialSize = _size;
     _isOpen = true;
-    _window = std::unique_ptr<WINDOW, decltype(&delwin)>(initscr(), &delwin);
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);
+    _window = std::unique_ptr<WINDOW, decltype(&delwin)>(newwin(_size.y, _size.x, 0, 0), &delwin);
+    box(_window.get(), 0, 0);
 }
 
 Window::~Window()
 {
-    if (_isOpen)
-        close();
+    wclear(stdscr);
+    close();
+    endwin();
 }
 
 std::unique_ptr<WINDOW, decltype(&delwin)> &Window::getWindow()
@@ -81,23 +88,25 @@ void Window::render(const shared::graphics::TextProps &props) {
 }
 
 void Window::clear() {
-    wclear(stdscr);
+    wclear(_window.get());
 }
 
 void Window::display() {
     for (auto &line : map) {
         for (auto &c : line.second) {
-            mvwprintw(stdscr, line.first, c.first, &c.second);
+            mvwprintw(_window.get(), line.first, c.first, &c.second);
         }
     }
-    refresh();
+    wrefresh(_window.get());
 }
 
 void Window::close() {
-    if (_isOpen) {
-        _isOpen = false;
-        endwin();
+    if (_window) {
+        wclear(_window.get());
+        wrefresh(_window.get());
     }
+    _isOpen = false;
+    _window.reset();
 }
 
 std::vector<EventPtr> Window::getEvents() {

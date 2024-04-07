@@ -266,6 +266,9 @@ void Menu::_initTexts()
 
 void Menu::_clearLists()
 {
+    this->_nameField.reset();
+    this->_font.reset();
+    this->_music.reset();
     this->_hiddenAuthors.clear();
     this->_hiddenTexts.clear();
     this->_texts.clear();
@@ -303,8 +306,8 @@ void Menu::_initWindow()
     };
 
     try {
-        this->_window = this->_graphicsProvider->createWindow(windowInitProps);
         this->_clearLists();
+        this->_window = this->_graphicsProvider->createWindow(windowInitProps);
         this->_preventGraphicsProvider();
         this->_initTexts();
         this->_initTextures();
@@ -410,7 +413,7 @@ void Menu::_selectGame()
     if (this->_checkBoxType == GAME_CHECKBOX) {
         for (auto checkBox : this->_gamesCheckBoxes) {
             if (checkBox->isHovered() && checkBox->isChecked())
-                this->_exitWithNewGame();
+                return this->_exitWithNewGame();
             if (checkBox->isHovered())
                 checkBox->check();
             else
@@ -419,7 +422,7 @@ void Menu::_selectGame()
     } else {
         for (auto checkBox : this->_graphicsCheckBoxes) {
             if (checkBox->isHovered() && checkBox->isChecked())
-                this->_changeGraphics(checkBox);
+                return this->_changeGraphics(checkBox);
             if (checkBox->isHovered())
                 checkBox->check();
             else
@@ -436,6 +439,8 @@ void Menu::_changeGraphics(std::shared_ptr<CheckBox> checkBox)
         this->_graphicsProvider = graphicsProvider;
         this->_window->close();
         this->_initWindow();
+        this->_previousSelectedGame();
+        this->_previousSelectedGraphics();
     }
 }
 

@@ -48,7 +48,7 @@ void Renderer::render(const shared::graphics::TextureProps &props)
     for (int j = 0; j < y ; j++) {
         for (int i = 0; i < x; i++) {
             auto securedChar = _getRightChar(props, Vector2i(i, j));
-                _window.map[props.position.y + j][props.position.x + i] = securedChar;
+            _window.map[props.position.y + j][props.position.x + i] = securedChar;
         }
     }
 }
