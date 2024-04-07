@@ -22,7 +22,7 @@ class arcade::graphics::sdl2::GraphicsProvider : public IGraphicsProvider
 {
 public:
     GraphicsProvider();
-    ~GraphicsProvider() override = default;
+    ~GraphicsProvider() override;
 
     /**
      * @brief Get the manifest of the graphics library

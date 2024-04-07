@@ -419,9 +419,13 @@ void Core::_handleWindowClose()
 {
     if (this->_window && this->_window->isOpen()) {
         this->_stopAllGraphicsSounds();
+        this->_textures.clear();
+        this->_fonts.clear();
         this->_window->close();
+        this->_sounds.clear();
         this->_menu.updateScore(this->_game);
         this->_sceneStage = MENU;
+        this->_window.reset();
     }
 }
 
@@ -592,7 +596,7 @@ void Core::run()
             this->_game->compute(deltaTime);
             this->_gameEntities = this->_game->getEntities();
             this->_handleEvents();
-            if (this->_window->isOpen()) {
+            if (this->_window && this->_window->isOpen()) {
                 this->_renderEntities();
             }
         }

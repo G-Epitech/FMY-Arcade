@@ -452,7 +452,10 @@ void Menu::_changeGraphics(const std::shared_ptr<CheckBox>& checkBox)
 void Menu::_exitAndPlayOldGame()
 {
     this->_sceneStage = RESUME;
-    this->_window->close();
+    if (this->_window) {
+        this->_clearLists();
+        this->_window.reset();
+    }
 }
 
 void Menu::_exitWithNewGame()
@@ -464,8 +467,11 @@ void Menu::_exitWithNewGame()
         }
     }
     this->_sceneStage = NEWGAME;
-    if (this->_window)
+    if (this->_window) {
         this->_window->close();
+        this->_clearLists();
+        this->_window.reset();
+    }
 }
 
 void Menu::_handleMouseMoveEvents(const std::shared_ptr<events::IMouseEvent>& mouse)
@@ -522,7 +528,7 @@ void Menu::_handleMouseButtonEvents(const std::shared_ptr<events::IMouseButtonEv
             this->_selectGame();
         }
     }
-    for (auto checkBox : this->_graphicsCheckBoxes) {
+    for (auto &checkBox : this->_graphicsCheckBoxes) {
         if (checkBox->isHovered(position)) {
             this->_selectGame();
         }
@@ -660,13 +666,14 @@ void Menu::run()
     this->_previousSelectedGraphics();
     if (!this->_window)
         throw ArcadeError("Can't create window");
-    while (this->_window->isOpen()) {
+    while (this->_window && this->_window->isOpen()) {
+        this->_render();
         this->_handleEvents();
-        if (this->_window->isOpen())
-            this->_render();
     }
     if (this->_music)
         this->_music->setState(ISound::SoundState::STOP);
+    this->_clearLists();
+    this->_window.reset();
 }
 
 void Menu::_readScores()

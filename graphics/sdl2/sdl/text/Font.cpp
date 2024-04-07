@@ -36,6 +36,7 @@ bool Font::load(const std::string &path, int ptSize) {
 Font::~Font() {
     if (_font)
         TTF_CloseFont(_font);
+    _font = nullptr;
 }
 
 TTF_Font *Font::_safeFont() const {

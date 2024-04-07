@@ -27,8 +27,10 @@ const GraphicsManifest GraphicsProvider::_manifest = {
     }
 };
 
-GraphicsProvider::GraphicsProvider() {
-    sdl::Initializer::init();
+GraphicsProvider::GraphicsProvider() = default;
+
+GraphicsProvider::~GraphicsProvider() {
+    sdl::Initializer::quit();
 }
 
 const shared::graphics::GraphicsManifest &GraphicsProvider::getManifest() const noexcept {

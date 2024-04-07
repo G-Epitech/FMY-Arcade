@@ -5,9 +5,9 @@
 ** Window.cpp
 */
 
-#include <iostream>
 #include "Window.hpp"
 #include "sdl/exception/Exception.hpp"
+#include "sdl/initializer/Initializer.hpp"
 
 using namespace sdl;
 
@@ -21,6 +21,7 @@ Window &Window::create(
     const Vector2i &size,
     Uint32 flags
 ) {
+    Initializer::init();
     _window = SDL_CreateWindow(
         title.c_str(),
         position.x,
@@ -84,7 +85,6 @@ Renderer &Window::getRenderer() {
 void Window::close()
 {
     if (_window) {
-        _renderer.reset();
         SDL_DestroyWindow(_window);
     }
     _window = nullptr;
