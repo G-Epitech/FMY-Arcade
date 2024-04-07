@@ -516,6 +516,11 @@ void Menu::_handleMouseButtonEvents(std::shared_ptr<events::IMouseButtonEvent> m
             this->_selectGame();
         }
     }
+    for (auto checkBox : this->_graphicsCheckBoxes) {
+        if (checkBox->isHovered(position)) {
+            this->_selectGame();
+        }
+    }
 }
 
 void Menu::_handleEvents()

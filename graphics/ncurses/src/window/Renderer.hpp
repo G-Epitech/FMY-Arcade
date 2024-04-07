@@ -43,21 +43,15 @@ private:
 
     /**
      * @brief Align vertically the text
-     * @param align Text alignment
-     * @param entityPos Entity position
-     * @param entitySize Entity size
+     * @param props Text properties
      */
-    void _textVerticalAlign(
-        const shared::graphics::TextVerticalAlign &align,
-        const shared::types::Vector2u &entitySize
-    );
+    int _textVerticalAlign(const shared::graphics::TextProps &props);
 
     /**
      * @brief Align the text
-     * @param align Text alignment
-     * @param entitySize Entity size
+     * @param props Text properties
      */
-    void _textAlign(const shared::graphics::TextAlign &align, const shared::types::Vector2i &entitySize);
+    int _textAlign(const shared::graphics::TextProps &props);
 
     /**
      * @brief Get the right character in the texture

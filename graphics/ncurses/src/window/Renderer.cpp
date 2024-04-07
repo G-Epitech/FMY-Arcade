@@ -22,21 +22,41 @@ void Renderer::render(const shared::graphics::TextProps &props)
 {
     int index = 0;
 
+    int x = _textAlign(props);
+    int y = _textVerticalAlign(props);
+    Vector2i position = {x, y};
     for (const auto &letter : props.content) {
-        _window.map[props.position.y][props.position.x + index] = letter;
+        _window.map[position.y][position.x + index] = letter;
         index += 1;
     }
 }
 
-void Renderer::_textVerticalAlign(const shared::graphics::TextVerticalAlign &align, const shared::types::Vector2u &entitySize)
+int Renderer::_textVerticalAlign(const shared::graphics::TextProps &props)
 {
+    switch (props.verticalAlign) {
+        case shared::graphics::TextVerticalAlign::TOP:
+            return props.position.y;
+        case shared::graphics::TextVerticalAlign::MIDDLE:
+            return props.position.y + (props.size.y / 2);
+        case shared::graphics::TextVerticalAlign::BOTTOM:
+            return props.position.y + props.size.y;
+    }
+    return props.position.y;
 }
 
-void Renderer::_textAlign(const shared::graphics::TextAlign &align, const shared::types::Vector2i &entitySize)
+int Renderer::_textAlign(const shared::graphics::TextProps &props)
 {
+    switch (props.align) {
+        case shared::graphics::TextAlign::LEFT:
+            return props.position.x;
+        case shared::graphics::TextAlign::CENTER:
+            return props.position.x + (props.size.x / 2) - (props.content.size() / 2);
+        case shared::graphics::TextAlign::RIGHT:
+            return props.position.x + props.size.x - props.content.size();
+    }
+    return props.position.x;
 }
 
-#include <iostream>
 void Renderer::render(const shared::graphics::TextureProps &props)
 {
     auto texture = _castOrThrow<shared::graphics::ITexture, texture::Texture>(props.texture);
